@@ -1,0 +1,58 @@
+export { aegisTailwindTheme, aegisTokens } from '@/foundations/aegisTheme';
+
+// Primitives
+export { default as Alert } from '@/components/primitives/Alert';
+export { default as ProgressBar } from '@/components/primitives/ProgressBar';
+export { default as ProgressCircle } from '@/components/primitives/ProgressCircle';
+export { default as Breadcrumbs } from '@/components/primitives/Breadcrumbs';
+export { default as Tabs, TabList, TabTrigger, TabPanel } from '@/components/primitives/Tabs';
+export { default as Modal, ModalHeader, ModalBody, ModalFooter } from '@/components/primitives/Modal';
+export { default as Checkbox } from '@/components/primitives/Checkbox';
+export { default as Form, FormSection, FormRow, FormActions } from '@/components/primitives/Form';
+export { default as RadioGroup, RadioOption } from '@/components/primitives/Radio';
+export { default as Table } from '@/components/primitives/Table';
+export { default as Toggle } from '@/components/primitives/Toggle';
+export { default as Avatar } from '@/components/primitives/Avatar';
+export { default as Badge } from '@/components/primitives/Badge';
+export { default as Button } from '@/components/primitives/Button';
+export { default as Divider } from '@/components/primitives/Divider';
+export { default as Input } from '@/components/primitives/Input';
+export { default as Select } from '@/components/primitives/Select';
+export { default as Spinner } from '@/components/primitives/Spinner';
+export { default as Textarea } from '@/components/primitives/Textarea';
+export { default as Tooltip } from '@/components/primitives/Tooltip';
+export type { AlertProps, AlertVariant } from '@/components/primitives/Alert';
+export type { ProgressBarProps, ProgressBarVariant, ProgressBarSize } from '@/components/primitives/ProgressBar';
+export type { ProgressCircleProps, ProgressCircleVariant, ProgressCircleSize } from '@/components/primitives/ProgressCircle';
+export type { BreadcrumbsProps, BreadcrumbItem, BreadcrumbSeparator } from '@/components/primitives/Breadcrumbs';
+export type { TabsProps, TabListProps, TabTriggerProps, TabPanelProps, TabsVariant } from '@/components/primitives/Tabs';
+export type { ModalProps, ModalHeaderProps, ModalBodyProps, ModalFooterProps, ModalSize, ModalVariant } from '@/components/primitives/Modal';
+export type { CheckboxProps } from '@/components/primitives/Checkbox';
+export type { RadioGroupProps, RadioOptionProps, RadioGroupOrientation } from '@/components/primitives/Radio';
+export type { FormSectionProps, FormRowProps, FormRowCols, FormActionsProps, FormProps } from '@/components/primitives/Form';
+export type { TableColumn, TableProps, SortDirection, ColumnAlign } from '@/components/primitives/Table';
+export type { ToggleProps, ToggleSize, ToggleVariant } from '@/components/primitives/Toggle';
+export type { AvatarProps, AvatarSize, AvatarVariant } from '@/components/primitives/Avatar';
+export type { BadgeProps, BadgeVariant } from '@/components/primitives/Badge';
+export type { ButtonProps, ButtonVariant, ButtonSize } from '@/components/primitives/Button';
+export type { DividerProps, DividerVariant } from '@/components/primitives/Divider';
+export type { InputProps } from '@/components/primitives/Input';
+export type { SelectProps, SelectOption } from '@/components/primitives/Select';
+export type { SpinnerProps, SpinnerSize, SpinnerVariant } from '@/components/primitives/Spinner';
+export type { TextareaProps } from '@/components/primitives/Textarea';
+export type { TooltipProps, TooltipPlacement } from '@/components/primitives/Tooltip';
+
+// Domain components
+export { default as FilterButton } from '@/components/arsenal/FilterButton';
+export { default as SpecCard } from '@/components/arsenal/SpecCard';
+export { default as TechItem } from '@/components/arsenal/TechItem';
+export { default as CertCard } from '@/components/credentials/CertCard';
+export { default as EducationEntry } from '@/components/credentials/EducationEntry';
+export { default as SkillGroup } from '@/components/credentials/SkillGroup';
+export { default as StatBlock } from '@/components/dashboard/StatBlock';
+export { default as StatCard } from '@/components/dashboard/StatCard';
+export { default as LabCard } from '@/components/laboratory/LabCard';
+export { default as PageHeader } from '@/components/layout/PageHeader';
+export { default as MissionItem } from '@/components/mission-log/MissionItem';
+export { default as ProtocolCard } from '@/components/protocols/ProtocolCard';
+export type { EducationEntryData, EducationField } from '@/types/education';

@@ -1,6 +1,54 @@
-:root {
+/* ─── Design token CSS variables ─────────────────────────────────────────────
+   Colors are stored as raw RGB channels so Tailwind opacity modifiers work:
+   rgb(var(--color-primary) / 0.2) === bg-primary/20
+──────────────────────────────────────────────────────────────────────────── */
+
+:root,
+[data-theme="dark"] {
   color-scheme: dark;
+
+  --color-primary:          0 243 255;    /* #00f3ff */
+  --color-hazard:           250 204 21;   /* #facc15 */
+  --color-alert:            255 0 60;     /* #ff003c */
+  --color-bg-dark:          5 5 5;        /* #050505 */
+  --color-panel-dark:       10 10 10;     /* #0a0a0a */
+  --color-border-dark:      26 26 26;     /* #1a1a1a */
+  --color-surface-terminal: 13 17 23;     /* #0d1117 */
+
+  /* Semantic text */
+  --text-base:    203 213 225;  /* slate-300 */
+  --text-muted:   100 116 139;  /* slate-500 */
+  --text-subtle:  51  65  85;   /* slate-700 */
 }
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --color-primary:          0 151 167;    /* #0097a7 — darkened for light bg contrast */
+  --color-hazard:           180 83 9;     /* #b45309 */
+  --color-alert:            190 18 60;    /* #be123c */
+  --color-bg-dark:          248 250 252;  /* #f8fafc */
+  --color-panel-dark:       241 245 249;  /* #f1f5f9 */
+  --color-border-dark:      203 213 225;  /* #cbd5e1 */
+  --color-surface-terminal: 232 239 248;  /* #e8eff8 */
+
+  --text-base:   15  23  42;   /* slate-900 */
+  --text-muted:  71  85 105;   /* slate-600 */
+  --text-subtle: 148 163 184;  /* slate-400 */
+}
+
+/* ─── Light-mode slate text remapping ────────────────────────────────────────
+   Tailwind slate-3xx/4xx were designed for dark surfaces. On light surfaces
+   we remap them to darker equivalents so contrast ratios remain accessible.
+──────────────────────────────────────────────────────────────────────────── */
+[data-theme="light"] .text-white        { color: rgb(15 23 42) !important; }
+[data-theme="light"] .text-slate-100,
+[data-theme="light"] .text-slate-200    { color: rgb(15 23 42) !important; }
+[data-theme="light"] .text-slate-300    { color: rgb(51 65 85) !important; }
+[data-theme="light"] .text-slate-400    { color: rgb(71 85 105) !important; }
+[data-theme="light"] .text-slate-500    { color: rgb(100 116 139) !important; }
+[data-theme="light"] .text-slate-600    { color: rgb(71 85 105) !important; }
+[data-theme="light"] .text-slate-700    { color: rgb(51 65 85) !important; }
 
 html,
 body,
@@ -10,14 +58,15 @@ body,
 
 body {
   margin: 0;
-  background-color: #050505;
-  color: #cbd5e1;
+  background-color: rgb(var(--color-bg-dark));
+  color: rgb(var(--text-base));
   overflow-x: hidden;
   font-family: 'JetBrains Mono', monospace;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .cyber-grid {
-  background-image: linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+  background-image: linear-gradient(rgb(var(--color-primary) / 0.03) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--color-primary) / 0.03) 1px, transparent 1px);
   background-size: 30px 30px;
   position: fixed;
   inset: 0;
@@ -55,7 +104,7 @@ body {
 
 .hud-border {
   position: relative;
-  border: 1px solid rgba(0, 243, 255, 0.2);
+  border: 1px solid rgb(var(--color-primary) / 0.2);
 }
 
 .hud-border::before {
@@ -65,8 +114,8 @@ body {
   left: -1px;
   width: 8px;
   height: 8px;
-  border-top: 2px solid #00f3ff;
-  border-left: 2px solid #00f3ff;
+  border-top: 2px solid rgb(var(--color-primary));
+  border-left: 2px solid rgb(var(--color-primary));
 }
 
 .hud-border::after {
@@ -76,8 +125,8 @@ body {
   bottom: -1px;
   width: 8px;
   height: 8px;
-  border-right: 2px solid #00f3ff;
-  border-bottom: 2px solid #00f3ff;
+  border-right: 2px solid rgb(var(--color-primary));
+  border-bottom: 2px solid rgb(var(--color-primary));
 }
 
 .hazard-stripe {
@@ -106,6 +155,24 @@ body {
   }
 }
 
+@keyframes aegis-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.aegis-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.aegis-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 243, 255, 0.06) 50%, transparent 100%);
+  animation: aegis-shimmer 1.6s ease-in-out infinite;
+}
+
 @keyframes aegis-scan {
   0%   { left: -33%; }
   100% { left: 100%; }
@@ -114,4 +181,9 @@ body {
 @keyframes aegis-spin-progress {
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@keyframes aegis-progress {
+  0%   { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
 }

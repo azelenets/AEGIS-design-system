@@ -1,0 +1,529 @@
+import { memo, useState, useMemo, useCallback, useEffect, useRef, Fragment, type ReactNode, type ChangeEvent } from 'react';
+import Pagination from '@/components/molecules/Pagination';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+export type DGSortDir    = 'asc' | 'desc';
+export type DGAlign      = 'left' | 'center' | 'right';
+export type DGDensity    = 'compact' | 'default' | 'comfortable';
+export type DGSelectMode = 'none' | 'single' | 'multi';
+
+export interface DataGridColumn<T extends Record<string, unknown>> {
+  key: keyof T | string;
+  header: string;
+  align?: DGAlign;
+  width?: string;
+  minWidth?: string;
+  sortable?: boolean;
+  filterable?: boolean;
+  hidden?: boolean;
+  render?: (value: unknown, row: T, index: number) => ReactNode;
+}
+
+export interface DataGridProps<T extends Record<string, unknown>> {
+  columns: DataGridColumn<T>[];
+  data: T[];
+  keyField: keyof T;
+  /** Row selection mode (default: 'none') */
+  selectionMode?: DGSelectMode;
+  selectedIds?: Set<string>;
+  onSelectionChange?: (ids: Set<string>) => void;
+  /** Render expanded detail panel below a row */
+  renderExpanded?: (row: T) => ReactNode;
+  /** Trailing actions rendered on row hover */
+  actions?: (row: T) => ReactNode;
+  /** Rows per page (default: 10) */
+  pageSize?: number;
+  /** Initial density */
+  density?: DGDensity;
+  striped?: boolean;
+  searchable?: boolean;
+  caption?: string;
+  emptyLabel?: string;
+  emptyIcon?: string;
+  className?: string;
+}
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const ALIGN: Record<DGAlign, string> = {
+  left: 'text-left', center: 'text-center', right: 'text-right',
+};
+
+const CELL_PAD: Record<DGDensity, string> = {
+  compact:     'py-1.5',
+  default:     'py-3',
+  comfortable: 'py-5',
+};
+
+const DENSITY_ICON: Record<DGDensity, string> = {
+  compact:     'density_small',
+  default:     'density_medium',
+  comfortable: 'density_large',
+};
+
+// ─── DataGrid ─────────────────────────────────────────────────────────────────
+
+const DataGridInner = <T extends Record<string, unknown>>({
+  columns: colDefs,
+  data,
+  keyField,
+  selectionMode = 'none',
+  selectedIds: controlledIds,
+  onSelectionChange,
+  renderExpanded,
+  actions,
+  pageSize: pageSizeProp = 10,
+  density: densityProp = 'default',
+  striped = false,
+  searchable = false,
+  caption,
+  emptyLabel = 'No data',
+  emptyIcon = 'inbox',
+  className = '',
+}: DataGridProps<T>) => {
+
+  // ── Column visibility ────────────────────────────────────────────────────
+  const [hiddenCols, setHiddenCols] = useState<Set<string>>(
+    () => new Set(colDefs.filter(c => c.hidden).map(c => c.key as string)),
+  );
+  const [colPanelOpen, setColPanelOpen] = useState(false);
+  const colPanelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!colPanelOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (colPanelRef.current && !colPanelRef.current.contains(e.target as Node))
+        setColPanelOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [colPanelOpen]);
+
+  // ── Density ──────────────────────────────────────────────────────────────
+  const [density, setDensity] = useState<DGDensity>(densityProp);
+
+  // ── Sort ─────────────────────────────────────────────────────────────────
+  const [sortKey, setSortKey] = useState<string | undefined>();
+  const [sortDir, setSortDir] = useState<DGSortDir>('asc');
+
+  // ── Search + per-column filters ───────────────────────────────────────────
+  const [search, setSearch] = useState('');
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [showFilters, setShowFilters] = useState(false);
+
+  // ── Pagination ────────────────────────────────────────────────────────────
+  const [page, setPage] = useState(1);
+
+  // ── Selection ─────────────────────────────────────────────────────────────
+  const [internalIds, setInternalIds] = useState<Set<string>>(new Set());
+  const isControlled = controlledIds !== undefined;
+  const selectedIds  = isControlled ? controlledIds : internalIds;
+
+  const setSelected = useCallback((ids: Set<string>) => {
+    if (!isControlled) setInternalIds(ids);
+    onSelectionChange?.(ids);
+  }, [isControlled, onSelectionChange]);
+
+  // ── Expansion ─────────────────────────────────────────────────────────────
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+
+  // ── Derived: visible columns ───────────────────────────────────────────────
+  const visibleCols = useMemo(
+    () => colDefs.filter(c => !hiddenCols.has(c.key as string)),
+    [colDefs, hiddenCols],
+  );
+
+  // ── Pipeline: search → filter → sort → paginate ────────────────────────────
+  const filtered = useMemo(() => {
+    let rows = data;
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      rows = rows.filter(r => Object.values(r).some(v => String(v ?? '').toLowerCase().includes(q)));
+    }
+    Object.entries(filters).forEach(([k, v]) => {
+      if (!v.trim()) return;
+      const q = v.toLowerCase();
+      rows = rows.filter(r => String(r[k] ?? '').toLowerCase().includes(q));
+    });
+    return rows;
+  }, [data, search, filters]);
+
+  const sorted = useMemo(() => {
+    if (!sortKey) return filtered;
+    return [...filtered].sort((a, b) => {
+      const cmp = String(a[sortKey] ?? '').localeCompare(String(b[sortKey] ?? ''), undefined, { numeric: true });
+      return sortDir === 'asc' ? cmp : -cmp;
+    });
+  }, [filtered, sortKey, sortDir]);
+
+  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSizeProp));
+  const safePage   = Math.min(page, totalPages);
+  const paged      = useMemo(() => {
+    const start = (safePage - 1) * pageSizeProp;
+    return sorted.slice(start, start + pageSizeProp);
+  }, [sorted, safePage, pageSizeProp]);
+
+  // ── Handlers ──────────────────────────────────────────────────────────────
+  const handleSort = useCallback((col: DataGridColumn<T>) => {
+    if (!col.sortable) return;
+    const k = col.key as string;
+    const dir: DGSortDir = sortKey === k && sortDir === 'asc' ? 'desc' : 'asc';
+    setSortKey(k);
+    setSortDir(dir);
+    setPage(1);
+  }, [sortKey, sortDir]);
+
+  const handleSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setPage(1);
+  }, []);
+
+  const handleFilter = useCallback((key: string, val: string) => {
+    setFilters(prev => ({ ...prev, [key]: val }));
+    setPage(1);
+  }, []);
+
+  const toggleSelect = useCallback((id: string) => {
+    if (selectionMode === 'none') return;
+    if (selectionMode === 'single') {
+      setSelected(selectedIds.has(id) ? new Set() : new Set([id]));
+      return;
+    }
+    const next = new Set(selectedIds);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setSelected(next);
+  }, [selectionMode, selectedIds, setSelected]);
+
+  const toggleSelectAll = useCallback(() => {
+    if (selectionMode !== 'multi') return;
+    const pageIds = paged.map(r => String(r[keyField]));
+    const allSel  = pageIds.every(id => selectedIds.has(id));
+    const next    = new Set(selectedIds);
+    allSel ? pageIds.forEach(id => next.delete(id)) : pageIds.forEach(id => next.add(id));
+    setSelected(next);
+  }, [selectionMode, paged, keyField, selectedIds, setSelected]);
+
+  const toggleExpand = useCallback((id: string) => {
+    setExpandedIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleColVisibility = useCallback((key: string) => {
+    setHiddenCols(prev => {
+      const next = new Set(prev);
+      next.has(key) ? next.delete(key) : next.add(key);
+      return next;
+    });
+  }, []);
+
+  // ── Derived flags ─────────────────────────────────────────────────────────
+  const pageIds       = paged.map(r => String(r[keyField]));
+  const allPageSel    = pageIds.length > 0 && pageIds.every(id => selectedIds.has(id));
+  const somePageSel   = pageIds.some(id => selectedIds.has(id));
+  const hasExpand     = !!renderExpanded;
+  const hasActions    = !!actions;
+  const hasCheckbox   = selectionMode !== 'none';
+  const hasFiltersRow = colDefs.some(c => c.filterable);
+  const hasFiltersSet = Object.values(filters).some(v => v.trim());
+  const cellPad       = CELL_PAD[density];
+  const totalCols     = visibleCols.length
+    + (hasCheckbox ? 1 : 0)
+    + (hasExpand   ? 1 : 0)
+    + (hasActions  ? 1 : 0);
+
+  return (
+    <div className={['flex flex-col border border-border-dark bg-bg-dark', className].join(' ')}>
+
+      {/* ── Toolbar ── */}
+      <div className="flex items-center gap-2 px-3 py-2 border-b border-border-dark bg-surface-terminal">
+        {searchable && (
+          <div className="flex items-center gap-1.5 bg-bg-dark border border-border-dark px-2 py-1 flex-1 max-w-xs">
+            <span className="material-symbols-outlined text-[14px] text-slate-600 shrink-0">search</span>
+            <input
+              type="text"
+              value={search}
+              onChange={handleSearch}
+              placeholder="Search…"
+              className="bg-transparent text-[11px] font-mono text-slate-300 placeholder-slate-700 outline-none w-full"
+            />
+            {search && (
+              <button onClick={() => { setSearch(''); setPage(1); }}>
+                <span className="material-symbols-outlined text-[14px] text-slate-600 hover:text-slate-300 transition-colors">close</span>
+              </button>
+            )}
+          </div>
+        )}
+
+        <div className="ml-auto flex items-center gap-1">
+          <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest mr-2 select-none">
+            {filtered.length} rows
+          </span>
+
+          {/* Density */}
+          {(['compact', 'default', 'comfortable'] as DGDensity[]).map(d => (
+            <button
+              key={d}
+              onClick={() => setDensity(d)}
+              title={d}
+              className={['p-1 transition-colors', density === d ? 'text-primary' : 'text-slate-600 hover:text-slate-300'].join(' ')}
+            >
+              <span className="material-symbols-outlined text-[16px]">{DENSITY_ICON[d]}</span>
+            </button>
+          ))}
+
+          {/* Filter toggle */}
+          {hasFiltersRow && (
+            <button
+              onClick={() => setShowFilters(v => !v)}
+              title="Toggle filters"
+              className={['p-1 transition-colors', showFilters || hasFiltersSet ? 'text-primary' : 'text-slate-600 hover:text-slate-300'].join(' ')}
+            >
+              <span className="material-symbols-outlined text-[16px]">filter_list</span>
+            </button>
+          )}
+
+          {/* Column visibility */}
+          <div className="relative" ref={colPanelRef}>
+            <button
+              onClick={() => setColPanelOpen(v => !v)}
+              title="Columns"
+              className={['p-1 transition-colors', colPanelOpen || hiddenCols.size > 0 ? 'text-primary' : 'text-slate-600 hover:text-slate-300'].join(' ')}
+            >
+              <span className="material-symbols-outlined text-[16px]">view_column</span>
+            </button>
+            {colPanelOpen && (
+              <div className="absolute right-0 top-full mt-1 z-50 bg-panel-dark border border-border-dark py-1 min-w-[160px]">
+                <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest px-3 py-1.5 border-b border-border-dark mb-1">
+                  Columns
+                </p>
+                {colDefs.map(col => {
+                  const k       = col.key as string;
+                  const visible = !hiddenCols.has(k);
+                  return (
+                    <button
+                      key={k}
+                      onClick={() => toggleColVisibility(k)}
+                      className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] font-mono hover:bg-primary/10 transition-colors text-left"
+                    >
+                      <span className={`material-symbols-outlined text-[14px] ${visible ? 'text-primary' : 'text-slate-600'}`}>
+                        {visible ? 'check_box' : 'check_box_outline_blank'}
+                      </span>
+                      <span className={visible ? 'text-slate-300' : 'text-slate-600'}>{col.header}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Caption ── */}
+      {caption && (
+        <div className="px-4 py-2 border-b border-border-dark text-[10px] font-mono text-slate-500 uppercase tracking-widest bg-surface-terminal">
+          {caption}
+        </div>
+      )}
+
+      {/* ── Table ── */}
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm font-mono">
+
+          <thead>
+            {/* Header */}
+            <tr className="border-b border-primary/20 bg-surface-terminal">
+              {hasExpand && <th className="w-9 px-2" />}
+              {hasCheckbox && (
+                <th className="w-9 px-2 py-3 text-center">
+                  {selectionMode === 'multi' && (
+                    <input
+                      type="checkbox"
+                      checked={allPageSel}
+                      ref={el => { if (el) el.indeterminate = !allPageSel && somePageSel; }}
+                      onChange={toggleSelectAll}
+                      className="accent-primary w-3.5 h-3.5 cursor-pointer"
+                    />
+                  )}
+                </th>
+              )}
+              {visibleCols.map(col => {
+                const k       = col.key as string;
+                const isSorted = sortKey === k;
+                return (
+                  <th
+                    key={k}
+                    style={{ width: col.width, minWidth: col.minWidth }}
+                    onClick={() => handleSort(col)}
+                    className={[
+                      'px-4 py-3 text-[9px] font-bold uppercase tracking-widest text-slate-500',
+                      ALIGN[col.align ?? 'left'],
+                      col.sortable ? 'cursor-pointer select-none hover:text-primary transition-colors' : '',
+                    ].filter(Boolean).join(' ')}
+                  >
+                    <span className="inline-flex items-center gap-1">
+                      {col.header}
+                      {col.sortable && (
+                        <span className={`material-symbols-outlined text-[12px] ${isSorted ? 'text-primary' : 'opacity-30'}`}>
+                          {isSorted ? (sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward') : 'unfold_more'}
+                        </span>
+                      )}
+                    </span>
+                  </th>
+                );
+              })}
+              {hasActions && <th className="w-16 px-4 py-3" />}
+            </tr>
+
+            {/* Filter row */}
+            {showFilters && (
+              <tr className="border-b border-border-dark bg-bg-dark">
+                {hasExpand   && <td />}
+                {hasCheckbox && <td />}
+                {visibleCols.map(col => (
+                  <td key={col.key as string} className="px-2 py-1.5">
+                    {col.filterable ? (
+                      <input
+                        type="text"
+                        value={filters[col.key as string] ?? ''}
+                        onChange={e => handleFilter(col.key as string, e.target.value)}
+                        placeholder="Filter…"
+                        className="w-full bg-surface-terminal border border-border-dark px-2 py-1 text-[10px] font-mono text-slate-300 placeholder-slate-700 outline-none focus:border-primary/50 transition-colors"
+                      />
+                    ) : null}
+                  </td>
+                ))}
+                {hasActions && <td />}
+              </tr>
+            )}
+          </thead>
+
+          <tbody>
+            {paged.length === 0 ? (
+              <tr>
+                <td colSpan={totalCols} className="px-4 py-12 text-center">
+                  <div className="flex flex-col items-center gap-2 text-slate-600">
+                    <span className="material-symbols-outlined text-[32px]">{emptyIcon}</span>
+                    <span className="text-[10px] uppercase tracking-widest">{emptyLabel}</span>
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              paged.map((row, rowIndex) => {
+                const id         = String(row[keyField]);
+                const isSelected = selectedIds.has(id);
+                const isExpanded = expandedIds.has(id);
+
+                return (
+                  <Fragment key={id}>
+                    <tr
+                      className={[
+                        'border-b border-border-dark transition-colors group/row',
+                        'hover:bg-primary/[0.06] hover:border-primary/20',
+                        isSelected ? 'bg-primary/10 border-primary/20' : '',
+                        striped && !isSelected && rowIndex % 2 !== 0 ? 'bg-surface-terminal/40' : '',
+                      ].filter(Boolean).join(' ')}
+                    >
+                      {/* Expand toggle */}
+                      {hasExpand && (
+                        <td className="w-9 px-2 text-center">
+                          <button
+                            onClick={() => toggleExpand(id)}
+                            className="text-slate-600 hover:text-primary transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">
+                              {isExpanded ? 'expand_less' : 'expand_more'}
+                            </span>
+                          </button>
+                        </td>
+                      )}
+
+                      {/* Selection checkbox / radio */}
+                      {hasCheckbox && (
+                        <td className="w-9 px-2 text-center">
+                          <input
+                            type={selectionMode === 'single' ? 'radio' : 'checkbox'}
+                            checked={isSelected}
+                            onChange={() => toggleSelect(id)}
+                            className="accent-primary w-3.5 h-3.5 cursor-pointer"
+                          />
+                        </td>
+                      )}
+
+                      {/* Data cells */}
+                      {visibleCols.map((col, colIdx) => {
+                        const k         = col.key as string;
+                        const raw       = row[k];
+                        const content   = col.render ? col.render(raw, row, rowIndex) : raw != null ? String(raw) : '—';
+                        const isFirstCol = colIdx === 0;
+
+                        return (
+                          <td
+                            key={k}
+                            className={[
+                              `px-4 ${cellPad} text-xs text-slate-300 transition-colors`,
+                              'group-hover/row:text-slate-100',
+                              isFirstCol
+                                ? isSelected
+                                  ? 'border-l-2 border-l-primary'
+                                  : 'border-l-2 border-l-transparent group-hover/row:border-l-primary'
+                                : '',
+                              ALIGN[col.align ?? 'left'],
+                            ].filter(Boolean).join(' ')}
+                          >
+                            {content}
+                          </td>
+                        );
+                      })}
+
+                      {/* Row actions */}
+                      {hasActions && (
+                        <td className={`px-4 ${cellPad} text-right`}>
+                          <div className="flex items-center justify-end gap-1 opacity-0 group-hover/row:opacity-100 transition-opacity">
+                            {actions!(row)}
+                          </div>
+                        </td>
+                      )}
+                    </tr>
+
+                    {/* Expanded panel */}
+                    {isExpanded && renderExpanded && (
+                      <tr className="border-b border-border-dark bg-bg-dark">
+                        <td colSpan={totalCols} className="px-6 py-4 border-l-2 border-l-primary/40">
+                          {renderExpanded(row)}
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* ── Footer ── */}
+      <div className="flex items-center justify-between px-4 py-2 border-t border-border-dark bg-surface-terminal min-h-[40px]">
+        <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest select-none">
+          {selectionMode !== 'none' && selectedIds.size > 0 ? `${selectedIds.size} selected · ` : ''}
+          {filtered.length} of {data.length} rows
+        </span>
+        {totalPages > 1 && (
+          <Pagination
+            page={safePage}
+            total={totalPages}
+            onChange={p => { setPage(p); }}
+            siblings={1}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+// memo cast preserves generics
+const DataGrid = memo(DataGridInner) as typeof DataGridInner;
+export default DataGrid;

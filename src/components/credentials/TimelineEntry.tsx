@@ -1,7 +1,20 @@
 import { memo } from 'react';
-import type { EducationEntryData } from '@/types/education';
 
-const EducationEntry = ({ level, title, institution, years, withHonor, fields }: EducationEntryData) => (
+export interface TimelineField {
+  label: string;
+  value: string;
+}
+
+export interface TimelineEntryProps {
+  level: string;
+  title: string;
+  organization: string;
+  period: string;
+  distinguished?: boolean;
+  fields: TimelineField[];
+}
+
+const TimelineEntry = ({ level, title, organization, period, distinguished, fields }: TimelineEntryProps) => (
   <article className="relative pl-6 border-l border-primary/30">
     <div className="absolute -left-[5px] top-0 size-2 bg-primary" />
     <div className="flex flex-wrap justify-between items-start gap-2 mb-2">
@@ -11,16 +24,16 @@ const EducationEntry = ({ level, title, institution, years, withHonor, fields }:
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <h3 className="text-xl font-bold text-white">{title}</h3>
-          {withHonor ? (
+          {distinguished ? (
             <span className="inline-flex items-center gap-1 border border-yellow-400/60 bg-yellow-400/10 text-yellow-400 text-[8px] font-black uppercase tracking-widest px-2 py-0.5">
               <span className="material-symbols-outlined text-[10px]">military_tech</span>
-              Diploma with Honor
+              Distinguished
             </span>
           ) : null}
         </div>
-        <div className="text-sm text-slate-400">{institution}</div>
+        <div className="text-sm text-slate-400">{organization}</div>
       </div>
-      <span className="text-xs font-bold text-white/40">{years}</span>
+      <span className="text-xs font-bold text-white/40">{period}</span>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
       {fields.map(({ label, value }) => (
@@ -33,4 +46,4 @@ const EducationEntry = ({ level, title, institution, years, withHonor, fields }:
   </article>
 );
 
-export default memo(EducationEntry);
+export default memo(TimelineEntry);

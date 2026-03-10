@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import TechItem from './TechItem';
+import StatusItem from './StatusItem';
 
-const meta: Meta<typeof TechItem> = {
-  title: 'Molecules/TechItem',
-  component: TechItem,
+const meta: Meta<typeof StatusItem> = {
+  title: 'Molecules/StatusItem',
+  component: StatusItem,
   decorators: [
     (Story) => (
       <ul className="max-w-sm">
@@ -14,12 +14,12 @@ const meta: Meta<typeof TechItem> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof TechItem>;
+type Story = StoryObj<typeof StatusItem>;
 
 export const Standard: Story = {
   args: {
     name: 'TypeScript',
-    version: 'v5.x',
+    detail: 'v5.x',
     status: 'PRODUCTION',
   },
 };
@@ -27,8 +27,17 @@ export const Standard: Story = {
 export const Critical: Story = {
   args: {
     name: 'Ruby on Rails',
-    version: 'v8.x',
+    detail: 'v8.x',
     status: 'PRIMARY_STACK',
     isCritical: true,
+  },
+};
+
+export const Master: Story = {
+  args: {
+    name: 'PostgreSQL',
+    detail: 'v16',
+    status: 'PRIMARY_STACK',
+    isMaster: true,
   },
 };

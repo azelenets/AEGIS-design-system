@@ -1,15 +1,16 @@
 import { memo } from 'react';
 
-export interface ProtocolCardProps {
+export interface FeatureCardProps {
   id: string;
   icon: string;
   title: string;
+  tag?: string;
   status: string;
-  dots: number;
+  dots?: number;
   children: string;
 }
 
-const ProtocolCard = ({ id, icon, title, status, dots, children }: ProtocolCardProps) => {
+const FeatureCard = ({ id, icon, title, tag = 'OBJECTIVE', status, dots = 3, children }: FeatureCardProps) => {
   const markers = Array.from({ length: dots });
 
   return (
@@ -28,7 +29,7 @@ const ProtocolCard = ({ id, icon, title, status, dots, children }: ProtocolCardP
         <h3 className="text-white text-xl md:text-2xl font-bold font-mono tracking-tight uppercase group-hover:text-primary transition-colors">{title}</h3>
         <div className="h-px w-12 bg-alert" />
         <p className="text-slate-400 text-sm leading-relaxed font-mono">
-          <span className="text-primary">[OBJECTIVE]</span> {children}
+          <span className="text-primary">[{tag}]</span> {children}
         </p>
       </div>
       <div className="mt-auto pt-6 border-t border-primary/10 flex justify-between items-center opacity-40">
@@ -43,4 +44,4 @@ const ProtocolCard = ({ id, icon, title, status, dots, children }: ProtocolCardP
   );
 };
 
-export default memo(ProtocolCard);
+export default memo(FeatureCard);

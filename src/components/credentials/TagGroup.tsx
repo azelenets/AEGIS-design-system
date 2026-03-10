@@ -1,11 +1,11 @@
 import { memo } from 'react';
 
-export interface SkillGroupProps {
+export interface TagGroupProps {
   title: string;
   items: string[];
 }
 
-const SkillGroup = ({ title, items }: SkillGroupProps) => (
+const TagGroup = ({ title, items }: TagGroupProps) => (
   <div className="bg-white/5 border border-white/10 p-5">
     <div className="text-[10px] text-primary/70 font-bold mb-4 uppercase">{title}</div>
     <div className="flex flex-wrap gap-2">
@@ -18,4 +18,4 @@ const SkillGroup = ({ title, items }: SkillGroupProps) => (
   </div>
 );
 
-export default memo(SkillGroup);
+export default memo(TagGroup);

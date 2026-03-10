@@ -111,13 +111,13 @@ export type { StackProps, HStackProps, VStackProps, ZStackProps, SpacerProps, Ce
 // ─── Domain components ────────────────────────────────────────────────────────
 export { default as FilterButton } from '@/components/arsenal/FilterButton';
 export { default as SpecCard }     from '@/components/arsenal/SpecCard';
-export { default as TechItem }     from '@/components/arsenal/TechItem';
-export { default as CertCard }     from '@/components/credentials/CertCard';
-export { default as EducationEntry } from '@/components/credentials/EducationEntry';
-export { default as SkillGroup }   from '@/components/credentials/SkillGroup';
+export { default as StatusItem }   from '@/components/arsenal/StatusItem';
+export { default as EntryCard }    from '@/components/credentials/EntryCard';
+export { default as TimelineEntry } from '@/components/credentials/TimelineEntry';
+export { default as TagGroup }     from '@/components/credentials/TagGroup';
 export { default as StatBlock }    from '@/components/dashboard/StatBlock';
 export { default as StatCard }     from '@/components/dashboard/StatCard';
 export { default as LabCard }      from '@/components/laboratory/LabCard';
 export { default as MissionItem }  from '@/components/mission-log/MissionItem';
-export { default as ProtocolCard } from '@/components/protocols/ProtocolCard';
-export type { EducationEntryData, EducationField } from '@/types/education';
+export { default as FeatureCard } from '@/components/protocols/FeatureCard';
+export type { TimelineEntryProps, TimelineField } from '@/components/credentials/TimelineEntry';

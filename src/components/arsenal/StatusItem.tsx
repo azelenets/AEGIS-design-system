@@ -1,8 +1,8 @@
 import { memo } from 'react';
 
-export interface TechItemProps {
+export interface StatusItemProps {
   name: string;
-  version: string;
+  detail: string;
   status: string;
   isCritical?: boolean;
   isMaster?: boolean;
@@ -10,7 +10,7 @@ export interface TechItemProps {
 
 const ALERT_BADGE_CLASSES = 'text-[9px] text-alert font-bold px-1 bg-alert/10 border border-alert shadow-[0_0_10px_rgba(255,62,62,0.3)]';
 
-const TechItem = ({ name, version, status, isCritical, isMaster }: TechItemProps) => {
+const StatusItem = ({ name, detail, status, isCritical, isMaster }: StatusItemProps) => {
   const isAlert = isCritical || isMaster;
   const borderColor = isAlert ? 'border-alert/20 hover:border-alert' : 'border-primary/10 hover:border-primary';
   const nameColor = isAlert ? 'text-alert' : 'text-primary';
@@ -30,11 +30,11 @@ const TechItem = ({ name, version, status, isCritical, isMaster }: TechItemProps
         {badge}
       </div>
       <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-        <span>{version}</span>
+        <span>{detail}</span>
         <span>{status}</span>
       </div>
     </li>
   );
 };
 
-export default memo(TechItem);
+export default memo(StatusItem);

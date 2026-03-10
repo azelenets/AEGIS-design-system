@@ -175,7 +175,7 @@ export const ZStackBadgeOverlay = {
             </div>
             {/* Overlay element */}
             <div className="justify-self-end self-start translate-x-1/2 -translate-y-1/2">
-              {i === 0 && <Badge label="NEW" variant="alert" solid />}
+              {i === 0 && <Badge label="NEW" variant="alert" solid className="px-1.5 py-0.5 text-[8px]" />}
               {i === 1 && <span className="block w-2.5 h-2.5 rounded-full bg-primary border-2 border-bg-dark" />}
               {i === 2 && <span className="block px-1 py-0.5 text-[8px] font-bold font-mono bg-hazard text-bg-dark leading-none">12</span>}
             </div>

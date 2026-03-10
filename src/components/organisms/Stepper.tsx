@@ -14,6 +14,8 @@ export interface StepperProps extends HTMLAttributes<HTMLDivElement> {
   steps: StepData[];
   orientation?: StepperOrientation;
   children?: ReactNode;   // active step content
+  activeStep?: number;
+  onStepClick?: (index: number) => void;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -48,28 +50,64 @@ const LINE_COLOR: Record<StepStatus, string> = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const Stepper = ({ steps, orientation = 'horizontal', children, className = '', ...rest }: StepperProps) => {
+const Stepper = ({
+  steps,
+  orientation = 'horizontal',
+  children,
+  activeStep,
+  onStepClick,
+  className = '',
+  ...rest
+}: StepperProps) => {
+  const isInteractive = Boolean(onStepClick);
+
   if (orientation === 'vertical') {
     return (
       <div {...rest} className={['flex flex-col', className].filter(Boolean).join(' ')}>
         {steps.map((step, i) => {
           const isLast = i === steps.length - 1;
+          const isCurrent = activeStep === i;
           return (
             <div key={step.id} className="flex gap-3">
               {/* Icon + connector */}
               <div className="flex flex-col items-center">
-                <span className={`material-symbols-outlined text-[22px] shrink-0 ${ICON_COLOR[step.status]}`}>
-                  {ICON[step.status]}
-                </span>
+                {isInteractive ? (
+                  <button
+                    type="button"
+                    onClick={() => onStepClick?.(i)}
+                    aria-current={isCurrent ? 'step' : undefined}
+                    aria-label={`Go to step ${i + 1}: ${step.title}`}
+                    className={`shrink-0 transition-colors hover:text-white focus:outline-none focus-visible:text-white ${ICON_COLOR[step.status]}`}
+                  >
+                    <span className="material-symbols-outlined text-[22px]">{ICON[step.status]}</span>
+                  </button>
+                ) : (
+                  <span className={`material-symbols-outlined text-[22px] shrink-0 ${ICON_COLOR[step.status]}`}>
+                    {ICON[step.status]}
+                  </span>
+                )}
                 {!isLast && (
                   <div className={`w-px flex-1 min-h-[1.5rem] mt-1 mb-1 ${LINE_COLOR[step.status]}`} />
                 )}
               </div>
               {/* Content */}
               <div className={`pb-6 ${isLast ? '' : ''}`}>
-                <p className={`text-[10px] font-bold uppercase tracking-widest font-mono leading-tight ${TITLE_COLOR[step.status]}`}>
-                  {step.title}
-                </p>
+                {isInteractive ? (
+                  <button
+                    type="button"
+                    onClick={() => onStepClick?.(i)}
+                    aria-current={isCurrent ? 'step' : undefined}
+                    className={`text-left transition-colors hover:text-white focus:outline-none focus-visible:text-white ${TITLE_COLOR[step.status]}`}
+                  >
+                    <p className="text-[10px] font-bold uppercase tracking-widest font-mono leading-tight">
+                      {step.title}
+                    </p>
+                  </button>
+                ) : (
+                  <p className={`text-[10px] font-bold uppercase tracking-widest font-mono leading-tight ${TITLE_COLOR[step.status]}`}>
+                    {step.title}
+                  </p>
+                )}
                 {step.description && (
                   <p className="text-[10px] text-slate-400 font-mono mt-0.5">{step.description}</p>
                 )}
@@ -90,6 +128,7 @@ const Stepper = ({ steps, orientation = 'horizontal', children, className = '', 
       <div className="flex items-start">
         {steps.map((step, i) => {
           const isLast = i === steps.length - 1;
+          const isCurrent = activeStep === i;
           return (
             <div key={step.id} className="flex-1 flex flex-col items-center relative">
               {/* Connector line — drawn before icon, hidden for first */}
@@ -101,13 +140,29 @@ const Stepper = ({ steps, orientation = 'horizontal', children, className = '', 
                 <div className={`absolute right-0 top-[11px] w-1/2 h-px ${LINE_COLOR[step.status]}`} />
               )}
               {/* Icon */}
-              <span className={`material-symbols-outlined text-[22px] z-10 bg-bg-dark ${ICON_COLOR[step.status]}`}>
-                {ICON[step.status]}
-              </span>
-              {/* Label */}
-              <p className={`text-[9px] font-bold uppercase tracking-widest font-mono text-center mt-1.5 px-1 ${TITLE_COLOR[step.status]}`}>
-                {step.title}
-              </p>
+              {isInteractive ? (
+                <button
+                  type="button"
+                  onClick={() => onStepClick?.(i)}
+                  aria-current={isCurrent ? 'step' : undefined}
+                  aria-label={`Go to step ${i + 1}: ${step.title}`}
+                  className={`z-10 flex flex-col items-center bg-bg-dark px-1 transition-colors hover:text-white focus:outline-none focus-visible:text-white ${ICON_COLOR[step.status]}`}
+                >
+                  <span className="material-symbols-outlined text-[22px]">{ICON[step.status]}</span>
+                  <span className={`text-[9px] font-bold uppercase tracking-widest font-mono text-center mt-1.5 ${TITLE_COLOR[step.status]}`}>
+                    {step.title}
+                  </span>
+                </button>
+              ) : (
+                <>
+                  <span className={`material-symbols-outlined text-[22px] z-10 bg-bg-dark ${ICON_COLOR[step.status]}`}>
+                    {ICON[step.status]}
+                  </span>
+                  <p className={`text-[9px] font-bold uppercase tracking-widest font-mono text-center mt-1.5 px-1 ${TITLE_COLOR[step.status]}`}>
+                    {step.title}
+                  </p>
+                </>
+              )}
               {step.description && (
                 <p className="text-[9px] text-slate-400 font-mono text-center mt-0.5 px-1">{step.description}</p>
               )}

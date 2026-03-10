@@ -117,19 +117,9 @@ const ControlledWizardStory = () => {
 
   return (
     <div className="max-w-xl flex flex-col gap-4">
-      <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
-        <span>Controlled step:</span>
-        {deploySteps.map((s, i) => (
-          <Button
-            key={s.id}
-            variant={i === step ? 'primary' : 'ghost'}
-            size="sm"
-            onClick={() => setStep(i)}
-          >
-            {i + 1}
-          </Button>
-        ))}
-      </div>
+      <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+        Controlled mode: click wizard steps to navigate directly.
+      </p>
       {done
         ? <Alert variant="success" title="Sequence complete">All steps authorized.</Alert>
         : <Wizard steps={deploySteps} activeStep={step} onStepChange={setStep} onComplete={() => setDone(true)} />
@@ -176,10 +166,16 @@ export const Vertical = {
 
 export const WithValidation = {
   render: () => <ValidationWizardStory />,
+};
+
+export const WithValidationSpec = {
+  tags: ['!dev'],
+  render: () => <ValidationWizardStory />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const next = canvas.getByRole('button', { name: /Next/i });
 
+    await expect(canvas.getByText('Step 1 / 2')).toBeVisible();
     await userEvent.click(next);
     await expect(next).toBeDisabled();
     await expect(canvas.getByText('Step 1 / 2')).toBeVisible();
@@ -194,13 +190,20 @@ export const WithValidation = {
 
 export const Controlled = {
   render: () => <ControlledWizardStory />,
+};
+
+export const ControlledFlowSpec = {
+  tags: ['!dev'],
+  render: () => <ControlledWizardStory />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.click(canvas.getByRole('button', { name: '3' }));
+    await expect(canvas.getByText('Step 1 / 4')).toBeVisible();
+    await expect(canvas.getByText('Operator ID')).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'Go to step 3: Deploy' }));
     await expect(canvas.getByText('Step 3 / 4')).toBeVisible();
     await expect(canvas.getByText('Deploy Tag')).toBeVisible();
-    await userEvent.click(canvas.getByRole('button', { name: '4' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Go to step 4: Confirm' }));
     await expect(canvas.getByText('Step 4 / 4')).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: /Complete/i }));
     await expect(canvas.getByText('Sequence complete')).toBeVisible();

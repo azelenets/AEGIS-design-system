@@ -100,10 +100,10 @@ const Wizard = ({
       <div className="absolute inset-x-0 top-0 h-px bg-primary/30" />
       {/* Step label */}
       <div className="flex items-center gap-2 px-4 pt-4 pb-3 border-b border-border-dark">
-        <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">
+        <span className="text-[9px] font-mono text-slate-300 uppercase tracking-widest">
           Step {activeIndex + 1} / {steps.length}
         </span>
-        <span className="text-[9px] font-mono text-primary/60 uppercase tracking-widest">
+        <span className="text-[9px] font-mono text-slate-300 uppercase tracking-widest">
           — {steps[activeIndex]?.title}
         </span>
       </div>
@@ -156,7 +156,12 @@ const Wizard = ({
       <div {...rest} className={['flex flex-row gap-0', className].filter(Boolean).join(' ')}>
         {/* Left: vertical stepper */}
         <div className="shrink-0 border-r border-border-dark pr-6 pt-2">
-          <Stepper steps={stepData} orientation="vertical" />
+          <Stepper
+            steps={stepData}
+            orientation="vertical"
+            activeStep={activeIndex}
+            onStepClick={isControlled ? setStep : undefined}
+          />
         </div>
 
         {/* Right: content + nav */}
@@ -171,7 +176,12 @@ const Wizard = ({
   return (
     <div {...rest} className={['flex flex-col gap-6', className].filter(Boolean).join(' ')}>
       {/* Stepper header */}
-      <Stepper steps={stepData} orientation="horizontal" />
+      <Stepper
+        steps={stepData}
+        orientation="horizontal"
+        activeStep={activeIndex}
+        onStepClick={isControlled ? setStep : undefined}
+      />
       {contentPanel}
       {navBar}
     </div>

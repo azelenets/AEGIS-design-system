@@ -54,7 +54,7 @@ const Sidebar = ({ brand, groups = [], footer, collapsed = false, onNavClick }: 
                 onClick={() => onNavClick?.(item)}
                 title={collapsed ? item.label : undefined}
                 className={[
-                  'w-full flex items-center gap-2.5 px-3 py-2 transition-colors border-l-2',
+                  'w-full flex items-center gap-2.5 px-3 py-2 transition-colors border-l-2 text-left',
                   'text-[10px] font-bold uppercase tracking-widest font-mono',
                   item.active
                     ? 'text-primary border-primary bg-primary/5'
@@ -82,7 +82,7 @@ const Sidebar = ({ brand, groups = [], footer, collapsed = false, onNavClick }: 
 
     {/* Footer slot */}
     {footer && (
-      <div className={`border-t border-border-dark p-3 ${collapsed ? 'flex justify-center' : ''}`}>
+      <div className={`border-t border-border-dark p-3 flex ${collapsed ? 'justify-center' : 'flex-col'}`}>
         {footer}
       </div>
     )}

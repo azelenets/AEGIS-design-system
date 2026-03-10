@@ -43,11 +43,16 @@ const Avatar = ({
   status,
 }: AvatarProps) => {
   const sizes = SIZE_CLASSES[size];
+  const avatarLabel = initials ? initials.slice(0, 2).toUpperCase() : icon ?? 'Avatar';
 
   return (
-    <span className={`relative inline-flex shrink-0 ${sizes.container}`}>
+    <span
+      className={`relative inline-flex shrink-0 ${sizes.container}`}
+      {...(!src && { role: 'img', 'aria-label': avatarLabel })}
+    >
       <span
         className={`flex items-center justify-center w-full h-full border font-bold font-mono overflow-hidden ${VARIANT_CLASSES[variant]}`}
+        aria-hidden={!src ? 'true' : undefined}
       >
         {src ? (
           <img src={src} alt={alt} className="w-full h-full object-cover" />
@@ -61,6 +66,8 @@ const Avatar = ({
       </span>
       {status && (
         <span
+          role="img"
+          aria-label={status}
           className={`absolute rounded-full border border-bg-dark ${STATUS_CLASSES[status]} ${sizes.status}`}
         />
       )}

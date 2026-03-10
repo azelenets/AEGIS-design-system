@@ -1,91 +1,190 @@
 # AEGIS Design System
 
-AEGIS is a standalone tactical UI workspace. It packages the production visual language into reusable foundations, components, and Storybook stories.
+AEGIS is a React 19 design-system workspace for the tactical UI language used across the project. It ships reusable foundations, typed components, Storybook stories, and a small Vite app for local inspection.
 
-## Scope
+## Stack
 
-- Shared design tokens for color, typography, and motion
-- Global tactical surface styles (`cyber-grid`, `hud-border`, scanlines, terminal chrome)
-- Primitive components covering all baseline UI needs
-- Storybook-documented components ported from the current site
-- A small Vite showcase app for quick inspection outside Storybook
+- React 19
+- Vite 6
+- Storybook 10 with `@storybook/react-vite`
+- Vitest browser-mode story tests
+- Storybook accessibility checks via `@storybook/addon-a11y`
+- Visual regression integration via `@chromatic-com/storybook`
 
-## Components
-
-### Primitives
-
-Foundational UI building blocks that match the AEGIS visual language.
-
-| Component | Description |
-|-----------|-------------|
-| `Button` | Action trigger — variants: `primary`, `secondary`, `ghost`, `danger`; sizes: `sm`, `md`, `lg`; `loading` and `icon` support |
-| `Badge` | Inline status label — variants: `primary`, `hazard`, `alert`, `success`, `ghost`; optional pulsing dot |
-| `Input` | Single-line text field with `label`, `error`, `hint`, and left-side icon |
-| `Textarea` | Multi-line text field with `label`, `error`, and `hint` |
-| `Select` | Dropdown with typed `SelectOption[]`, `label`, `error`, and `placeholder` |
-| `Divider` | Horizontal separator (with optional label) or vertical rule — variants: `primary`, `hazard`, `ghost` |
-| `Spinner` | Loading indicator — sizes: `sm`, `md`, `lg`; variants: `primary`, `hazard`, `alert`, `ghost`; optional label |
-| `Alert` | Notification banner — variants: `info`, `warning`, `danger`, `success`; optional title and dismiss handler |
-| `Tooltip` | Hover tooltip — placements: `top`, `bottom`, `left`, `right`; no external dependencies |
-| `Avatar` | User/entity display with `src`, `initials`, or icon fallback; sizes: `sm`, `md`, `lg`, `xl`; `online`/`offline`/`busy` status dot |
-| `Form` | `<form>` wrapper; compose with `FormSection`, `FormRow`, `FormActions` sub-components |
-| `FormSection` | Groups fields with a title, optional description, and a bottom divider |
-| `FormRow` | Responsive CSS grid row — `cols` 1–4 |
-| `FormActions` | Footer action bar with `left / right / center` alignment |
-| `Table` | Typed data table with column definitions, optional sorting, striped rows, and empty state |
-
-### Domain components
-
-| Category | Components |
-|----------|-----------|
-| Dashboard | `StatCard`, `StatBlock` |
-| Layout | `PageHeader` |
-| Arsenal | `FilterButton`, `TechItem`, `SpecCard` |
-| Laboratory | `LabCard` |
-| Mission Log | `MissionItem` |
-| Credentials | `CertCard`, `SkillGroup`, `EducationEntry` |
-| Protocols | `ProtocolCard` |
-
-## Local usage
+## Local Development
 
 ```bash
 npm install
-npm run storybook   # http://localhost:6007
-npm run dev         # http://localhost:3001
+npm run dev
+npm run storybook
 ```
 
-## Foundation exports
+Local URLs:
 
-`src/foundations/aegisTheme.ts` exports:
+- Vite app: `http://localhost:3001`
+- Storybook: `http://localhost:6007`
 
-- `aegisTailwindTheme` — extend your Tailwind config with AEGIS tokens
-- `aegisTokens` — direct token access for docs or glue code
+## Scripts
 
-**Color tokens:**
+```bash
+npm run dev                     # Vite preview app
+npm run build                   # Library/app build
+npm run storybook               # Storybook dev server
+npm run build-storybook         # Static Storybook build
+npm run test-storybook          # Storybook Vitest suite
+npm run test-storybook:watch    # Watch mode
+npm run test-storybook:coverage # Storybook tests with V8 coverage
+npm run visual-test             # Chromatic visual tests
+```
 
-| Token | Value | Role |
-|-------|-------|------|
-| `primary` | `#00f3ff` | Cyan — main accent |
-| `hazard` | `#facc15` | Yellow — warnings |
-| `alert` | `#ff003c` | Red — critical/danger |
-| `bg-dark` | `#050505` | Main background |
-| `panel-dark` | `#0a0a0a` | Panel surfaces |
-| `surface-terminal` | `#0d1117` | Terminal surfaces |
-| `border-dark` | `#1a1a1a` | Borders |
+## Package Surface
 
-**Global CSS utilities** (from `src/foundations/globals.css`):
+Primary exports live in [`src/index.ts`](./src/index.ts).
 
-| Class | Effect |
-|-------|--------|
-| `.cyber-grid` | Repeating cyan grid background |
-| `.scanlines` | CRT scanline overlay |
-| `.hud-border` | Tactical HUD corner brackets |
-| `.hazard-stripe` | Yellow/black diagonal stripes |
-| `.primary-stripe` | Cyan/black diagonal stripes |
-| `.slanted-clip` | 10° polygon clip path |
-| `.glitch-img` | Desaturated glitch filter |
+Foundations:
+
+- `aegisTailwindTheme`
+- `aegisTokens`
+- `aegisCSSVars`
+- `ThemeProvider`
+- `useTheme`
+
+CSS entrypoint:
+
+- `@aegis/design-system/globals.css`
+
+## Foundations
+
+Core theme data is defined in [`src/foundations/aegisTheme.ts`](./src/foundations/aegisTheme.ts).
+
+- Fonts: `Orbitron`, `JetBrains Mono`, `Space Grotesk`
+- Theme modes: `dark`, `light`
+- Semantic tokens: `primary`, `hazard`, `alert`, `background`, `panel`, `surface`, `border`, `text`
+- CSS-variable theme contract through `aegisCSSVars`
+
+Global UI treatments come from [`src/foundations/globals.css`](./src/foundations/globals.css), including tactical surfaces, HUD borders, grid overlays, stripes, and scanline utilities.
+
+## Component Inventory
+
+### Atoms
+
+- `Avatar`
+- `Badge`
+- `Button`
+- `Checkbox`
+- `Divider`
+- `Input`
+- `Kbd`
+- `RadioGroup`, `RadioOption`
+- `Rating`
+- `SearchInput`
+- `Select`
+- `Skeleton`
+- `Slider`
+- `Spinner`
+- `Tag`
+- `Textarea`
+- `ThemeToggle`
+- `Toggle`
+- `Tooltip`
+
+### Molecules
+
+- `Accordion`
+- `Alert`
+- `AvatarGroup`
+- `Breadcrumbs`
+- `Card`, `CardHeader`, `CardBody`, `CardFooter`
+- `Form`, `FormSection`, `FormRow`, `FormActions`
+- `Pagination`
+- `ProgressBar`
+- `ProgressCircle`
+
+### Organisms
+
+- `Carousel`, `CarouselSlide`
+- `DataGrid`
+- `Dropdown`, `DropdownItem`, `DropdownSeparator`, `DropdownGroup`
+- `Footer`
+- `Modal`, `ModalHeader`, `ModalBody`, `ModalFooter`
+- `Navbar`
+- `Sidebar`
+- `Stepper`
+- `Table`
+- `Tabs`, `TabList`, `TabTrigger`, `TabPanel`
+- `ToastProvider`, `Toaster`, `useToast`
+- `Wizard`
+
+### Layout
+
+- `Container`
+- `Grid`, `GridItem`
+- `Overlay`
+- `PageHeader`
+- `Stack`, `HStack`, `VStack`, `ZStack`, `Spacer`, `Center`
+
+### Domain Components
+
+- Arsenal: `FilterButton`, `SpecCard`, `StatusItem`
+- Credentials: `EntryCard`, `TagGroup`, `TimelineEntry`
+- Dashboard: `StatBlock`, `StatCard`
+- Laboratory: `LabCard`
+- Mission Log: `MissionItem`
+- Protocols: `FeatureCard`
+
+## Project Structure
+
+```text
+src/
+  components/
+    arsenal/
+    atoms/
+    credentials/
+    dashboard/
+    laboratory/
+    layout/
+    mission-log/
+    molecules/
+    organisms/
+    protocols/
+  foundations/
+  pages/
+```
+
+Notes:
+
+- `src/components/primitives` exists as a folder, but the active exported taxonomy is `atoms`, `molecules`, `organisms`, `layout`, and domain groups.
+- Stories live beside components as `*.stories.tsx`.
+
+## Testing
+
+Storybook is the test surface for this repo.
+
+- Interaction and render tests run through `@storybook/addon-vitest`
+- Accessibility checks are enabled through `@storybook/addon-a11y`
+- Coverage is generated by `@vitest/coverage-v8`
+- Visual regression is configured through Chromatic
+
+Current workflow:
+
+- `npm run test-storybook`
+- `npm run test-storybook:coverage`
+- `npm run visual-test`
+
+Coverage output is written to [`coverage/storybook`](./coverage/storybook).
+
+## CI
+
+GitHub Actions is configured in [`.github/workflows/storybook-tests.yml`](./.github/workflows/storybook-tests.yml).
+
+It currently:
+
+- runs Storybook Vitest coverage on pushes to `main` and pull requests
+- uploads the Storybook coverage artifact
+- runs Chromatic when `CHROMATIC_PROJECT_TOKEN` is configured
 
 ## Notes
 
-- This workspace intentionally mirrors the current production styling, including the CDN Tailwind setup used by the main project.
-- If you want this moved to a sibling folder outside the repo or promoted into a monorepo package, the structure is ready for that next step.
+- The repo includes a Vite app entry in [`src/main.tsx`](./src/main.tsx) for quick manual review outside Storybook.
+- The Storybook catalog currently covers the full exported component surface, plus foundation and page-level stories.
+- `npx tsc --noEmit` still reports existing type issues in [`src/pages/Dashboard.stories.tsx`](./src/pages/Dashboard.stories.tsx), so TypeScript is not yet a clean gate for the whole workspace.

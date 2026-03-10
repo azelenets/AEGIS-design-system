@@ -76,8 +76,6 @@ export interface RadioGroupProps {
   children: React.ReactNode;
 }
 
-import type { ReactNode } from 'react';
-
 const ORIENTATION_CLASSES: Record<RadioGroupOrientation, string> = {
   vertical: 'flex-col gap-3',
   horizontal: 'flex-row flex-wrap gap-x-6 gap-y-3',

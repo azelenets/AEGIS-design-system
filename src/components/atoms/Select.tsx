@@ -123,7 +123,11 @@ const Select = ({
           if (open && highlighted >= 0) {
             selectOption(options[highlighted].value);
           } else {
-            open ? setOpen(false) : openDropdown();
+            if (open) {
+              setOpen(false);
+            } else {
+              openDropdown();
+            }
             setHighlighted(options.findIndex((o) => o.value === currentValue));
           }
           break;
@@ -146,7 +150,7 @@ const Select = ({
           break;
       }
     },
-    [open, highlighted, options, selectOption, disabled, currentValue],
+    [open, highlighted, options, selectOption, disabled, currentValue, openDropdown],
   );
 
   const removeValue = useCallback((val: string, e: React.MouseEvent) => {
@@ -174,7 +178,14 @@ const Select = ({
           aria-controls={listboxId}
           disabled={disabled}
           onKeyDown={handleKeyDown}
-          onClick={() => { if (!disabled) { open ? setOpen(false) : openDropdown(); } }}
+          onClick={() => {
+            if (disabled) return;
+            if (open) {
+              setOpen(false);
+            } else {
+              openDropdown();
+            }
+          }}
           className={[
             'w-full bg-surface-terminal border text-sm text-left font-mono',
             'px-3 py-2 pr-8 outline-none transition-all duration-150 min-h-[38px]',

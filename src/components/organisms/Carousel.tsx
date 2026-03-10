@@ -72,7 +72,10 @@ const Carousel = ({
 
   // Auto-play
   const goNextRef = useRef(goNext);
-  goNextRef.current = goNext;
+
+  useEffect(() => {
+    goNextRef.current = goNext;
+  }, [goNext]);
 
   useEffect(() => {
     if (!autoPlay || paused || count <= 1) return;

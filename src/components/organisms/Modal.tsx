@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
+import { aegisLayers } from '@/foundations/layers';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -161,7 +162,8 @@ const Modal = ({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-[1300] flex items-center justify-center p-4"
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ zIndex: aegisLayers.modal }}
     >
       {/* Backdrop */}
       <div

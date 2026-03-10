@@ -1,4 +1,5 @@
 import { memo, useState, type ReactNode } from 'react';
+import Button from '@/components/atoms/Button';
 
 export type AccordionVariant = 'default' | 'flush';
 
@@ -39,16 +40,16 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
         return (
           <div key={item.id} className="bg-panel-dark">
             {/* Trigger */}
-            <button
-              type="button"
+            <Button
               disabled={item.disabled}
               aria-expanded={isOpen}
               aria-controls={`accordion-panel-${item.id}`}
               id={`accordion-trigger-${item.id}`}
               onClick={() => toggle(item.id)}
+              variant="ghost"
+              size="lg"
               className={[
-                'w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left',
-                'text-xs font-bold uppercase tracking-widest font-mono transition-colors',
+                'w-full justify-between px-4 py-3.5 text-left normal-case tracking-normal border-0',
                 isOpen ? 'text-primary' : 'text-slate-400',
                 item.disabled ? 'opacity-40 cursor-not-allowed' : 'hover:text-slate-200 cursor-pointer',
               ]
@@ -58,10 +59,10 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
               <span>{item.trigger}</span>
               <span
                 className={`material-symbols-outlined text-[18px] shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-              >
-                expand_more
-              </span>
-            </button>
+                >
+                  expand_more
+                </span>
+            </Button>
 
             {/* Panel */}
             {isOpen && (

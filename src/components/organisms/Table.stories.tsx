@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import Table, { type TableColumn, type SortDirection } from './Table';
 import Badge from '@/components/atoms/Badge';
 
@@ -54,18 +55,55 @@ const columns: TableColumn<Operator>[] = [
   { key: 'lastSeen', header: 'Last Seen', align: 'right' },
 ];
 
+const SortableTableStory = () => {
+  const [sortKey, setSortKey] = useState<string>('id');
+  const [sortDir, setSortDir] = useState<SortDirection>('asc');
+
+  const sorted = [...operators].sort((a, b) => {
+    const av = a[sortKey as keyof Operator];
+    const bv = b[sortKey as keyof Operator];
+    const cmp = String(av).localeCompare(String(bv));
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
+
+  return (
+    <Table
+      columns={columns}
+      data={sorted}
+      keyField="id"
+      sortKey={sortKey}
+      sortDir={sortDir}
+      onSort={(key, dir) => { setSortKey(key); setSortDir(dir); }}
+      striped
+    />
+  );
+};
+
 // ─── Stories ─────────────────────────────────────────────────────────────────
 
 export const Default: Story = {
   decorators: [
     () => <Table columns={columns} data={operators} keyField="id" />,
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByRole('table')).toBeInTheDocument();
+    await expect(canvas.getByText('GHOST')).toBeVisible();
+    await expect(canvas.getByText('VIPER')).toBeVisible();
+    await expect(canvas.getByText('Last Seen')).toBeVisible();
+  },
 };
 
 export const Striped: Story = {
   decorators: [
     () => <Table columns={columns} data={operators} keyField="id" striped />,
   ],
+  play: async ({ canvasElement }) => {
+    const row = within(canvasElement).getByText('RAVEN').closest('tr');
+
+    await expect(row).toHaveClass('bg-surface-terminal/50');
+  },
 };
 
 export const WithCaption: Story = {
@@ -79,6 +117,9 @@ export const WithCaption: Story = {
       />
     ),
   ],
+  play: async ({ canvasElement }) => {
+    await expect(within(canvasElement).getByText('AEGIS // Operator Registry // Sector Alpha-7')).toBeVisible();
+  },
 };
 
 export const Empty: Story = {
@@ -93,32 +134,27 @@ export const Empty: Story = {
       />
     ),
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByText('No operators on record')).toBeVisible();
+    await expect(canvas.getByText('person_off')).toBeVisible();
+  },
 };
 
 export const WithSorting: Story = {
   decorators: [
-    () => {
-      const [sortKey, setSortKey] = useState<string>('id');
-      const [sortDir, setSortDir] = useState<SortDirection>('asc');
-
-      const sorted = [...operators].sort((a, b) => {
-        const av = a[sortKey as keyof Operator];
-        const bv = b[sortKey as keyof Operator];
-        const cmp = String(av).localeCompare(String(bv));
-        return sortDir === 'asc' ? cmp : -cmp;
-      });
-
-      return (
-        <Table
-          columns={columns}
-          data={sorted}
-          keyField="id"
-          sortKey={sortKey}
-          sortDir={sortDir}
-          onSort={(key, dir) => { setSortKey(key); setSortDir(dir); }}
-          striped
-        />
-      );
-    },
+    () => <SortableTableStory />,
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const callSignHeader = canvas.getByText('Call Sign').closest('th');
+    const rows = () => canvas.getAllByRole('row').slice(1);
+
+    await userEvent.click(callSignHeader as HTMLElement);
+    await expect(rows()[0]).toHaveTextContent('CIPHER');
+    await userEvent.click(callSignHeader as HTMLElement);
+    await expect(rows()[0]).toHaveTextContent('WRAITH');
+    await expect(callSignHeader?.querySelector('.text-primary')).toBeInTheDocument();
+  },
 };

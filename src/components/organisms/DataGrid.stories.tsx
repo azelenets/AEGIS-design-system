@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import DataGrid, { type DataGridColumn } from './DataGrid';
 import Badge from '@/components/atoms/Badge';
 import Button from '@/components/atoms/Button';
@@ -60,18 +61,90 @@ const columns: DataGridColumn<Operator>[] = [
   { key: 'lastSeen', header: 'Last Seen', align: 'right', width: '110px' },
 ];
 
+const MultiSelectStory = () => {
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  return (
+    <div className="flex flex-col gap-3">
+      <DataGrid
+        columns={columns}
+        data={operators}
+        keyField="id"
+        selectionMode="multi"
+        selectedIds={selected}
+        onSelectionChange={setSelected}
+        searchable
+        striped
+      />
+      {selected.size > 0 && (
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-mono text-slate-400">Selected:</span>
+          {[...selected].map(id => (
+            <span key={id} className="text-[10px] font-mono text-primary border border-primary/30 px-2 py-0.5">{id}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const FullFeaturedStory = () => {
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  return (
+    <DataGrid
+      columns={columns}
+      data={operators}
+      keyField="id"
+      selectionMode="multi"
+      selectedIds={selected}
+      onSelectionChange={setSelected}
+      searchable
+      striped
+      pageSize={5}
+      caption="AEGIS // Operator Registry"
+      renderExpanded={(row) => (
+        <p className="text-[10px] font-mono text-slate-400">{row.notes}</p>
+      )}
+      actions={(row) => (
+        <>
+          <button title="View" className="text-slate-400 hover:text-primary transition-colors" onClick={() => alert(`View ${row.callSign}`)}>
+            <span className="material-symbols-outlined text-[16px]">visibility</span>
+          </button>
+          <button title="Delete" className="text-slate-400 hover:text-alert transition-colors" onClick={() => alert(`Delete ${row.callSign}`)}>
+            <span className="material-symbols-outlined text-[16px]">delete</span>
+          </button>
+        </>
+      )}
+    />
+  );
+};
+
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
 export const Default = {
   render: () => (
     <DataGrid columns={columns} data={operators} keyField="id" searchable />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByRole('searchbox')).toHaveAttribute('placeholder', 'Search...');
+    await expect(canvas.getByText('12 rows')).toBeVisible();
+    await expect(canvas.getByText('GHOST')).toBeVisible();
+    await expect(canvas.getByText('LYNX')).toBeVisible();
+  },
 };
 
 export const Striped = {
   render: () => (
     <DataGrid columns={columns} data={operators} keyField="id" striped />
   ),
+  play: async ({ canvasElement }) => {
+    const row = within(canvasElement).getByText('RAVEN').closest('tr');
+
+    await expect(row).toHaveClass('bg-surface-terminal/40');
+  },
 };
 
 export const WithFilters = {
@@ -84,33 +157,31 @@ export const WithFilters = {
       caption="AEGIS // Operator Registry"
     />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByText('AEGIS // Operator Registry')).toBeVisible();
+    await userEvent.click(canvas.getByTitle('Toggle filters'));
+    const inputs = canvasElement.querySelectorAll('input[placeholder="Filter…"]');
+    await expect(inputs.length).toBeGreaterThan(0);
+    await userEvent.type(inputs[1] as HTMLInputElement, 'RAVEN');
+    await expect(canvas.getByText('RAVEN')).toBeVisible();
+    await expect(canvas.queryByText('GHOST')).not.toBeInTheDocument();
+  },
 };
 
 export const MultiSelect = {
-  render: () => {
-    const [selected, setSelected] = useState<Set<string>>(new Set());
-    return (
-      <div className="flex flex-col gap-3">
-        <DataGrid
-          columns={columns}
-          data={operators}
-          keyField="id"
-          selectionMode="multi"
-          selectedIds={selected}
-          onSelectionChange={setSelected}
-          searchable
-          striped
-        />
-        {selected.size > 0 && (
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono text-slate-400">Selected:</span>
-            {[...selected].map(id => (
-              <span key={id} className="text-[10px] font-mono text-primary border border-primary/30 px-2 py-0.5">{id}</span>
-            ))}
-          </div>
-        )}
-      </div>
-    );
+  render: () => <MultiSelectStory />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByLabelText('Select row OP-001'));
+    await userEvent.click(canvas.getByLabelText('Select row OP-002'));
+    await expect(canvas.getByText('2 selected · 12 of 12 rows')).toBeVisible();
+    await expect(canvas.getAllByText('OP-001').length).toBeGreaterThan(1);
+    await expect(canvas.getAllByText('OP-002').length).toBeGreaterThan(1);
+    await userEvent.click(canvas.getByLabelText('Select all rows'));
+    await expect(canvas.getByText('10 selected · 12 of 12 rows')).toBeVisible();
   },
 };
 
@@ -123,6 +194,15 @@ export const SingleSelect = {
       selectionMode="single"
     />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByLabelText('Select row OP-001'));
+    await expect(canvas.getByText('1 selected · 12 of 12 rows')).toBeVisible();
+    await userEvent.click(canvas.getByLabelText('Select row OP-002'));
+    await expect(canvas.getByText('1 selected · 12 of 12 rows')).toBeVisible();
+    await expect(canvas.getByLabelText('Select row OP-001')).not.toBeChecked();
+  },
 };
 
 export const ExpandableRows = {
@@ -147,6 +227,14 @@ export const ExpandableRows = {
       )}
     />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const row = canvas.getByText('GHOST').closest('tr');
+
+    await userEvent.click(row?.querySelector('button') as HTMLButtonElement);
+    await expect(canvas.getByText('Operator Notes')).toBeVisible();
+    await expect(canvas.getByText('Lead recon operative for northern grid.')).toBeVisible();
+  },
 };
 
 export const WithRowActions = {
@@ -182,38 +270,29 @@ export const WithRowActions = {
       )}
     />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getAllByTitle('View')).toHaveLength(10);
+    await expect(canvas.getAllByTitle('Edit')).toHaveLength(10);
+    await expect(canvas.getAllByTitle('Remove')).toHaveLength(10);
+  },
 };
 
 export const FullFeatured = {
-  render: () => {
-    const [selected, setSelected] = useState<Set<string>>(new Set());
-    return (
-      <DataGrid
-        columns={columns}
-        data={operators}
-        keyField="id"
-        selectionMode="multi"
-        selectedIds={selected}
-        onSelectionChange={setSelected}
-        searchable
-        striped
-        pageSize={5}
-        caption="AEGIS // Operator Registry"
-        renderExpanded={(row) => (
-          <p className="text-[10px] font-mono text-slate-400">{row.notes}</p>
-        )}
-        actions={(row) => (
-          <>
-            <button title="View" className="text-slate-400 hover:text-primary transition-colors" onClick={() => alert(`View ${row.callSign}`)}>
-              <span className="material-symbols-outlined text-[16px]">visibility</span>
-            </button>
-            <button title="Delete" className="text-slate-400 hover:text-alert transition-colors" onClick={() => alert(`Delete ${row.callSign}`)}>
-              <span className="material-symbols-outlined text-[16px]">delete</span>
-            </button>
-          </>
-        )}
-      />
-    );
+  render: () => <FullFeaturedStory />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByText('AEGIS // Operator Registry')).toBeVisible();
+    await expect(canvas.getByText('12 of 12 rows')).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: '3' }));
+    await expect(canvas.getByText('FALCON')).toBeVisible();
+    await expect(canvas.queryByText('GHOST')).not.toBeInTheDocument();
+    await userEvent.type(canvas.getByRole('searchbox'), 'KRAKEN');
+    await expect(canvas.getByText('KRAKEN')).toBeVisible();
+    await expect(canvas.getByText('1 rows')).toBeVisible();
+    await expect(canvas.getByText('1 of 12 rows')).toBeVisible();
   },
 };
 
@@ -228,6 +307,12 @@ export const Empty = {
       emptyIcon="person_off"
     />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByText('No operators on record')).toBeVisible();
+    await expect(canvas.getByText('0 rows')).toBeVisible();
+  },
 };
 
 export const ColumnVisibility = {
@@ -242,4 +327,12 @@ export const ColumnVisibility = {
       searchable
     />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.queryByText('Notes')).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByTitle('Columns'));
+    await userEvent.click(canvas.getByRole('button', { name: /Notes/i }));
+    await expect(canvas.getAllByText('Notes').length).toBeGreaterThan(1);
+  },
 };

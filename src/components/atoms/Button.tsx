@@ -8,7 +8,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   loading?: boolean;
   icon?: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {

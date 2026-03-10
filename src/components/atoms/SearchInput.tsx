@@ -3,9 +3,18 @@ import { memo, useId, useRef, type InputHTMLAttributes } from 'react';
 export interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;
   onClear?: () => void;
+  containerClassName?: string;
 }
 
-const SearchInput = ({ label, onClear, id, className = '', value, ...rest }: SearchInputProps) => {
+const SearchInput = ({
+  label,
+  onClear,
+  id,
+  className = '',
+  containerClassName = '',
+  value,
+  ...rest
+}: SearchInputProps) => {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -17,7 +26,7 @@ const SearchInput = ({ label, onClear, id, className = '', value, ...rest }: Sea
   };
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div className={['flex flex-col gap-1.5', containerClassName].filter(Boolean).join(' ')}>
       {label && (
         <label
           htmlFor={inputId}

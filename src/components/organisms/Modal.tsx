@@ -6,6 +6,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
+import Button from '@/components/atoms/Button';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -82,14 +83,15 @@ export const ModalHeader = memo(({ title, eyebrow, onClose, variant = 'primary' 
       <h2 className="text-base font-display font-bold text-white leading-tight truncate">{title}</h2>
     </div>
     {onClose && (
-      <button
-        type="button"
+      <Button
         onClick={onClose}
         aria-label="Close dialog"
-        className="shrink-0 text-slate-600 hover:text-slate-200 transition-colors mt-0.5"
+        variant="ghost"
+        size="sm"
+        className="shrink-0 min-w-0 border-0 px-1 py-1 text-slate-600 hover:text-slate-200 mt-0.5"
       >
         <span className="material-symbols-outlined text-[20px]">close</span>
-      </button>
+      </Button>
     )}
   </div>
 ));

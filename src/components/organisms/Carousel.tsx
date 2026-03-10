@@ -2,6 +2,7 @@ import {
   memo, useState, useEffect, useCallback, useRef,
   Children, type ReactNode,
 } from 'react';
+import Button from '@/components/atoms/Button';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -92,12 +93,14 @@ const Carousel = ({
   const atEnd   = !loop && active === count - 1;
 
   const arrowBtn = (onClick: () => void, disabled: boolean, icon: string, label: string) => (
-    <button
+    <Button
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
+      variant="ghost"
+      size="sm"
       className={[
-        'shrink-0 flex items-center justify-center w-8 h-8',
+        'shrink-0 w-8 h-8 min-w-0 border border-slate-600 px-0 py-0',
         'bg-bg-dark/80 border border-slate-600',
         'text-slate-400 transition-all duration-200',
         'hover:border-primary/50 hover:text-primary',
@@ -106,7 +109,7 @@ const Carousel = ({
       ].filter(Boolean).join(' ')}
     >
       <span className="material-symbols-outlined text-[18px]">{icon}</span>
-    </button>
+    </Button>
   );
 
   return (
@@ -166,11 +169,14 @@ const Carousel = ({
             </span>
           ) : (
             slides.map((_, i) => (
-              <button
+              <Button
                 key={i}
                 onClick={() => goTo(i)}
                 aria-label={`Go to slide ${i + 1}`}
+                variant="ghost"
+                size="sm"
                 className={[
+                  'min-w-0 border-0 px-0 py-0',
                   'transition-all duration-300',
                   indicators === 'bars'
                     ? ['h-0.5', i === active ? 'w-6 bg-primary' : 'w-3 bg-border-dark hover:bg-slate-600'].join(' ')

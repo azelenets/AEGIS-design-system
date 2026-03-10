@@ -14,8 +14,16 @@ const StatCard = ({ id, label, value, progress, segmented }: StatCardProps) => {
   const filledCount = Math.round((progress / 100) * SEGMENTS);
   return (
     <article className="bg-surface-terminal border border-primary/10 p-6 relative group overflow-hidden hover:border-primary/40 transition-colors">
-      <div className="absolute top-0 right-0 p-1 text-[10px] text-primary/30">{id}</div>
-      <p className="text-primary/60 text-[10px] uppercase mb-1">{label}</p>
+      <div
+        aria-hidden="true"
+        className="absolute top-0 right-0 pointer-events-none select-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="60" height="20"><text fill="#00f3ff" fill-opacity="0.3" font-size="10" font-family="monospace" x="4" y="14">${id}</text></svg>`)}")`,
+          width: '60px',
+          height: '20px',
+        }}
+      />
+      <p className="text-primary text-[10px] uppercase mb-1">{label}</p>
       <p className="text-3xl font-bold text-white tracking-tighter">{value}</p>
       <div className="h-1 w-full mt-4 flex gap-1">
         {segmented ? (

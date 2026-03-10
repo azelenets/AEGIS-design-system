@@ -45,6 +45,10 @@ const preview: Preview = {
       toc: true,
     },
     layout: 'padded',
+    options: {
+      storySort: (a, b) => a.title.localeCompare(b.title, undefined, { numeric: true, sensitivity: 'base' })
+        || a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }),
+    },
   },
 };
 

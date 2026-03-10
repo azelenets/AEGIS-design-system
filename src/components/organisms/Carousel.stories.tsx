@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import Carousel, { CarouselSlide } from './Carousel';
 import Badge from '@/components/atoms/Badge';
 import Button from '@/components/atoms/Button';
@@ -99,6 +100,19 @@ export const Default = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const next = canvas.getByRole('button', { name: 'Next slide' });
+    const prev = canvas.getByRole('button', { name: 'Previous slide' });
+
+    await expect(canvas.getByText('Alpha Sector')).toBeVisible();
+    await expect(canvas.getAllByRole('button', { name: /Go to slide/i })).toHaveLength(4);
+    await userEvent.click(next);
+    await expect(canvas.getByText('Bravo Sector')).toBeVisible();
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(canvas.getByText('Alpha Sector')).toBeVisible();
+    await expect(prev).toBeEnabled();
+  },
 };
 
 export const WithBarsIndicator = {
@@ -109,6 +123,14 @@ export const WithBarsIndicator = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const indicators = canvas.getAllByRole('button', { name: /Go to slide/i });
+
+    await expect(indicators).toHaveLength(4);
+    await userEvent.click(canvas.getByRole('button', { name: 'Go to slide 3' }));
+    await expect(canvas.getByText('Charlie Sector')).toBeVisible();
+  },
 };
 
 export const WithNumbersIndicator = {
@@ -119,6 +141,14 @@ export const WithNumbersIndicator = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const counter = () => canvasElement.querySelector('.tabular-nums');
+
+    await expect(counter()).toHaveTextContent('01 / 04');
+    await userEvent.click(canvas.getByRole('button', { name: 'Next slide' }));
+    await expect(counter()).toHaveTextContent('02 / 04');
+  },
 };
 
 export const FadeTransition = {
@@ -129,6 +159,14 @@ export const FadeTransition = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByText('Alpha Sector').closest('[aria-hidden]')).toHaveAttribute('aria-hidden', 'false');
+    await userEvent.click(canvas.getByRole('button', { name: 'Go to slide 2' }));
+    await expect(canvas.getByText('Bravo Sector').closest('[aria-hidden]')).toHaveAttribute('aria-hidden', 'false');
+    await expect(canvas.getByText('Alpha Sector').closest('[aria-hidden]')).toHaveAttribute('aria-hidden', 'true');
+  },
 };
 
 export const AutoPlay = {
@@ -139,6 +177,12 @@ export const AutoPlay = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const progress = canvasElement.querySelector('.origin-left');
+
+    await expect(progress).toBeInTheDocument();
+    await expect(progress).toHaveAttribute('style', expect.stringContaining('3000ms'));
+  },
 };
 
 export const NoLoop = {
@@ -149,6 +193,18 @@ export const NoLoop = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const prev = canvas.getByRole('button', { name: 'Previous slide' });
+    const next = canvas.getByRole('button', { name: 'Next slide' });
+
+    await expect(prev).toBeDisabled();
+    await userEvent.click(next);
+    await userEvent.click(next);
+    await userEvent.click(next);
+    await expect(canvas.getByText('Delta Sector')).toBeVisible();
+    await expect(next).toBeDisabled();
+  },
 };
 
 export const MediaGallery = {
@@ -161,10 +217,29 @@ export const MediaGallery = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const activePanelFor = (label: string) =>
+      canvas.getAllByText(label)
+        .map((element) => element.closest('[aria-hidden]'))
+        .find((panel) => panel?.getAttribute('aria-hidden') === 'false');
+
+    await expect(activePanelFor('Alpha Grid')).toHaveAttribute('aria-hidden', 'false');
+    await userEvent.click(canvas.getByRole('button', { name: 'Go to slide 5' }));
+    await expect(activePanelFor('Echo Station')).toHaveAttribute('aria-hidden', 'false');
+  },
 };
 
 export const Controlled = {
   render: () => <ControlledCarouselStory />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByText('Alpha Sector')).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: '3' }));
+    await expect(canvas.getByText('Charlie Sector')).toBeVisible();
+    await expect(canvas.getByText('03', { exact: true })).toBeVisible();
+  },
 };
 
 export const NoArrows = {
@@ -175,6 +250,13 @@ export const NoArrows = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.queryByRole('button', { name: 'Previous slide' })).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('button', { name: 'Next slide' })).not.toBeInTheDocument();
+    await expect(canvas.getAllByRole('button', { name: /Go to slide/i })).toHaveLength(4);
+  },
 };
 
 export const WithCarouselSlide = {
@@ -202,4 +284,13 @@ export const WithCarouselSlide = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByText('Mission Alpha')).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'Next slide' }));
+    await expect(canvas.getByText('Mission Bravo')).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'Go to slide 3' }));
+    await expect(canvas.getByText('Mission Charlie')).toBeVisible();
+  },
 };

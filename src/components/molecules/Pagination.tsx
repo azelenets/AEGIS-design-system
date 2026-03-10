@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import Button from '@/components/atoms/Button';
 
 export interface PaginationProps {
   page: number;
@@ -36,14 +37,16 @@ const Pagination = ({ page, total, siblings = 1, onChange, showEdges = true }: P
   const prev = page > 1;
   const next = page < total;
 
-  const btn = (content: React.ReactNode, target: number | null, active = false, disabled = false) => (
-    <button
-      type="button"
+  const btn = (content: React.ReactNode, target: number | null, active = false, disabled = false, key?: string) => (
+    <Button
+      key={key}
       disabled={disabled || target === null}
       onClick={() => target !== null && onChange(target)}
       aria-current={active ? 'page' : undefined}
+      variant="ghost"
+      size="sm"
       className={[
-        'flex items-center justify-center min-w-[2rem] h-8 px-2 text-[10px] font-bold font-mono uppercase tracking-wider transition-colors border',
+        'min-w-[2rem] h-8 px-2 py-0 text-[10px] border',
         active
           ? 'bg-primary/15 border-primary/40 text-primary'
           : 'bg-transparent border-border-dark text-slate-400 hover:border-primary/40 hover:text-slate-300',
@@ -53,18 +56,18 @@ const Pagination = ({ page, total, siblings = 1, onChange, showEdges = true }: P
         .join(' ')}
     >
       {content}
-    </button>
+    </Button>
   );
 
   return (
     <nav aria-label="Pagination" className="flex items-center gap-1 flex-wrap">
-      {btn(<span className="material-symbols-outlined text-[14px]">chevron_left</span>,  prev ? page - 1 : null, false, !prev)}
+      {btn(<span className="material-symbols-outlined text-[14px]">chevron_left</span>, prev ? page - 1 : null, false, !prev, 'pagination-prev')}
       {pages.map((p, i) =>
         p === '…'
           ? <span key={`ellipsis-${i}`} className="flex items-end justify-center w-8 h-8 pb-1 text-slate-400 font-mono text-xs">···</span>
-          : btn(p, p as number, p === page),
+          : btn(p, p as number, p === page, false, `page-${p}`),
       )}
-      {btn(<span className="material-symbols-outlined text-[14px]">chevron_right</span>, next ? page + 1 : null, false, !next)}
+      {btn(<span className="material-symbols-outlined text-[14px]">chevron_right</span>, next ? page + 1 : null, false, !next, 'pagination-next')}
     </nav>
   );
 };

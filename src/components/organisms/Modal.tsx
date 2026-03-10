@@ -166,9 +166,11 @@ const Modal = ({
       style={{ zIndex: aegisLayers.modal }}
     >
       {/* Backdrop */}
-      <div
+      <button
+        type="button"
         className="absolute inset-0 bg-bg-dark/80 backdrop-blur-sm"
         onClick={() => closeOnBackdrop && onClose()}
+        aria-label="Close dialog backdrop"
       />
 
       {/* Scanline overlay on backdrop */}

@@ -3,7 +3,7 @@ import { memo, type HTMLAttributes } from 'react';
 export interface MissionItemProps extends HTMLAttributes<HTMLElement> {
   date: string;
   title: string;
-  role: string;
+  missionRole: string;
   scanId: string;
   objective: string;
   tactics: string[];
@@ -17,7 +17,7 @@ export interface MissionItemProps extends HTMLAttributes<HTMLElement> {
   imageUrl?: string;
 }
 
-const MissionItem = ({ date, title, role, scanId, objective, tactics, tools, outcome, status, statusColor, align, isShield, isGhost, imageUrl, className = '', ...rest }: MissionItemProps) => {
+const MissionItem = ({ date, title, missionRole, scanId, objective, tactics, tools, outcome, status, statusColor, align, isShield, isGhost, imageUrl, className = '', ...rest }: MissionItemProps) => {
   return (
     <article {...rest} className={['relative grid grid-cols-1 md:grid-cols-2 gap-12 items-start', className].filter(Boolean).join(' ')}>
       <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 z-10">
@@ -29,7 +29,7 @@ const MissionItem = ({ date, title, role, scanId, objective, tactics, tools, out
       <div className={`space-y-4 ${align === 'right' ? 'md:text-right' : 'md:order-2'}`}>
         <div className="inline-block px-3 py-1 bg-primary/10 border border-primary/30 text-primary text-[10px] font-bold tracking-widest uppercase">OPS_DATE: {date}</div>
         <h2 className="text-2xl font-display font-black text-white uppercase tracking-tight">{title}</h2>
-        <div className="text-primary/60 text-xs font-bold tracking-tighter uppercase">ROLE: {role}</div>
+        <div className="text-primary/60 text-xs font-bold tracking-tighter uppercase">ROLE: {missionRole}</div>
 
         <figure className="border border-primary/10 bg-black/20 p-4 mt-4 inline-block group hover:border-primary/40 transition-colors w-full">
           {isShield ? (

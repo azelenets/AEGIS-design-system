@@ -3,7 +3,6 @@ import {
   useState,
   useRef,
   useEffect,
-  useLayoutEffect,
   useCallback,
   useId,
   cloneElement,
@@ -11,11 +10,17 @@ import {
   type ReactNode,
   type HTMLAttributes,
   type KeyboardEvent as ReactKeyboardEvent,
-  type MouseEvent as ReactMouseEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
 import Divider from '@/components/atoms/Divider';
+
+const getTriggerText = (node: ReactNode): string => {
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(getTriggerText).join(' ').trim();
+  if (isValidElement<{ children?: ReactNode }>(node)) return getTriggerText(node.props.children);
+  return '';
+};
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -146,11 +151,6 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
     return () => cancelAnimationFrame(frame);
   }, [open, focusMenuItem]);
 
-  useLayoutEffect(() => {
-    if (!open) return;
-    updatePosition();
-  }, [open, updatePosition]);
-
   useEffect(() => {
     if (!open) return;
     const handleOutside = (e: MouseEvent) => {
@@ -181,7 +181,8 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
     if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (!open) {
-        updatePosition();
+        const next = getPosition();
+        if (next) setPos(next);
         setOpen(true);
       } else {
         focusMenuItem(activeIndex + 1);
@@ -191,13 +192,14 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (!open) {
-        updatePosition();
+        const next = getPosition();
+        if (next) setPos(next);
         setOpen(true);
       } else {
         focusMenuItem(activeIndex - 1);
       }
     }
-  }, [activeIndex, focusMenuItem, open, updatePosition]);
+  }, [activeIndex, focusMenuItem, getPosition, open]);
 
   const handleMenuKeyDown = useCallback((e: ReactKeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'ArrowDown') {
@@ -219,25 +221,15 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
     }
   }, [activeIndex, focusMenuItem, getMenuItems]);
 
-  const triggerProps = {
-    'aria-haspopup': 'menu' as const,
-    'aria-expanded': open,
-    'aria-controls': `${baseId}-menu`,
-    onClick: (e: ReactMouseEvent<HTMLElement>) => {
-      e.preventDefault();
-      toggleMenu();
-    },
-    onKeyDown: handleTriggerKeyDown,
-  };
+  const triggerLabel = getTriggerText(trigger).replace(/\s+/g, ' ').trim() || 'Open menu';
 
   const renderedTrigger = isValidElement(trigger)
-    ? cloneElement(trigger, triggerProps)
+    ? cloneElement(trigger as React.ReactElement<{ 'aria-hidden'?: boolean; tabIndex?: number }>, {
+        'aria-hidden': true,
+        tabIndex: -1,
+      })
     : (
-      <div
-        role="button"
-        tabIndex={0}
-        {...triggerProps}
-      >
+      <div aria-hidden="true">
         {trigger}
       </div>
     );
@@ -247,7 +239,15 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
       <div
         {...rest}
         ref={triggerRef}
+        onClick={toggleMenu}
+        onKeyDown={handleTriggerKeyDown}
         className={['inline-flex', className].filter(Boolean).join(' ')}
+        role="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={`${baseId}-menu`}
+        aria-label={triggerLabel}
+        tabIndex={0}
       >
         {renderedTrigger}
       </div>
@@ -261,6 +261,7 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
           style={{ top: pos.top, left: pos.left, width }}
           onClick={closeMenu}
           onKeyDown={handleMenuKeyDown}
+          tabIndex={-1}
         >
           {children}
         </div>,

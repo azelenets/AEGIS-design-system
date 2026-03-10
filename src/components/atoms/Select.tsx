@@ -212,8 +212,15 @@ const Select = ({
                     {opt.label}
                     <span
                       role="button"
+                      tabIndex={0}
                       aria-label={`Remove ${opt.label}`}
                       onMouseDown={(e) => removeValue(opt.value, e)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          removeValue(opt.value, e as unknown as React.MouseEvent);
+                        }
+                      }}
                       className="material-symbols-outlined text-[10px] text-primary/60 hover:text-primary cursor-pointer"
                     >
                       close

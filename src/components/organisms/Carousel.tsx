@@ -83,17 +83,6 @@ const Carousel = ({
     return () => clearInterval(timer);
   }, [autoPlay, paused, count, interval]);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      goPrev();
-    }
-    if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      goNext();
-    }
-  }, [goPrev, goNext]);
-
   const atStart = !loop && active === 0;
   const atEnd   = !loop && active === count - 1;
 
@@ -120,8 +109,6 @@ const Carousel = ({
   return (
     <div
       {...rest}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
       className={['group/carousel select-none', className].filter(Boolean).join(' ')}
       onMouseEnter={() => pauseOnHover && setPaused(true)}
       onMouseLeave={() => pauseOnHover && setPaused(false)}

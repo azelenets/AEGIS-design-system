@@ -763,7 +763,7 @@ const DashboardContent = () => {
                           <MissionItem
                             date="2023 — 2025"
                             title="Operation Blacksite"
-                            role="Lead Engineer"
+                            missionRole="Lead Engineer"
                             scanId="SC-4891"
                             objective="Architect and ship a zero-downtime microservices migration for a high-traffic SaaS platform."
                             tactics={[

@@ -160,7 +160,7 @@ export const Default = {
 
 export const Vertical = {
   render: () => (
-    <div className="max-w-xl">
+    <div className="max-w-2xl">
       <Wizard steps={deploySteps} orientation="vertical" />
     </div>
   ),

@@ -91,68 +91,89 @@ const Wizard = ({
 
   const stepData = buildStepData(steps, activeIndex);
   const activeContent = steps[activeIndex]?.content;
+  const isVertical = orientation === 'vertical';
+
+  // ── Content panel + nav (shared between layouts) ──────────────────────────
+  const contentPanel = (
+    <div className="bg-surface-terminal border border-border-dark relative overflow-hidden flex-1">
+      {/* Top accent line */}
+      <div className="absolute inset-x-0 top-0 h-px bg-primary/30" />
+      {/* Step label */}
+      <div className="flex items-center gap-2 px-4 pt-4 pb-3 border-b border-border-dark">
+        <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">
+          Step {activeIndex + 1} / {steps.length}
+        </span>
+        <span className="text-[9px] font-mono text-primary/60 uppercase tracking-widest">
+          — {steps[activeIndex]?.title}
+        </span>
+      </div>
+      {/* Content */}
+      <div className="p-4">{activeContent}</div>
+    </div>
+  );
+
+  const navBar = !hideNav && (
+    <div className="flex items-center justify-between">
+      <Button
+        variant="ghost"
+        size="sm"
+        icon="arrow_back"
+        onClick={handleBack}
+        disabled={isFirst}
+      >
+        Back
+      </Button>
+
+      {/* Step dots */}
+      <div className="flex items-center gap-1.5">
+        {steps.map((_, i) => (
+          <span
+            key={i}
+            className={[
+              'w-1.5 h-1.5 transition-all',
+              i < activeIndex  ? 'bg-primary/50' :
+              i === activeIndex ? 'bg-primary w-3' :
+              'bg-border-dark',
+            ].join(' ')}
+          />
+        ))}
+      </div>
+
+      <Button
+        variant={isLast ? 'primary' : 'secondary'}
+        size="sm"
+        icon={isLast ? 'check' : 'arrow_forward'}
+        onClick={handleNext}
+        loading={validating}
+      >
+        {isLast ? completeLabel : 'Next'}
+      </Button>
+    </div>
+  );
+
+  if (isVertical) {
+    return (
+      <div {...rest} className={['flex flex-row gap-0', className].filter(Boolean).join(' ')}>
+        {/* Left: vertical stepper */}
+        <div className="shrink-0 border-r border-border-dark pr-6 pt-2">
+          <Stepper steps={stepData} orientation="vertical" />
+        </div>
+
+        {/* Right: content + nav */}
+        <div className="flex flex-col gap-6 flex-1 pl-6">
+          {contentPanel}
+          {navBar}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div {...rest} className={['flex flex-col gap-6', className].filter(Boolean).join(' ')}>
       {/* Stepper header */}
-      <Stepper steps={stepData} orientation={orientation} />
-
-      {/* Step content panel */}
-      <div className="bg-surface-terminal border border-border-dark relative overflow-hidden">
-        {/* Top accent line */}
-        <div className="absolute inset-x-0 top-0 h-px bg-primary/30" />
-        {/* Step label */}
-        <div className="flex items-center gap-2 px-4 pt-4 pb-3 border-b border-border-dark">
-          <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">
-            Step {activeIndex + 1} / {steps.length}
-          </span>
-          <span className="text-[9px] font-mono text-primary/60 uppercase tracking-widest">
-            — {steps[activeIndex]?.title}
-          </span>
-        </div>
-        {/* Content */}
-        <div className="p-4">{activeContent}</div>
-      </div>
-
-      {/* Navigation */}
-      {!hideNav && (
-        <div className="flex items-center justify-between">
-          <Button
-            variant="ghost"
-            size="sm"
-            icon="arrow_back"
-            onClick={handleBack}
-            disabled={isFirst}
-          >
-            Back
-          </Button>
-
-          {/* Step dots */}
-          <div className="flex items-center gap-1.5">
-            {steps.map((_, i) => (
-              <span
-                key={i}
-                className={[
-                  'w-1.5 h-1.5 transition-all',
-                  i < activeIndex  ? 'bg-primary/50' :
-                  i === activeIndex ? 'bg-primary w-3' :
-                  'bg-border-dark',
-                ].join(' ')}
-              />
-            ))}
-          </div>
-
-          <Button
-            variant={isLast ? 'primary' : 'secondary'}
-            size="sm"
-            icon={isLast ? 'check' : 'arrow_forward'}
-            onClick={handleNext}
-            loading={validating}
-          >
-            {isLast ? completeLabel : 'Next'}
-          </Button>
-        </div>
-      )}
+      <Stepper steps={stepData} orientation="horizontal" />
+      {contentPanel}
+      {navBar}
     </div>
   );
 };

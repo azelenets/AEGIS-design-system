@@ -12,7 +12,7 @@ import Tabs, { TabList, TabTrigger, TabPanel }             from '@/components/or
 import Table                                               from '@/components/organisms/Table';
 import DataGrid, { type DataGridColumn }                   from '@/components/organisms/DataGrid';
 import Modal, { ModalHeader, ModalBody, ModalFooter }      from '@/components/organisms/Modal';
-import Carousel                                            from '@/components/organisms/Carousel';
+import Carousel, { CarouselSlide }                         from '@/components/organisms/Carousel';
 import Stepper                                             from '@/components/organisms/Stepper';
 import Wizard                                              from '@/components/organisms/Wizard';
 import Footer                                              from '@/components/organisms/Footer';
@@ -68,7 +68,6 @@ import TagGroup                                            from '@/components/cr
 import TimelineEntry                                       from '@/components/credentials/TimelineEntry';
 import LabCard                                             from '@/components/laboratory/LabCard';
 import MissionItem                                         from '@/components/mission-log/MissionItem';
-import FeatureCard                                         from '@/components/protocols/FeatureCard';
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 const meta: Meta = {
@@ -231,6 +230,68 @@ const LabTags = ({ items, rating: r }: { items: string[]; rating: number }) => (
   </div>
 );
 
+const SidebarToggleButton = ({
+  collapsed,
+  onToggle,
+}: {
+  collapsed: boolean;
+  onToggle: () => void;
+}) => (
+  <Button
+    type="button"
+    variant="ghost"
+    size="sm"
+    icon={collapsed ? 'chevron_right' : 'chevron_left'}
+    onClick={onToggle}
+    className="w-full justify-start border-0 px-3 py-2 text-slate-600 hover:text-slate-300"
+  >
+    {!collapsed ? 'Collapse' : undefined}
+  </Button>
+);
+
+const OperatorMenuTrigger = () => (
+  <Button
+    type="button"
+    variant="ghost"
+    size="sm"
+    className="gap-2 border-0 px-2 py-1 normal-case tracking-normal hover:bg-primary/5"
+  >
+    <Avatar src="https://i.pravatar.cc/150?img=12" size="sm" />
+    <span className="text-[10px] font-mono font-bold text-slate-400 group-hover:text-slate-200 tracking-widest uppercase hidden sm:block">PHANTOM</span>
+    <span className="material-symbols-outlined text-[14px] text-slate-600">expand_more</span>
+  </Button>
+);
+
+const DashboardMetricCard = ({
+  label,
+  value,
+  color,
+}: {
+  label: string;
+  value: string;
+  color: string;
+}) => (
+  <Card className="bg-surface-terminal">
+    <CardBody className="p-3">
+      <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">{label}</p>
+      <p className={`text-2xl font-bold font-display ${color}`}>{value}</p>
+    </CardBody>
+  </Card>
+);
+
+const AssetArchiveSlide = ({ label, index }: { label: string; index: number }) => (
+  <CarouselSlide>
+    <div className="relative bg-surface-terminal border border-border-dark overflow-hidden h-40 flex items-center justify-center">
+      <div className="absolute inset-0 cyber-grid opacity-30" />
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+      <div className="relative flex flex-col items-center gap-2">
+        <span className="font-display text-3xl font-bold text-primary/20 tracking-widest">{String(index + 1).padStart(2, '0')}</span>
+        <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">{label}</span>
+      </div>
+    </div>
+  </CarouselSlide>
+);
+
 // ─── Dashboard Page ────────────────────────────────────────────────────────────
 const DashboardContent = () => {
   const { toast } = useToast();
@@ -277,14 +338,10 @@ const DashboardContent = () => {
           groups={sidebarGroups}
           collapsed={sidebarCollapsed}
           footer={
-            <button
-              type="button"
-              onClick={() => setSidebarCollapsed(v => !v)}
-              className="w-full flex items-center gap-2 px-3 py-2 text-slate-600 hover:text-slate-300 transition-colors text-[10px] font-mono uppercase tracking-widest"
-            >
-              <span className="material-symbols-outlined text-[16px]">{sidebarCollapsed ? 'chevron_right' : 'chevron_left'}</span>
-              {!sidebarCollapsed && 'Collapse'}
-            </button>
+            <SidebarToggleButton
+              collapsed={sidebarCollapsed}
+              onToggle={() => setSidebarCollapsed(v => !v)}
+            />
           }
         />
 
@@ -311,11 +368,7 @@ const DashboardContent = () => {
                 <Badge label="SYSTEM NOMINAL" variant="success" dot />
                 <ThemeToggle variant="icon" size="sm" />
                 <Dropdown align="right" width="220px" trigger={
-                  <button type="button" className="flex items-center gap-2 px-2 py-1 hover:bg-primary/5 transition-colors group">
-                    <Avatar src="https://i.pravatar.cc/150?img=12" size="sm" />
-                    <span className="text-[10px] font-mono font-bold text-slate-400 group-hover:text-slate-200 tracking-widest uppercase hidden sm:block">PHANTOM</span>
-                    <span className="material-symbols-outlined text-[14px] text-slate-600 group-hover:text-slate-400">expand_more</span>
-                  </button>
+                  <OperatorMenuTrigger />
                 }>
                   <DropdownGroup label="Operator">
                     <DropdownItem icon="person"    label="Profile"     hint="View operator record" />
@@ -453,13 +506,12 @@ const DashboardContent = () => {
                                 { label: 'Pending',   value: '7',   color: 'text-hazard'     },
                                 { label: 'Critical',  value: '2',   color: 'text-alert'      },
                               ].map(({ label, value, color }) => (
-                                <div key={label} className="bg-surface-terminal border border-border-dark p-3">
-                                  <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">{label}</p>
-                                  <p className={`text-2xl font-bold font-display ${color}`}>{value}</p>
-                                </div>
+                                <DashboardMetricCard key={label} label={label} value={value} color={color} />
                               ))}
                             </div>
-                            <Divider className="my-2" />
+                            <div className="my-2">
+                              <Divider />
+                            </div>
                             <HStack className="justify-between items-center mt-2">
                               <span className="text-[10px] text-slate-500 uppercase tracking-widest">Active Operators</span>
                               <AvatarGroup avatars={avatars} max={5} size="sm" />
@@ -739,14 +791,7 @@ const DashboardContent = () => {
                         <CardBody>
                           <Carousel indicators="bars" transition="fade">
                             {['Alpha Grid', 'Bravo Node', 'Charlie Hub', 'Delta Relay'].map((label, i) => (
-                              <div key={label} className="relative bg-surface-terminal border border-border-dark overflow-hidden h-40 flex items-center justify-center">
-                                <div className="absolute inset-0 cyber-grid opacity-30" />
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
-                                <div className="relative flex flex-col items-center gap-2">
-                                  <span className="font-display text-3xl font-bold text-primary/20 tracking-widest">{String(i + 1).padStart(2, '0')}</span>
-                                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">{label}</span>
-                                </div>
-                              </div>
+                              <AssetArchiveSlide key={label} label={label} index={i} />
                             ))}
                           </Carousel>
                         </CardBody>
@@ -942,13 +987,6 @@ const DashboardContent = () => {
 
               {/* ── Right sidebar ── */}
               <div className="flex flex-col gap-4">
-                <FeatureCard id="P-01" icon="memory"   title="BACKEND SYSTEMS"   status="ACTIVE"     dots={5}>
-                  High-throughput APIs, event-driven microservices, and distributed data pipelines.
-                </FeatureCard>
-                <FeatureCard id="P-02" icon="security" title="THREAT DETECTION"  status="MONITORING" dots={3}>
-                  Real-time anomaly detection across all network segments and endpoints.
-                </FeatureCard>
-
                 <Divider label="Tech Stack" />
 
                 <ul className="flex flex-col gap-1.5">

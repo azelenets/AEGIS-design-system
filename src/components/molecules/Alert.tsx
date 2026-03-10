@@ -1,4 +1,5 @@
 import { memo, type ReactNode } from 'react';
+import Button from '@/components/atoms/Button';
 
 export type AlertVariant = 'info' | 'warning' | 'danger' | 'success';
 
@@ -60,14 +61,15 @@ const Alert = ({ variant = 'info', title, children, onDismiss }: AlertProps) => 
         <div className="text-xs text-slate-400 font-mono leading-relaxed">{children}</div>
       </div>
       {onDismiss && (
-        <button
-          type="button"
+        <Button
           onClick={onDismiss}
-          className="shrink-0 text-slate-600 hover:text-slate-300 transition-colors"
+          variant="ghost"
+          size="sm"
+          className="shrink-0 min-w-0 border-0 px-1 py-1 text-slate-600 hover:text-slate-300"
           aria-label="Dismiss"
         >
           <span className="material-symbols-outlined text-[16px]">close</span>
-        </button>
+        </Button>
       )}
     </div>
   );

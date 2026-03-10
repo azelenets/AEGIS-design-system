@@ -47,7 +47,7 @@ const Input = ({ label, error, hint, icon, id, className = '', ...rest }: InputP
       </div>
       {(error || hint) && (
         <p
-          className={`text-[10px] font-mono ${error ? 'text-alert' : 'text-slate-500'}`}
+          className={`text-[10px] font-mono ${error ? 'text-alert' : 'text-slate-400'}`}
         >
           {error ?? hint}
         </p>

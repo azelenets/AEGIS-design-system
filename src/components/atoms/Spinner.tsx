@@ -19,7 +19,7 @@ const VARIANT_CLASSES: Record<SpinnerVariant, string> = {
   primary: 'text-primary',
   hazard: 'text-hazard',
   alert: 'text-alert',
-  ghost: 'text-slate-500',
+  ghost: 'text-slate-400',
 };
 
 const LABEL_SIZE_CLASSES: Record<SpinnerSize, string> = {
@@ -36,7 +36,7 @@ const Spinner = ({ size = 'md', variant = 'primary', label }: SpinnerProps) => (
       progress_activity
     </span>
     {label && (
-      <span className={`font-mono font-bold uppercase tracking-widest opacity-60 ${LABEL_SIZE_CLASSES[size]} ${VARIANT_CLASSES[variant]}`}>
+      <span className={`font-mono font-bold uppercase tracking-widest ${LABEL_SIZE_CLASSES[size]} ${VARIANT_CLASSES[variant]}`}>
         {label}
       </span>
     )}

@@ -41,6 +41,8 @@
    Tailwind slate-3xx/4xx were designed for dark surfaces. On light surfaces
    we remap them to darker equivalents so contrast ratios remain accessible.
 ──────────────────────────────────────────────────────────────────────────── */
+/* Primary cyan is too light for small text on light surfaces — darken it */
+[data-theme="light"] .text-primary      { color: rgb(0 105 116) !important; }
 [data-theme="light"] .text-white        { color: rgb(15 23 42) !important; }
 [data-theme="light"] .text-slate-100,
 [data-theme="light"] .text-slate-200    { color: rgb(15 23 42) !important; }
@@ -49,6 +51,22 @@
 [data-theme="light"] .text-slate-500    { color: rgb(100 116 139) !important; }
 [data-theme="light"] .text-slate-600    { color: rgb(71 85 105) !important; }
 [data-theme="light"] .text-slate-700    { color: rgb(51 65 85) !important; }
+
+/* ─── Storybook docs page theming ────────────────────────────────────────────
+   Override Storybook's hardcoded white docs background so it matches the
+   active theme selected in the toolbar.
+──────────────────────────────────────────────────────────────────────────── */
+#storybook-docs,
+.sbdocs.sbdocs-wrapper,
+.sbdocs-content {
+  background-color: rgb(var(--color-bg-dark)) !important;
+  color: rgb(var(--text-base)) !important;
+}
+
+/* Story preview containers inside docs */
+.docs-story {
+  background-color: rgb(var(--color-panel-dark)) !important;
+}
 
 html,
 body,

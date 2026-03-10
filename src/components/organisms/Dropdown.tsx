@@ -6,6 +6,8 @@ import {
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
+import Button from '@/components/atoms/Button';
+import Divider from '@/components/atoms/Divider';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -33,13 +35,14 @@ export interface DropdownProps {
 // ─── DropdownItem ─────────────────────────────────────────────────────────────
 
 export const DropdownItem = memo(({ label, icon, hint, variant = 'default', disabled, onClick }: DropdownItemProps) => (
-  <button
-    type="button"
+  <Button
+    role="menuitem"
     disabled={disabled}
     onClick={onClick}
+    variant="ghost"
+    size="sm"
     className={[
-      'w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors',
-      'disabled:opacity-40 disabled:cursor-not-allowed',
+      'w-full justify-start gap-2.5 border-0 px-3 py-2 text-left normal-case tracking-normal transition-colors',
       variant === 'danger'
         ? 'text-alert hover:bg-alert/10'
         : 'text-slate-300 hover:bg-primary/5 hover:text-slate-100',
@@ -50,7 +53,7 @@ export const DropdownItem = memo(({ label, icon, hint, variant = 'default', disa
       <span className="block text-[11px] font-mono font-bold uppercase tracking-wider">{label}</span>
       {hint && <span className="block text-[10px] text-slate-600 font-mono normal-case tracking-normal mt-0.5">{hint}</span>}
     </span>
-  </button>
+  </Button>
 ));
 
 DropdownItem.displayName = 'DropdownItem';
@@ -58,7 +61,9 @@ DropdownItem.displayName = 'DropdownItem';
 // ─── DropdownSeparator ────────────────────────────────────────────────────────
 
 export const DropdownSeparator = memo(() => (
-  <div className="my-1 border-t border-border-dark" />
+  <div className="my-1 px-3">
+    <Divider />
+  </div>
 ));
 
 DropdownSeparator.displayName = 'DropdownSeparator';
@@ -66,9 +71,9 @@ DropdownSeparator.displayName = 'DropdownSeparator';
 // ─── DropdownGroup ────────────────────────────────────────────────────────────
 
 export const DropdownGroup = memo(({ label, children }: DropdownGroupProps) => (
-  <div>
+  <div role="group" aria-label={label}>
     {label && (
-      <p className="px-3 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest text-slate-600 font-mono">
+      <p className="px-3 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest text-slate-600 font-mono" aria-hidden="true">
         {label}
       </p>
     )}

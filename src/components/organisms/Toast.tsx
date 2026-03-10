@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
+import Button from '@/components/atoms/Button';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -78,14 +79,15 @@ const ToastItem = memo(({ data, onDismiss }: { data: ToastData; onDismiss: (id: 
         )}
         <p className="text-[11px] text-slate-400 font-mono leading-relaxed">{data.message}</p>
       </div>
-      <button
-        type="button"
+      <Button
         onClick={() => onDismiss(data.id)}
         aria-label="Dismiss"
-        className="shrink-0 text-slate-700 hover:text-slate-300 transition-colors"
+        variant="ghost"
+        size="sm"
+        className="shrink-0 min-w-0 border-0 px-1 py-1 text-slate-700 hover:text-slate-300"
       >
         <span className="material-symbols-outlined text-[16px]">close</span>
-      </button>
+      </Button>
     </div>
   );
 });

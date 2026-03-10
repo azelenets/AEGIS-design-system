@@ -1,37 +1,45 @@
 import type { Meta } from '@storybook/react-vite';
+import Badge from '@/components/atoms/Badge';
+import { CardBody, CardHeader, default as Card } from '@/components/molecules/Card';
+import Stack from '@/components/layout/Stack';
 
 const meta: Meta = { title: 'Foundations/Typography' };
 export default meta;
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="flex flex-col gap-4">
-    <p className="text-[9px] font-bold uppercase tracking-widest text-primary/60 font-mono border-b border-border-dark pb-2">{title}</p>
+  <Card>
+    <CardHeader title={title} eyebrow="Typography" variant="primary" />
+    <CardBody className="space-y-4">
     {children}
-  </div>
+    </CardBody>
+  </Card>
 );
 
 const Row = ({ label, className, sample }: { label: string; className: string; sample?: string }) => (
   <div className="flex items-baseline gap-6">
-    <span className="text-[9px] text-slate-600 font-mono w-32 shrink-0">{label}</span>
+    <span className="text-[9px] text-slate-400 font-mono w-32 shrink-0">{label}</span>
     <span className={className}>{sample ?? 'AEGIS Tactical UI'}</span>
   </div>
 );
 
 export const FontFamilies = {
   render: () => (
-    <div className="flex flex-col gap-10 p-6">
+    <Stack gap={6} className="p-6">
+      <div className="flex items-center gap-3">
+        <Badge label="Foundations" variant="primary" dot />
+      </div>
       <Section title="Families">
         <Row label="font-display"  className="font-display text-2xl text-white"   sample="Orbitron — Display" />
         <Row label="font-mono"     className="font-mono   text-base text-white"   sample="JetBrains Mono — Mono" />
         <Row label="font-grotesk"  className="font-grotesk text-base text-white"  sample="Space Grotesk — Body" />
       </Section>
-    </div>
+    </Stack>
   ),
 };
 
 export const TypeScale = {
   render: () => (
-    <div className="flex flex-col gap-10 p-6">
+    <Stack gap={6} className="p-6">
       <Section title="Display scale (font-display)">
         {(['text-4xl','text-3xl','text-2xl','text-xl','text-lg'] as const).map((s) => (
           <Row key={s} label={s} className={`font-display font-bold text-white ${s}`} />
@@ -42,25 +50,25 @@ export const TypeScale = {
           <Row key={s} label={s} className={`font-mono text-white ${s}`} sample="Operator GHOST // Alpha-7" />
         ))}
       </Section>
-    </div>
+    </Stack>
   ),
 };
 
 export const FontWeights = {
   render: () => (
-    <div className="flex flex-col gap-4 p-6">
+    <Stack gap={6} className="p-6">
       <Section title="Weights (font-mono)">
         <Row label="font-normal (400)" className="font-mono font-normal text-white" />
         <Row label="font-bold (700)"   className="font-mono font-bold   text-white" />
         <Row label="font-extrabold (800)" className="font-mono font-extrabold text-white" />
       </Section>
-    </div>
+    </Stack>
   ),
 };
 
 export const TextColors = {
   render: () => (
-    <div className="flex flex-col gap-3 p-6">
+    <Stack gap={6} className="p-6">
       <Section title="Color tokens on text">
         {[
           ['text-white',       'Primary text'],
@@ -76,6 +84,6 @@ export const TextColors = {
           <Row key={cls} label={label} className={`font-mono text-sm ${cls}`} sample={`${cls} — ${label}`} />
         ))}
       </Section>
-    </div>
+    </Stack>
   ),
 };

@@ -33,7 +33,7 @@ const Footer = ({ brand, tagline, groups = [], bottom, copyright, className = ''
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">{brand}</div>
             {tagline && (
-              <p className="text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-1">
+              <p className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mt-1">
                 {tagline}
               </p>
             )}
@@ -57,7 +57,7 @@ const Footer = ({ brand, tagline, groups = [], bottom, copyright, className = ''
                           {...(link.href
                             ? { href: link.href }
                             : { type: 'button' as const, onClick: link.onClick })}
-                          className="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-500 hover:text-slate-200 transition-colors"
+                          className="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-400 hover:text-slate-200 transition-colors"
                         >
                           {link.icon && (
                             <span className="material-symbols-outlined text-[13px]">{link.icon}</span>
@@ -78,7 +78,7 @@ const Footer = ({ brand, tagline, groups = [], bottom, copyright, className = ''
     {/* Bottom bar */}
     <div className="flex items-center justify-between px-6 py-3 border-t border-border-dark/60">
       {copyright ? (
-        <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">{copyright}</span>
+        <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">{copyright}</span>
       ) : (
         <span />
       )}

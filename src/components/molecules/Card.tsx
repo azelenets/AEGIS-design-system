@@ -43,10 +43,10 @@ const VARIANT_HOVER: Record<CardVariant, string> = {
 };
 
 const VARIANT_EYEBROW: Record<CardVariant, string> = {
-  default: 'text-slate-500',
-  primary: 'text-primary/60',
-  hazard:  'text-hazard/60',
-  alert:   'text-alert/60',
+  default: 'text-slate-400',
+  primary: 'text-primary',
+  hazard:  'text-hazard',
+  alert:   'text-alert',
 };
 
 const FOOTER_ALIGN: Record<'left' | 'right' | 'between', string> = {

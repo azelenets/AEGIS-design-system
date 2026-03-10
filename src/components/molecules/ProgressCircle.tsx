@@ -67,7 +67,7 @@ const ProgressCircle = ({
   const color = STROKE_COLOR[variant];
 
   const centerContent = label ?? (showValue && !indeterminate
-    ? <span className={`font-bold font-mono tabular-nums text-white ${VALUE_SIZE[size]}`}>{clamped}</span>
+    ? <span className={`font-bold font-mono tabular-nums [color:rgb(var(--text-base))] ${VALUE_SIZE[size]}`}>{clamped}</span>
     : null);
 
   return (

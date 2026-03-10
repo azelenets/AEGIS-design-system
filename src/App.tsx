@@ -3,7 +3,6 @@ import PageHeader from '@/components/layout/PageHeader';
 import StatCard from '@/components/dashboard/StatCard';
 import FilterButton from '@/components/arsenal/FilterButton';
 import SpecCard from '@/components/arsenal/SpecCard';
-import FeatureCard from '@/components/protocols/FeatureCard';
 
 const App = () => {
   return (
@@ -35,9 +34,10 @@ const App = () => {
               subtitle="HUD :: TERMINAL :: OPS"
               img="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=640&q=80"
             />
-            <FeatureCard id="P-01" icon="deployed_code" title="SYSTEM EXTRACTION" status="READY" dots={4}>
-              Reusable presentation primitives aligned to the production site and existing stories.
-            </FeatureCard>
+            <SpecCard
+              title="System Extraction"
+              subtitle="PROTOCOL :: READY"
+            />
           </div>
         </section>
       </div>

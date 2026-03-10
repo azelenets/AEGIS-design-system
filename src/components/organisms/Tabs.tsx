@@ -6,6 +6,7 @@ import {
   useContext,
   type ReactNode,
 } from 'react';
+import Button from '@/components/atoms/Button';
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -74,9 +75,9 @@ const TRIGGER_ACTIVE: Record<TabsVariant, string> = {
 };
 
 const TRIGGER_INACTIVE: Record<TabsVariant, string> = {
-  line:  'text-slate-500 border-transparent hover:text-slate-300 hover:border-slate-600',
-  pill:  'text-slate-500 border border-transparent hover:text-slate-300',
-  boxed: 'text-slate-500 border-transparent hover:text-slate-300',
+  line:  'text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-600',
+  pill:  'text-slate-400 border border-transparent hover:text-slate-300',
+  boxed: 'text-slate-400 border-transparent hover:text-slate-300',
 };
 
 // ─── TabList ──────────────────────────────────────────────────────────────────
@@ -102,18 +103,18 @@ export const TabTrigger = memo(({ id, icon, children, disabled = false }: TabTri
   const isActive = active === id;
 
   return (
-    <button
+    <Button
       role="tab"
-      type="button"
       id={`${baseId}-tab-${id}`}
       aria-controls={`${baseId}-panel-${id}`}
       aria-selected={isActive}
       disabled={disabled}
       onClick={() => setActive(id)}
+      variant="ghost"
+      size="sm"
       className={[
-        'inline-flex items-center gap-1.5 shrink-0 outline-none',
+        'shrink-0 outline-none border-0 normal-case tracking-normal',
         'focus-visible:ring-1 focus-visible:ring-primary/40',
-        'disabled:opacity-40 disabled:cursor-not-allowed',
         TRIGGER_BASE[variant],
         isActive ? TRIGGER_ACTIVE[variant] : TRIGGER_INACTIVE[variant],
       ].join(' ')}
@@ -122,7 +123,7 @@ export const TabTrigger = memo(({ id, icon, children, disabled = false }: TabTri
         <span className="material-symbols-outlined text-[14px]">{icon}</span>
       )}
       {children}
-    </button>
+    </Button>
   );
 });
 

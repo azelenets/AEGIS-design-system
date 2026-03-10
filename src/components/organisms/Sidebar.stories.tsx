@@ -38,7 +38,7 @@ export const Default = {
   render: () => (
     <div className="h-screen flex">
       <Sidebar brand={brand} groups={groups} footer={footer} />
-      <main className="flex-1 p-8 text-xs font-mono text-slate-600">Main content area</main>
+      <main className="flex-1 p-8 text-xs font-mono text-slate-400">Main content area</main>
     </div>
   ),
 };
@@ -47,7 +47,7 @@ export const Collapsed = {
   render: () => (
     <div className="h-screen flex">
       <Sidebar brand={<span className="material-symbols-outlined text-primary text-[20px]">shield</span>} groups={groups} footer={footer} collapsed />
-      <main className="flex-1 p-8 text-xs font-mono text-slate-600">Main content area</main>
+      <main className="flex-1 p-8 text-xs font-mono text-slate-400">Main content area</main>
     </div>
   ),
 };
@@ -60,7 +60,7 @@ export const Toggleable = {
         <Sidebar brand={collapsed ? <span className="material-symbols-outlined text-primary text-[20px]">shield</span> : brand} groups={groups} collapsed={collapsed}
           footer={<Button variant="ghost" size="sm" icon={collapsed ? 'chevron_right' : 'chevron_left'} onClick={() => setCollapsed((v) => !v)}>{collapsed ? '' : 'Collapse'}</Button>}
         />
-        <main className="flex-1 p-8 text-xs font-mono text-slate-600">Click footer button to toggle sidebar.</main>
+        <main className="flex-1 p-8 text-xs font-mono text-slate-400">Click footer button to toggle sidebar.</main>
       </div>
     );
   },

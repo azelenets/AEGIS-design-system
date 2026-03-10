@@ -72,12 +72,13 @@ const ToggleGroupStory = () => {
         >
           <div>
             <p className="text-xs text-slate-300 font-mono">{setting.label}</p>
-            <p className="text-[10px] text-slate-600 font-mono">{setting.hint}</p>
+            <p className="text-[10px] text-slate-400 font-mono">{setting.hint}</p>
           </div>
           <Toggle
             variant={setting.variant ?? 'primary'}
             checked={!!active[setting.id]}
             onChange={() => toggle(setting.id)}
+            aria-label={setting.label}
           />
         </div>
       ))}

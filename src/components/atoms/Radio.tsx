@@ -55,7 +55,7 @@ export const RadioOption = memo(({ label, hint, id, className = '', ...rest }: R
               {label}
             </span>
           )}
-          {hint && <span className="text-[10px] text-slate-600 font-mono">{hint}</span>}
+          {hint && <span className="text-[10px] text-slate-400 font-mono">{hint}</span>}
         </span>
       )}
     </label>
@@ -91,7 +91,7 @@ const RadioGroup = ({ name: _name, label, hint, orientation = 'vertical', childr
       </legend>
     )}
     <div className={`flex ${ORIENTATION_CLASSES[orientation]}`}>{children}</div>
-    {hint && <p className="text-[10px] text-slate-600 font-mono mt-2">{hint}</p>}
+    {hint && <p className="text-[10px] text-slate-400 font-mono mt-2">{hint}</p>}
   </fieldset>
 );
 

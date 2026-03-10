@@ -42,7 +42,7 @@ const Navbar = ({ brand, items = [], actions, sticky = true, onNavClick }: Navba
                 'border-b-2 transition-colors shrink-0',
                 item.active
                   ? 'text-primary border-primary'
-                  : 'text-slate-500 border-transparent hover:text-slate-300 hover:border-slate-600',
+                  : 'text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-600',
               ].join(' ')}
             >
               {item.icon && <span className="material-symbols-outlined text-[15px]">{item.icon}</span>}

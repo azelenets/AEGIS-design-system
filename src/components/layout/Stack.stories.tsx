@@ -11,7 +11,7 @@ export default meta;
 const Box = ({ label, dim }: { label: string; dim?: boolean }) => (
   <div className={[
     'border px-3 py-2 text-[10px] font-mono text-center',
-    dim ? 'bg-bg-dark border-border-dark text-slate-600' : 'bg-surface-terminal border-border-dark text-slate-400',
+    dim ? 'bg-bg-dark border-border-dark text-slate-400' : 'bg-surface-terminal border-border-dark text-slate-400',
   ].join(' ')}>
     {label}
   </div>
@@ -96,7 +96,7 @@ export const HStackAlignments = {
     <VStack gap={4}>
       {(['start', 'center', 'end', 'stretch'] as const).map(align => (
         <div key={align}>
-          <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest mb-1">align="{align}"</p>
+          <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest mb-1">align="{align}"</p>
           <HStack gap={2} align={align} className="border border-border-dark p-2">
             <Box label="Short" />
             <TallBox label="Tall" />
@@ -152,7 +152,7 @@ export const ZStackDefault = {
       <Center className="w-full h-full">
         <div className="text-center">
           <p className="font-display text-sm font-bold text-primary tracking-widest uppercase">AEGIS</p>
-          <p className="text-[9px] font-mono text-slate-500 mt-1 uppercase tracking-widest">Tactical Grid</p>
+          <p className="text-[9px] font-mono text-slate-400 mt-1 uppercase tracking-widest">Tactical Grid</p>
         </div>
       </Center>
     </ZStack>
@@ -165,11 +165,11 @@ export const ZStackBadgeOverlay = {
     <HStack gap={6} align="start">
       {(['top-right corner badge', 'status dot', 'count pill'] as const).map((label, i) => (
         <div key={label} className="flex flex-col items-center gap-2">
-          <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">{label}</p>
+          <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">{label}</p>
           <ZStack align="start" className="inline-grid">
             {/* Base element */}
             <div className="w-12 h-12 bg-surface-terminal border border-border-dark flex items-center justify-center">
-              <span className="material-symbols-outlined text-[20px] text-slate-500">
+              <span className="material-symbols-outlined text-[20px] text-slate-400">
                 {i === 0 ? 'notifications' : i === 1 ? 'person' : 'mail'}
               </span>
             </div>
@@ -192,7 +192,7 @@ export const ZStackAlignments = {
     <HStack gap={4} align="start" wrap>
       {(['start', 'center', 'end'] as const).map(align => (
         <div key={align} className="flex flex-col items-center gap-2">
-          <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">align="{align}"</p>
+          <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">align="{align}"</p>
           <ZStack align={align} className="w-24 h-24 border border-border-dark bg-surface-terminal">
             <div className="w-full h-full" />
             <div className="w-10 h-10 bg-primary/20 border border-primary/40" />
@@ -210,7 +210,7 @@ export const SpacerExample = {
   render: () => (
     <VStack gap={3}>
       <div>
-        <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest mb-1">HStack with Spacer</p>
+        <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest mb-1">HStack with Spacer</p>
         <HStack gap={2} className="border border-border-dark p-2 w-full">
           <Box label="Logo" />
           <Spacer />
@@ -219,7 +219,7 @@ export const SpacerExample = {
         </HStack>
       </div>
       <div>
-        <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest mb-1">Multiple Spacers (equal distribution)</p>
+        <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest mb-1">Multiple Spacers (equal distribution)</p>
         <HStack gap={0} className="border border-border-dark p-2 w-full">
           <Box label="A" />
           <Spacer />
@@ -242,7 +242,7 @@ export const CenterExample = {
     <Center className="h-32 border border-border-dark bg-surface-terminal">
       <div className="text-center">
         <p className="font-display text-sm font-bold text-primary tracking-widest uppercase">Centered</p>
-        <p className="text-[9px] font-mono text-slate-500 mt-1">Both axes</p>
+        <p className="text-[9px] font-mono text-slate-400 mt-1">Both axes</p>
       </div>
     </Center>
   ),
@@ -272,7 +272,7 @@ export const AppShell = {
         </VStack>
         {/* Main */}
         <Center className="flex-1 bg-bg-dark">
-          <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">Main content area</p>
+          <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">Main content area</p>
         </Center>
       </HStack>
     </VStack>

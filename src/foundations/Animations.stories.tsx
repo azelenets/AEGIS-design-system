@@ -1,60 +1,85 @@
 import type { Meta } from '@storybook/react-vite';
+import Badge from '@/components/atoms/Badge';
+import Button from '@/components/atoms/Button';
+import Skeleton from '@/components/atoms/Skeleton';
+import { CardBody, CardHeader, default as Card } from '@/components/molecules/Card';
+import Stack from '@/components/layout/Stack';
 
 const meta: Meta = { title: 'Foundations/Animations' };
 export default meta;
 
-const Demo = ({ label, hint, children }: { label: string; hint: string; children: React.ReactNode }) => (
-  <div className="flex items-center gap-6 border-b border-border-dark pb-5 last:border-0">
-    <div className="w-24 h-12 flex items-center justify-center">{children}</div>
-    <div>
-      <p className="text-xs font-bold font-mono text-white">{label}</p>
-      <p className="text-[10px] font-mono text-slate-600">{hint}</p>
-    </div>
-  </div>
+const DemoCard = ({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint: string;
+  children: React.ReactNode;
+}) => (
+  <Card className="min-h-[132px]">
+    <CardHeader title={label} eyebrow={hint} variant="primary" />
+    <CardBody className="flex min-h-[72px] items-center justify-center">
+      {children}
+    </CardBody>
+  </Card>
 );
 
 export const AllAnimations = {
   render: () => (
-    <div className="flex flex-col gap-5 p-6 max-w-lg">
-      <p className="text-[9px] font-bold uppercase tracking-widest text-primary/60 font-mono">AEGIS // Motion Tokens</p>
+    <Stack gap={5} className="max-w-4xl p-6">
+      <div className="flex items-center gap-3">
+        <Badge label="Foundations" variant="primary" dot />
+        <p className="text-[9px] font-bold uppercase tracking-widest text-primary/60 font-mono">
+          AEGIS // Motion Tokens
+        </p>
+      </div>
 
-      <Demo label="animate-spin" hint="Tailwind built-in — 1s">
-        <span className="material-symbols-outlined text-primary text-[24px] animate-spin">refresh</span>
-      </Demo>
+      <div className="grid gap-4 md:grid-cols-2">
+        <DemoCard label="animate-spin" hint="Tailwind built-in // 1s">
+          <span className="material-symbols-outlined text-primary text-[24px] animate-spin">refresh</span>
+        </DemoCard>
 
-      <Demo label="animate-spin-slow" hint="Custom — 20s linear infinite">
-        <span className="material-symbols-outlined text-primary/60 text-[24px] animate-spin-slow">radar</span>
-      </Demo>
+        <DemoCard label="animate-spin-slow" hint="Custom // 20s linear infinite">
+          <span className="material-symbols-outlined text-primary/60 text-[24px] animate-spin-slow">radar</span>
+        </DemoCard>
 
-      <Demo label="animate-pulse" hint="Tailwind built-in — 2s">
-        <span className="w-3 h-3 rounded-full bg-primary animate-pulse" />
-      </Demo>
+        <DemoCard label="animate-pulse" hint="Tailwind built-in // 2s">
+          <span className="w-3 h-3 rounded-full bg-primary animate-pulse" />
+        </DemoCard>
 
-      <Demo label="animate-pulse-fast" hint="Custom — 1s">
-        <span className="w-3 h-3 rounded-full bg-hazard animate-pulse-fast" />
-      </Demo>
+        <DemoCard label="animate-pulse-fast" hint="Custom // 1s">
+          <span className="w-3 h-3 rounded-full bg-hazard animate-pulse-fast" />
+        </DemoCard>
 
-      <Demo label="aegis-scan" hint="globals.css — indeterminate bar sweep">
-        <span className="relative w-full h-1.5 bg-primary/10 overflow-hidden">
-          <span className="absolute inset-y-0 w-1/3 bg-primary opacity-80" style={{ animation: 'aegis-scan 1.4s ease-in-out infinite' }} />
-        </span>
-      </Demo>
+        <DemoCard label="aegis-scan" hint="globals.css // indeterminate bar sweep">
+          <span className="relative w-full h-1.5 bg-primary/10 overflow-hidden">
+            <span
+              className="absolute inset-y-0 w-1/3 bg-primary opacity-80"
+              style={{ animation: 'aegis-scan 1.4s ease-in-out infinite' }}
+            />
+          </span>
+        </DemoCard>
 
-      <Demo label="aegis-spin-progress" hint="globals.css — circular spinner">
-        <span className="material-symbols-outlined text-primary text-[24px]" style={{ animation: 'aegis-spin-progress 1.4s linear infinite' }}>
-          progress_activity
-        </span>
-      </Demo>
+        <DemoCard label="aegis-spin-progress" hint="globals.css // circular spinner">
+          <span
+            className="material-symbols-outlined text-primary text-[24px]"
+            style={{ animation: 'aegis-spin-progress 1.4s linear infinite' }}
+          >
+            progress_activity
+          </span>
+        </DemoCard>
 
-      <Demo label="aegis-shimmer" hint="globals.css — skeleton shimmer">
-        <span className="block w-full h-6 bg-surface-terminal aegis-shimmer" />
-      </Demo>
+        <DemoCard label="aegis-shimmer" hint="globals.css // skeleton shimmer">
+          <Skeleton shape="box" height="24px" className="w-full" />
+        </DemoCard>
 
-      <Demo label="transition-colors" hint="Tailwind — 150ms default">
-        <button type="button" className="px-3 py-1.5 border border-border-dark text-slate-500 font-mono text-[10px] hover:border-primary hover:text-primary transition-colors">
-          Hover me
-        </button>
-      </Demo>
-    </div>
+        <DemoCard label="transition-colors" hint="Tailwind // 150ms default">
+          <Button variant="ghost" size="sm">
+            Hover me
+          </Button>
+        </DemoCard>
+      </div>
+    </Stack>
   ),
 };

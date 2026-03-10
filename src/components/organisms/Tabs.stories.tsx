@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import Tabs, { TabList, TabTrigger, TabPanel } from './Tabs';
 import Badge from '@/components/atoms/Badge';
 
@@ -28,6 +29,12 @@ export const LineVariant: Story = {
       </Tabs>
     ),
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('tab', { name: /Telemetry/ }));
+    await expect(canvas.getByRole('tabpanel')).toHaveTextContent('Inbound: 1.2 GB/s');
+  },
 };
 
 export const PillVariant: Story = {

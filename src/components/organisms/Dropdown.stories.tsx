@@ -1,4 +1,5 @@
 import type { Meta } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import Dropdown, { DropdownItem, DropdownSeparator, DropdownGroup } from './Dropdown';
 import Button from '@/components/atoms/Button';
 
@@ -15,6 +16,13 @@ export const Default = {
       <DropdownItem label="Delete"        icon="delete" variant="danger" />
     </Dropdown>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: /Actions/ }));
+    await expect(within(document.body).getByRole('menu')).toBeVisible();
+    await expect(within(document.body).getByRole('button', { name: /Delete/ })).toBeVisible();
+  },
 };
 
 export const WithGroups = {

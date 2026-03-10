@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import Modal, { ModalHeader, ModalBody, ModalFooter } from './Modal';
 import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
@@ -50,6 +51,14 @@ export const Default: Story = {
       </Trigger>
     ),
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: /Open Default/ }));
+    await expect(within(document.body).getByRole('dialog')).toBeVisible();
+    await userEvent.click(within(document.body).getByRole('button', { name: /Acknowledge/ }));
+    await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+  },
 };
 
 export const SmallSize: Story = {

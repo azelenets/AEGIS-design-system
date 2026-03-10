@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import Checkbox from './Checkbox';
 
 const meta: Meta<typeof Checkbox> = {
@@ -52,6 +53,13 @@ export const Controlled: Story = {
       );
     },
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByRole('checkbox', { name: /Shield inactive/ });
+
+    await userEvent.click(checkbox);
+    await expect(canvas.getByRole('checkbox', { name: /Shield active/ })).toBeChecked();
+  },
 };
 
 export const CheckboxGroup: Story = {

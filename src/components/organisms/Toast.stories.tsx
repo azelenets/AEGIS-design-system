@@ -1,4 +1,5 @@
 import type { Meta } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { ToastProvider, Toaster, useToast } from './Toast';
 import Button from '@/components/atoms/Button';
 
@@ -25,6 +26,16 @@ export const Default = {
       <Trigger />
     </ToastProvider>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Success' }));
+    await expect(within(document.body).getByText('All 14 endpoints confirmed nominal.')).toBeVisible();
+    await userEvent.click(within(document.body).getByRole('button', { name: 'Dismiss' }));
+    await waitFor(async () => {
+      await expect(within(document.body).queryByText('All 14 endpoints confirmed nominal.')).not.toBeInTheDocument();
+    });
+  },
 };
 
 export const TopRight = {

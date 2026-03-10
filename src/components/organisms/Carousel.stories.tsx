@@ -63,6 +63,32 @@ const ImageLikeSlide = ({ label, index }: { label: string; index: number }) => (
   </div>
 );
 
+const ControlledCarouselStory = () => {
+  const [active, setActive] = useState(0);
+
+  return (
+    <div className="flex flex-col gap-4 max-w-lg">
+      <div className="flex items-center gap-2">
+        {slides.map((slide, index) => (
+          <Button
+            key={slide.id}
+            variant={active === index ? 'primary' : 'ghost'}
+            size="sm"
+            onClick={() => setActive(index)}
+          >
+            {index + 1}
+          </Button>
+        ))}
+      </div>
+      <Carousel activeSlide={active} onSlideChange={setActive} indicators="numbers">
+        {slides.map((slide) => (
+          <TacticalSlide key={slide.id} s={slide} />
+        ))}
+      </Carousel>
+    </div>
+  );
+};
+
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
 export const Default = {
@@ -138,28 +164,7 @@ export const MediaGallery = {
 };
 
 export const Controlled = {
-  render: () => {
-    const [active, setActive] = useState(0);
-    return (
-      <div className="flex flex-col gap-4 max-w-lg">
-        <div className="flex items-center gap-2">
-          {slides.map((s, i) => (
-            <Button
-              key={s.id}
-              variant={active === i ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => setActive(i)}
-            >
-              {i + 1}
-            </Button>
-          ))}
-        </div>
-        <Carousel activeSlide={active} onSlideChange={setActive} indicators="numbers">
-          {slides.map(s => <TacticalSlide key={s.id} s={s} />)}
-        </Carousel>
-      </div>
-    );
-  },
+  render: () => <ControlledCarouselStory />,
 };
 
 export const NoArrows = {

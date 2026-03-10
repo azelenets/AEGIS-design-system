@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import SearchInput from './SearchInput';
 
 const meta: Meta<typeof SearchInput> = { title: 'Atoms/SearchInput', component: SearchInput, decorators: [(S) => <div className="max-w-xs"><S /></div>] };
@@ -19,5 +20,14 @@ export const Controlled = {
         {q && <p className="text-[10px] font-mono text-slate-600">Query: "{q}"</p>}
       </div>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByLabelText('Query');
+
+    await userEvent.type(input, 'ghost');
+    await expect(canvas.getByText('Query: "ghost"')).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear search' }));
+    await expect(input).toHaveValue('');
   },
 };

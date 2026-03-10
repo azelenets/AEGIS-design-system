@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import Pagination from './Pagination';
 
 const meta: Meta<typeof Pagination> = { title: 'Molecules/Pagination', component: Pagination };
@@ -9,6 +10,12 @@ export const Default = {
   render: () => {
     const [p, setP] = useState(1);
     return <Pagination page={p} total={10} onChange={setP} />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: '2' }));
+    await expect(canvas.getByRole('button', { name: '2' })).toHaveAttribute('aria-current', 'page');
   },
 };
 

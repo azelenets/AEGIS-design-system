@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import RadioGroup, { RadioOption } from './Radio';
 
 const meta: Meta<typeof RadioGroup> = {
@@ -86,4 +87,11 @@ export const Controlled: Story = {
       );
     },
   ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('radio', { name: /^Neutralize/ }));
+    await expect(canvas.getByRole('radio', { name: /^Neutralize/ })).toBeChecked();
+    await expect(canvas.getByRole('radio', { name: /^Reconnaissance/ })).not.toBeChecked();
+  },
 };

@@ -1,6 +1,6 @@
 # AEGIS Design System
 
-AEGIS is a standalone tactical UI workspace extracted from the main portfolio site. It packages the production visual language into reusable foundations, components, and Storybook stories.
+AEGIS is a standalone tactical UI workspace. It packages the production visual language into reusable foundations, components, and Storybook stories.
 
 ## Scope
 

@@ -2,49 +2,45 @@
 
 # AEGIS Design System
 
-AEGIS is a React 19 design-system workspace for the tactical UI language used across the project. It ships reusable foundations, typed components, Storybook stories, and a small Vite app for local inspection.
+AEGIS is a React 19 design-system workspace for building tactical, terminal-inspired interfaces with a consistent visual language and typed component API. The project combines theme foundations, reusable UI primitives, higher-level layout and workflow components, domain-specific presentation blocks, and a Storybook catalog that acts as both documentation and the main interaction test surface.
+
+The design direction is deliberate rather than generic: HUD framing, grid overlays, mono-driven data presentation, alert-state color semantics, and operational dashboard patterns are all first-class parts of the system.
+
+## What This Project Includes
+
+- Typed React components exported from a single package entrypoint
+- Design tokens and CSS variable contracts for dark/light theming
+- Storybook stories for components, foundations, and page-level assemblies
+- Browser-based Storybook interaction tests with Vitest and Playwright
+- Accessibility checks through Storybook a11y tooling
+- ESLint and TypeScript static checks
+- A small Vite app for local manual inspection outside Storybook
 
 ## Stack
 
 - React 19
+- TypeScript 5
 - Vite 6
-- Storybook 10 with `@storybook/react-vite`
-- Storybook Autodocs via `@storybook/addon-docs`
-- Vitest browser-mode story tests
-- Storybook accessibility checks via `@storybook/addon-a11y`
-- Visual regression integration via `@chromatic-com/storybook`
+- Storybook 10 (`@storybook/react-vite`)
+- Vitest browser mode
+- Playwright
+- ESLint 9 flat config
+- Chromatic
 
-## Local Development
+## Design Philosophy
 
-```bash
-npm install
-npm run dev
-npm run storybook
-```
+AEGIS is built for tactical product surfaces rather than consumer UI defaults.
 
-Local URLs:
-
-- Vite app: `http://localhost:3001`
-- Storybook: `http://localhost:6007`
-
-## Scripts
-
-```bash
-npm run dev                     # Vite preview app
-npm run build                   # Library/app build
-npm run storybook               # Storybook dev server
-npm run build-storybook         # Static Storybook build
-npm run test-storybook          # Storybook Vitest suite
-npm run test-storybook:watch    # Watch mode
-npm run test-storybook:coverage # Storybook tests with V8 coverage
-npm run visual-test             # Chromatic visual tests
-```
+- Typography emphasizes `Orbitron`, `JetBrains Mono`, and `Space Grotesk`
+- Color semantics are operational: `primary`, `hazard`, `alert`, `success`, `ghost`
+- Components are designed to look coherent in dashboards, control panels, operator views, and intelligence surfaces
+- Foundation styles include HUD borders, scanlines, grid textures, terminal panels, and system status treatments
 
 ## Package Surface
 
 Primary exports live in [`src/index.ts`](./src/index.ts).
 
-Foundations:
+### Foundations
 
 - `aegisTailwindTheme`
 - `aegisTokens`
@@ -55,19 +51,6 @@ Foundations:
 CSS entrypoint:
 
 - `@aegis/design-system/globals.css`
-
-## Foundations
-
-Core theme data is defined in [`src/foundations/aegisTheme.ts`](./src/foundations/aegisTheme.ts).
-
-- Fonts: `Orbitron`, `JetBrains Mono`, `Space Grotesk`
-- Theme modes: `dark`, `light`
-- Semantic tokens: `primary`, `hazard`, `alert`, `background`, `panel`, `surface`, `border`, `text`
-- CSS-variable theme contract through `aegisCSSVars`
-
-Global UI treatments come from [`src/foundations/globals.css`](./src/foundations/globals.css), including tactical surfaces, HUD borders, grid overlays, stripes, and scanline utilities.
-
-## Component Inventory
 
 ### Atoms
 
@@ -109,6 +92,7 @@ Global UI treatments come from [`src/foundations/globals.css`](./src/foundations
 - `DataGrid`
 - `Dropdown`, `DropdownItem`, `DropdownSeparator`, `DropdownGroup`
 - `Footer`
+- `Map`
 - `Modal`, `ModalHeader`, `ModalBody`, `ModalFooter`
 - `Navbar`
 - `Sidebar`
@@ -133,7 +117,18 @@ Global UI treatments come from [`src/foundations/globals.css`](./src/foundations
 - Dashboard: `StatBlock`, `StatCard`
 - Laboratory: `LabCard`
 - Mission Log: `MissionItem`
-- Protocols: `FeatureCard`
+
+## Foundations
+
+Theme tokens and CSS variables are defined in [`src/foundations/aegisTheme.ts`](./src/foundations/aegisTheme.ts). Global styles live in [`src/foundations/globals.css`](./src/foundations/globals.css).
+
+Key foundation capabilities:
+
+- Dark and light themes
+- Semantic color tokens for state and status
+- Shared panel, border, text, and background contracts
+- Reusable visual utilities for HUD and terminal presentation
+- App-level theme switching through `ThemeProvider`
 
 ## Project Structure
 
@@ -149,46 +144,144 @@ src/
     mission-log/
     molecules/
     organisms/
-    protocols/
   foundations/
   pages/
+  App.tsx
+  index.ts
+  main.tsx
+
+.storybook/
+  main.ts
+  preview.ts
+  vitest.setup.ts
 ```
 
-Notes:
+Stories live beside components as `*.stories.tsx`.
 
-- `src/components/primitives` exists as a folder, but the active exported taxonomy is `atoms`, `molecules`, `organisms`, `layout`, and domain groups.
-- Stories live beside components as `*.stories.tsx`.
+## Local Development
 
-## Testing
+Install dependencies:
 
-Storybook is the test surface for this repo.
+```bash
+npm install
+```
 
-- Interaction and render tests run through `@storybook/addon-vitest`
-- Component documentation is generated through Storybook Autodocs
-- Accessibility checks are enabled through `@storybook/addon-a11y`
-- Coverage is generated by `@vitest/coverage-v8`
-- Visual regression is configured through Chromatic
+Run the Vite app:
 
-Current workflow:
+```bash
+npm run dev
+```
 
-- `npm run test-storybook`
-- `npm run test-storybook:coverage`
-- `npm run visual-test`
+Run Storybook:
 
-Coverage output is written to [`coverage/storybook`](./coverage/storybook).
+```bash
+npm run storybook
+```
+
+Typical local URLs:
+
+- Vite app: `http://localhost:5173`
+- Storybook: `http://localhost:6007`
+
+## Scripts
+
+```bash
+npm run dev
+npm run build
+npm run lint
+npm run lint:fix
+npm run typecheck
+npm run storybook
+npm run build-storybook
+npm run test-storybook
+npm run test-storybook:watch
+npm run test-storybook:coverage
+npm run visual-test
+```
+
+Meaning:
+
+- `build`: production Vite build
+- `lint`: ESLint across the workspace
+- `typecheck`: TypeScript compile-time validation with `tsc --noEmit`
+- `test-storybook`: Storybook interaction suite
+- `test-storybook:coverage`: Storybook interaction suite with V8 coverage output
+
+## Testing and Quality Gates
+
+This repo uses Storybook as the main component validation surface.
+
+- Stories provide documentation and executable interaction coverage
+- Vitest runs Storybook stories in browser mode
+- Playwright powers the browser environment
+- Coverage is produced via `@vitest/coverage-v8`
+- ESLint enforces code quality
+- TypeScript enforces API and usage correctness
+
+Coverage output is written to [`coverage/storybook`](./coverage/storybook) when the coverage script runs.
 
 ## CI
 
-GitHub Actions is configured in [`.github/workflows/storybook-tests.yml`](./.github/workflows/storybook-tests.yml).
+GitHub Actions workflow lives in [`.github/workflows/storybook-tests.yml`](./.github/workflows/storybook-tests.yml).
 
-It currently:
+Current CI structure:
 
-- runs Storybook Vitest coverage on pushes to `main` and pull requests
-- uploads the Storybook coverage artifact
-- runs Chromatic when `CHROMATIC_PROJECT_TOKEN` is configured
+- `static-checks` job
+  - `npm ci`
+  - `npm run lint`
+  - `npm run typecheck`
+- `storybook-tests` job
+  - `npm ci`
+  - Playwright Chromium install
+  - `npm run test-storybook:coverage`
+  - coverage artifact upload
+- `chromatic` job
+  - runs on push
+  - waits for both static checks and Storybook tests
+
+Static checks and Storybook browser tests run in parallel to reduce total CI time.
+
+## Storybook Scope
+
+The Storybook catalog includes:
+
+- foundation stories for themes, spacing, color, and typography
+- component stories for every exported UI tier
+- domain stories for tactical/dashboard-specific building blocks
+- a page-level `AEGIS Ops Dashboard` composition story
+
+That makes Storybook the primary place to:
+
+- inspect component behavior
+- validate interaction flows
+- verify visual hierarchy and theme behavior
+- test complex compositions like grids, modals, wizards, tables, maps, and dashboards
+
+## Notable Components
+
+Some higher-value surfaces in this system:
+
+- `DataGrid`: filtering, sorting, pagination, density, selection, expansion, column visibility
+- `Wizard`: controlled/uncontrolled step flows with validation hooks
+- `Map`: Leaflet-backed tactical map surface with themed overlays and markers
+- `Tabs`, `Sidebar`, `Navbar`, `Footer`: application shell composition pieces
+- `Modal`, `Toast`, `Overlay`, `Dropdown`: operational interaction primitives
+- `Carousel`, `Stepper`, `Table`: high-level display and workflow components
+
+## Intended Use
+
+AEGIS is a good fit for:
+
+- internal operations dashboards
+- command-center and monitoring UIs
+- security/admin consoles
+- system control panels
+- intelligence, mission, or infrastructure reporting tools
+
+It is less about generic marketing-site components and more about structured, status-rich application interfaces.
 
 ## Notes
 
-- The repo includes a Vite app entry in [`src/main.tsx`](./src/main.tsx) for quick manual review outside Storybook.
-- The Storybook catalog currently covers the full exported component surface, plus foundation and page-level stories, and global `autodocs` is enabled in preview configuration.
-- `npx tsc --noEmit` still reports existing type issues in [`src/pages/Dashboard.stories.tsx`](./src/pages/Dashboard.stories.tsx), so TypeScript is not yet a clean gate for the whole workspace.
+- The repo is currently private and structured as a package workspace rather than a published npm package release flow.
+- The Vite app in [`src/App.tsx`](./src/App.tsx) is a local preview shell, not the primary documentation surface.
+- Storybook remains the canonical showcase and test surface for the component library.

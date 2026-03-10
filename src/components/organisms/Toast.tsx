@@ -117,7 +117,7 @@ export const Toaster = memo(({ position = 'bottom-right' }: { position?: ToastPo
   };
 
   return createPortal(
-    <div className={`fixed z-[60] flex flex-col gap-2 pointer-events-none ${POSITION_CLASSES[position]}`}>
+    <div className={`fixed z-[1400] flex flex-col gap-2 pointer-events-none ${POSITION_CLASSES[position]}`}>
       {toasts.map((t) => (
         <div key={t.id} className="pointer-events-auto">
           <ToastItem data={t} onDismiss={dismiss} />

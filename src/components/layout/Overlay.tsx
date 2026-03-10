@@ -8,7 +8,7 @@ export interface OverlayProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onCl
   zIndex?: number;
 }
 
-const Overlay = ({ visible, onClick, blur = false, zIndex = 40, className = '', style, ...rest }: OverlayProps) => {
+const Overlay = ({ visible, onClick, blur = false, zIndex = 1200, className = '', style, ...rest }: OverlayProps) => {
   if (!visible) return null;
   return createPortal(
     <div

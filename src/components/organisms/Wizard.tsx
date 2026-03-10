@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, type ReactNode } from 'react';
+import { memo, useState, useCallback, type ReactNode, type HTMLAttributes } from 'react';
 import Stepper, { type StepData, type StepperOrientation } from './Stepper';
 import Button from '@/components/atoms/Button';
 
@@ -13,7 +13,7 @@ export interface WizardStep {
   onNext?: () => boolean | Promise<boolean>;
 }
 
-export interface WizardProps {
+export interface WizardProps extends HTMLAttributes<HTMLDivElement> {
   steps: WizardStep[];
   /** Controlled active index */
   activeStep?: number;
@@ -24,7 +24,6 @@ export interface WizardProps {
   completeLabel?: string;
   /** Hide built-in nav buttons (bring your own) */
   hideNav?: boolean;
-  className?: string;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -52,6 +51,7 @@ const Wizard = ({
   completeLabel = 'Complete',
   hideNav = false,
   className = '',
+  ...rest
 }: WizardProps) => {
   const [internalStep, setInternalStep] = useState(0);
   const [validating, setValidating] = useState(false);
@@ -93,7 +93,7 @@ const Wizard = ({
   const activeContent = steps[activeIndex]?.content;
 
   return (
-    <div className={['flex flex-col gap-6', className].join(' ')}>
+    <div {...rest} className={['flex flex-col gap-6', className].filter(Boolean).join(' ')}>
       {/* Stepper header */}
       <Stepper steps={stepData} orientation={orientation} />
 

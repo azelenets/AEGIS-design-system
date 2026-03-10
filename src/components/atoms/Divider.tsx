@@ -1,8 +1,8 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
 export type DividerVariant = 'primary' | 'ghost' | 'hazard';
 
-export interface DividerProps {
+export interface DividerProps extends HTMLAttributes<HTMLDivElement> {
   label?: string;
   variant?: DividerVariant;
   vertical?: boolean;
@@ -20,14 +20,14 @@ const LABEL_CLASSES: Record<DividerVariant, string> = {
   hazard: 'text-hazard/60',
 };
 
-const Divider = ({ label, variant = 'ghost', vertical = false }: DividerProps) => {
+const Divider = ({ label, variant = 'ghost', vertical = false, className = '', ...rest }: DividerProps) => {
   if (vertical) {
-    return <div className={`self-stretch border-l ${BORDER_CLASSES[variant]}`} />;
+    return <div {...rest} className={['self-stretch border-l', BORDER_CLASSES[variant], className].filter(Boolean).join(' ')} />;
   }
 
   if (label) {
     return (
-      <div className="flex items-center gap-3">
+      <div {...rest} className={['flex items-center gap-3', className].filter(Boolean).join(' ')}>
         <div className={`flex-1 border-t ${BORDER_CLASSES[variant]}`} />
         <span className={`text-[9px] font-bold uppercase tracking-widest font-mono ${LABEL_CLASSES[variant]}`}>
           {label}
@@ -37,7 +37,7 @@ const Divider = ({ label, variant = 'ghost', vertical = false }: DividerProps) =
     );
   }
 
-  return <div className={`w-full border-t ${BORDER_CLASSES[variant]}`} />;
+  return <div {...rest} className={['w-full border-t', BORDER_CLASSES[variant], className].filter(Boolean).join(' ')} />;
 };
 
 export default memo(Divider);

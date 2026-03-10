@@ -1,14 +1,14 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
-export interface EntryCardProps {
+export interface EntryCardProps extends HTMLAttributes<HTMLElement> {
   id: string;
   code: string;
   title: string;
   full?: boolean;
 }
 
-const EntryCard = ({ id, code, title, full }: EntryCardProps) => (
-  <article className={`p-4 border border-white/10 bg-panel-dark hover:border-primary/50 transition-colors group relative overflow-hidden ${full ? 'col-span-full' : ''}`}>
+const EntryCard = ({ id, code, title, full, className = '', ...rest }: EntryCardProps) => (
+  <article {...rest} className={['p-4 border border-white/10 bg-panel-dark hover:border-primary/50 transition-colors group relative overflow-hidden', full ? 'col-span-full' : '', className].filter(Boolean).join(' ')}>
     <div
       aria-hidden="true"
       className="absolute right-0 top-0 pointer-events-none opacity-5 group-hover:opacity-10 transition-opacity"

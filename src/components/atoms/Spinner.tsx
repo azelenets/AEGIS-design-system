@@ -1,9 +1,9 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
 export type SpinnerSize = 'sm' | 'md' | 'lg';
 export type SpinnerVariant = 'primary' | 'hazard' | 'alert' | 'ghost';
 
-export interface SpinnerProps {
+export interface SpinnerProps extends HTMLAttributes<HTMLDivElement> {
   size?: SpinnerSize;
   variant?: SpinnerVariant;
   label?: string;
@@ -28,8 +28,8 @@ const LABEL_SIZE_CLASSES: Record<SpinnerSize, string> = {
   lg: 'text-xs',
 };
 
-const Spinner = ({ size = 'md', variant = 'primary', label }: SpinnerProps) => (
-  <div className="inline-flex flex-col items-center gap-2">
+const Spinner = ({ size = 'md', variant = 'primary', label, className = '', ...rest }: SpinnerProps) => (
+  <div {...rest} className={['inline-flex flex-col items-center gap-2', className].filter(Boolean).join(' ')}>
     <span
       className={`material-symbols-outlined animate-spin ${SIZE_CLASSES[size]} ${VARIANT_CLASSES[variant]}`}
     >

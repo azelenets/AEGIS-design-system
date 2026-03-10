@@ -1,6 +1,6 @@
 import {
   memo, useState, useEffect, useCallback, useRef,
-  Children, type ReactNode,
+  Children, type ReactNode, type HTMLAttributes,
 } from 'react';
 import Button from '@/components/atoms/Button';
 
@@ -9,7 +9,7 @@ import Button from '@/components/atoms/Button';
 export type CarouselIndicator = 'dots' | 'bars' | 'numbers' | 'none';
 export type CarouselTransition = 'slide' | 'fade';
 
-export interface CarouselProps {
+export interface CarouselProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   /** Controlled active index */
   activeSlide?: number;
@@ -43,6 +43,7 @@ const Carousel = ({
   showArrows = true,
   pauseOnHover = true,
   className = '',
+  ...rest
 }: CarouselProps) => {
   const slides = Children.toArray(children);
   const count  = slides.length;
@@ -114,7 +115,8 @@ const Carousel = ({
 
   return (
     <div
-      className={['group/carousel select-none', className].join(' ')}
+      {...rest}
+      className={['group/carousel select-none', className].filter(Boolean).join(' ')}
       onMouseEnter={() => pauseOnHover && setPaused(true)}
       onMouseLeave={() => pauseOnHover && setPaused(false)}
     >
@@ -214,14 +216,13 @@ export default memo(Carousel);
 
 // ─── CarouselSlide ─────────────────────────────────────────────────────────────
 
-export interface CarouselSlideProps {
+export interface CarouselSlideProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  className?: string;
 }
 
 /** Semantic wrapper for carousel slide content */
-export const CarouselSlide = memo(({ children, className = '' }: CarouselSlideProps) => (
-  <div className={['w-full', className].join(' ')}>
+export const CarouselSlide = memo(({ children, className = '', ...rest }: CarouselSlideProps) => (
+  <div {...rest} className={['w-full', className].filter(Boolean).join(' ')}>
     {children}
   </div>
 ));

@@ -5,6 +5,7 @@ import {
   createContext,
   useContext,
   type ReactNode,
+  type HTMLAttributes,
 } from 'react';
 import Button from '@/components/atoms/Button';
 
@@ -29,7 +30,7 @@ const useTabsCtx = () => {
 
 // ─── Prop types ───────────────────────────────────────────────────────────────
 
-export interface TabsProps {
+export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   defaultTab: string;
   variant?: TabsVariant;
   children: ReactNode;
@@ -151,7 +152,7 @@ TabPanel.displayName = 'TabPanel';
 
 // ─── Tabs (root) ──────────────────────────────────────────────────────────────
 
-const Tabs = ({ defaultTab, variant = 'line', onChange, children }: TabsProps) => {
+const Tabs = ({ defaultTab, variant = 'line', onChange, children, className = '', ...rest }: TabsProps) => {
   const baseId = useId();
   const [active, setActive] = useState(defaultTab);
 
@@ -162,7 +163,7 @@ const Tabs = ({ defaultTab, variant = 'line', onChange, children }: TabsProps) =
 
   return (
     <TabsContext.Provider value={{ active, setActive: handleChange, baseId, variant }}>
-      <div className="flex flex-col">{children}</div>
+      <div {...rest} className={['flex flex-col', className].filter(Boolean).join(' ')}>{children}</div>
     </TabsContext.Provider>
   );
 };

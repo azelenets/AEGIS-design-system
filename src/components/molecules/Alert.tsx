@@ -1,9 +1,9 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 import Button from '@/components/atoms/Button';
 
 export type AlertVariant = 'info' | 'warning' | 'danger' | 'success';
 
-export interface AlertProps {
+export interface AlertProps extends HTMLAttributes<HTMLDivElement> {
   variant?: AlertVariant;
   title?: string;
   children: ReactNode;
@@ -44,11 +44,11 @@ const VARIANT_CONFIG: Record<
   },
 };
 
-const Alert = ({ variant = 'info', title, children, onDismiss }: AlertProps) => {
+const Alert = ({ variant = 'info', title, children, onDismiss, className = '', ...rest }: AlertProps) => {
   const config = VARIANT_CONFIG[variant];
 
   return (
-    <div className={`border ${config.border} ${config.bg} p-4 flex gap-3`}>
+    <div {...rest} className={[`border ${config.border} ${config.bg} p-4 flex gap-3`, className].filter(Boolean).join(' ')}>
       <span className={`material-symbols-outlined text-[20px] shrink-0 mt-0.5 ${config.iconColor}`}>
         {config.icon}
       </span>

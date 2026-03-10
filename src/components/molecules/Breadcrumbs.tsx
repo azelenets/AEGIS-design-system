@@ -1,4 +1,4 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -10,7 +10,7 @@ export interface BreadcrumbItem {
   icon?: string;
 }
 
-export interface BreadcrumbsProps {
+export interface BreadcrumbsProps extends HTMLAttributes<HTMLElement> {
   items: BreadcrumbItem[];
   separator?: BreadcrumbSeparator;
   maxItems?: number;
@@ -27,7 +27,7 @@ const SEPARATOR_CONTENT: Record<BreadcrumbSeparator, ReactNode> = {
 
 // ─── Breadcrumbs ──────────────────────────────────────────────────────────────
 
-const Breadcrumbs = ({ items, separator = 'chevron', maxItems }: BreadcrumbsProps) => {
+const Breadcrumbs = ({ items, separator = 'chevron', maxItems, className, ...rest }: BreadcrumbsProps) => {
   // Collapse middle items when maxItems is set
   let visible = items;
   let collapsed = false;
@@ -38,7 +38,7 @@ const Breadcrumbs = ({ items, separator = 'chevron', maxItems }: BreadcrumbsProp
   }
 
   return (
-    <nav aria-label="Breadcrumb">
+    <nav {...rest} aria-label="Breadcrumb" className={className}>
       <ol className="flex items-center gap-1.5 flex-wrap">
         {visible.map((item, index) => {
           const isLast = index === visible.length - 1;

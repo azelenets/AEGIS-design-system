@@ -1,6 +1,6 @@
-import { memo } from 'react';
+import { memo, type LiHTMLAttributes } from 'react';
 
-export interface StatusItemProps {
+export interface StatusItemProps extends LiHTMLAttributes<HTMLLIElement> {
   name: string;
   detail: string;
   status: string;
@@ -10,7 +10,7 @@ export interface StatusItemProps {
 
 const ALERT_BADGE_CLASSES = 'text-[9px] text-alert font-bold px-1 bg-alert/10 border border-alert shadow-[0_0_10px_rgba(255,62,62,0.3)]';
 
-const StatusItem = ({ name, detail, status, isCritical, isMaster }: StatusItemProps) => {
+const StatusItem = ({ name, detail, status, isCritical, isMaster, className = '', ...rest }: StatusItemProps) => {
   const isAlert = isCritical || isMaster;
   const borderColor = isAlert ? 'border-alert/20 hover:border-alert' : 'border-primary/10 hover:border-primary';
   const nameColor = isAlert ? 'text-alert' : 'text-primary';
@@ -24,7 +24,7 @@ const StatusItem = ({ name, detail, status, isCritical, isMaster }: StatusItemPr
   );
 
   return (
-    <li className={`border p-3 bg-bg-dark group transition-colors relative ${borderColor}`}>
+    <li {...rest} className={['border p-3 bg-bg-dark group transition-colors relative', borderColor, className].filter(Boolean).join(' ')}>
       <div className="flex justify-between items-center mb-1">
         <span className={`text-sm font-bold uppercase group-hover:[color:rgb(var(--text-base))] ${nameColor}`}>{name}</span>
         {badge}

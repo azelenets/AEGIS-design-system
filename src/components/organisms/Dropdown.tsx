@@ -4,6 +4,7 @@ import {
   useRef,
   useEffect,
   type ReactNode,
+  type HTMLAttributes,
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
@@ -25,7 +26,7 @@ export interface DropdownGroupProps {
   children: ReactNode;
 }
 
-export interface DropdownProps {
+export interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
   trigger: ReactNode;
   children: ReactNode;
   align?: 'left' | 'right';
@@ -85,7 +86,7 @@ DropdownGroup.displayName = 'DropdownGroup';
 
 // ─── Dropdown ─────────────────────────────────────────────────────────────────
 
-const Dropdown = ({ trigger, children, align = 'left', width = '200px' }: DropdownProps) => {
+const Dropdown = ({ trigger, children, align = 'left', width = '200px', className, ...rest }: DropdownProps) => {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -117,7 +118,7 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px' }: Dropdo
 
   return (
     <>
-      <div ref={triggerRef} onClick={() => { updatePosition(); setOpen((v) => !v); }} className="inline-flex">
+      <div {...rest} ref={triggerRef} onClick={() => { updatePosition(); setOpen((v) => !v); }} className={['inline-flex', className].filter(Boolean).join(' ')}>
         {trigger}
       </div>
 

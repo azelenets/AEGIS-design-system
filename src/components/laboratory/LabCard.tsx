@@ -1,6 +1,6 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 
-export interface LabCardProps {
+export interface LabCardProps extends HTMLAttributes<HTMLElement> {
   id: string;
   codename: string;
   title: string;
@@ -33,11 +33,11 @@ const TITLE_HOVER_CLASS_MAP: Record<LabCardProps['color'], string> = {
   alert: 'group-hover:text-alert',
 };
 
-const LabCard = ({ id, codename, title, desc, status, statusColor, color, stats, action, icon, link, children }: LabCardProps) => {
+const LabCard = ({ id, codename, title, desc, status, statusColor, color, stats, action, icon, link, children, className = '', ...rest }: LabCardProps) => {
   const actionClasses = ACTION_CLASS_MAP[color];
 
   return (
-    <article className={`hud-border bg-panel-dark/80 backdrop-blur-sm p-6 group transition-all ${COLOR_CLASS_MAP[color]}`}>
+    <article {...rest} className={['hud-border bg-panel-dark/80 backdrop-blur-sm p-6 group transition-all', COLOR_CLASS_MAP[color], className].filter(Boolean).join(' ')}>
       <div className="flex justify-between items-start mb-4">
         <span className="text-[10px] font-bold opacity-60">
           {id}

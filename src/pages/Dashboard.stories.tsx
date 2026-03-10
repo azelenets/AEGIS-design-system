@@ -525,7 +525,7 @@ const DashboardContent = () => {
                                     <span className="material-symbols-outlined text-primary text-[18px]">shield</span>
                                   </div>
                                   <div className="absolute -top-1.5 -right-1.5">
-                                    <Badge label="2" variant={v} />
+                                    <Badge label="2" variant={v} solid={true} />
                                   </div>
                                 </ZStack>
                               ))}

@@ -1,11 +1,11 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
 export interface TimelineField {
   label: string;
   value: string;
 }
 
-export interface TimelineEntryProps {
+export interface TimelineEntryProps extends HTMLAttributes<HTMLElement> {
   level: string;
   title: string;
   organization: string;
@@ -14,8 +14,8 @@ export interface TimelineEntryProps {
   fields: TimelineField[];
 }
 
-const TimelineEntry = ({ level, title, organization, period, distinguished, fields }: TimelineEntryProps) => (
-  <article className="relative pl-6 border-l border-primary/30">
+const TimelineEntry = ({ level, title, organization, period, distinguished, fields, className = '', ...rest }: TimelineEntryProps) => (
+  <article {...rest} className={['relative pl-6 border-l border-primary/30', className].filter(Boolean).join(' ')}>
     <div className="absolute -left-[5px] top-0 size-2 bg-primary" />
     <div className="flex flex-wrap justify-between items-start gap-2 mb-2">
       <div className="flex flex-col gap-2">

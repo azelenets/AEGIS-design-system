@@ -1,4 +1,4 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 
 export interface NavItem {
   id: string;
@@ -9,7 +9,7 @@ export interface NavItem {
   badge?: string;
 }
 
-export interface NavbarProps {
+export interface NavbarProps extends HTMLAttributes<HTMLElement> {
   brand?: ReactNode;
   items?: NavItem[];
   actions?: ReactNode;
@@ -17,12 +17,14 @@ export interface NavbarProps {
   onNavClick?: (item: NavItem) => void;
 }
 
-const Navbar = ({ brand, items = [], actions, sticky = true, onNavClick }: NavbarProps) => (
+const Navbar = ({ brand, items = [], actions, sticky = true, onNavClick, className = '', ...rest }: NavbarProps) => (
   <header
+    {...rest}
     className={[
       'w-full bg-panel-dark border-b border-border-dark z-30',
       sticky ? 'sticky top-0' : '',
-    ].join(' ')}
+      className,
+    ].filter(Boolean).join(' ')}
   >
     <div className="flex items-center gap-4 px-4 h-12">
       {/* Brand */}

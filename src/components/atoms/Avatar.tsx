@@ -1,9 +1,9 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarVariant = 'primary' | 'hazard' | 'alert' | 'ghost';
 
-export interface AvatarProps {
+export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
   src?: string;
   alt?: string;
   initials?: string;
@@ -41,13 +41,16 @@ const Avatar = ({
   size = 'md',
   variant = 'primary',
   status,
+  className = '',
+  ...rest
 }: AvatarProps) => {
   const sizes = SIZE_CLASSES[size];
   const avatarLabel = initials ? initials.slice(0, 2).toUpperCase() : icon ?? 'Avatar';
 
   return (
     <span
-      className={`relative inline-flex shrink-0 ${sizes.container}`}
+      {...rest}
+      className={['relative inline-flex shrink-0', sizes.container, className].filter(Boolean).join(' ')}
       {...(!src && { role: 'img', 'aria-label': avatarLabel })}
     >
       <span

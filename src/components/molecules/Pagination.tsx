@@ -1,7 +1,7 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 import Button from '@/components/atoms/Button';
 
-export interface PaginationProps {
+export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
   page: number;
   total: number;       // total number of pages
   siblings?: number;   // pages shown each side of current (default 1)
@@ -32,7 +32,7 @@ const buildPages = (page: number, total: number, siblings: number): (number | '�
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const Pagination = ({ page, total, siblings = 1, onChange, showEdges = true }: PaginationProps) => {
+const Pagination = ({ page, total, siblings = 1, onChange, showEdges = true, className, ...rest }: PaginationProps) => {
   const pages = showEdges ? buildPages(page, total, siblings) : range(1, total);
   const prev = page > 1;
   const next = page < total;
@@ -60,7 +60,7 @@ const Pagination = ({ page, total, siblings = 1, onChange, showEdges = true }: P
   );
 
   return (
-    <nav aria-label="Pagination" className="flex items-center gap-1 flex-wrap">
+    <nav {...rest} aria-label="Pagination" className={['flex items-center gap-1 flex-wrap', className].filter(Boolean).join(' ')}>
       {btn(<span className="material-symbols-outlined text-[14px]">chevron_left</span>, prev ? page - 1 : null, false, !prev, 'pagination-prev')}
       {pages.map((p, i) =>
         p === '…'

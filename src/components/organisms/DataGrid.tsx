@@ -1,4 +1,4 @@
-import { memo, useState, useMemo, useCallback, useEffect, useRef, Fragment, type ReactNode, type ChangeEvent } from 'react';
+import { memo, useState, useMemo, useCallback, useEffect, useRef, Fragment, type ReactNode, type ChangeEvent, type HTMLAttributes } from 'react';
 import Button from '@/components/atoms/Button';
 import Checkbox from '@/components/atoms/Checkbox';
 import { RadioOption } from '@/components/atoms/Radio';
@@ -24,7 +24,7 @@ export interface DataGridColumn<T extends Record<string, unknown>> {
   render?: (value: unknown, row: T, index: number) => ReactNode;
 }
 
-export interface DataGridProps<T extends Record<string, unknown>> {
+export interface DataGridProps<T extends Record<string, unknown>> extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   columns: DataGridColumn<T>[];
   data: T[];
   keyField: keyof T;
@@ -85,6 +85,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
   emptyLabel = 'No data',
   emptyIcon = 'inbox',
   className = '',
+  ...rest
 }: DataGridProps<T>) => {
 
   // ── Column visibility ────────────────────────────────────────────────────
@@ -240,7 +241,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
     + (hasActions  ? 1 : 0);
 
   return (
-    <div className={['flex flex-col border border-border-dark bg-bg-dark', className].join(' ')}>
+    <div {...rest} className={['flex flex-col border border-border-dark bg-bg-dark', className].filter(Boolean).join(' ')}>
 
       {/* ── Toolbar ── */}
       <div className="flex items-center gap-2 px-3 py-2 border-b border-border-dark bg-surface-terminal">

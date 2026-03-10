@@ -1,4 +1,4 @@
-import { memo, useState, type ReactNode } from 'react';
+import { memo, useState, type ReactNode, type HTMLAttributes } from 'react';
 import Button from '@/components/atoms/Button';
 
 export type AccordionVariant = 'default' | 'flush';
@@ -10,14 +10,14 @@ export interface AccordionItemData {
   disabled?: boolean;
 }
 
-export interface AccordionProps {
+export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   items: AccordionItemData[];
   variant?: AccordionVariant;
   multiple?: boolean;       // allow multiple open at once
   defaultOpen?: string[];
 }
 
-const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen = [] }: AccordionProps) => {
+const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen = [], className = '', ...rest }: AccordionProps) => {
   const [open, setOpen] = useState<Set<string>>(new Set(defaultOpen));
 
   const toggle = (id: string) => {
@@ -34,7 +34,7 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
   };
 
   return (
-    <div className={variant === 'default' ? 'border border-border-dark divide-y divide-border-dark' : 'divide-y divide-border-dark'}>
+    <div {...rest} className={[variant === 'default' ? 'border border-border-dark divide-y divide-border-dark' : 'divide-y divide-border-dark', className].filter(Boolean).join(' ')}>
       {items.map((item) => {
         const isOpen = open.has(item.id);
         return (

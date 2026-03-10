@@ -1,4 +1,4 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 
 export interface SidebarNavItem {
   id: string;
@@ -14,7 +14,7 @@ export interface SidebarGroup {
   items: SidebarNavItem[];
 }
 
-export interface SidebarProps {
+export interface SidebarProps extends HTMLAttributes<HTMLElement> {
   brand?: ReactNode;
   groups?: SidebarGroup[];
   footer?: ReactNode;
@@ -22,12 +22,14 @@ export interface SidebarProps {
   onNavClick?: (item: SidebarNavItem) => void;
 }
 
-const Sidebar = ({ brand, groups = [], footer, collapsed = false, onNavClick }: SidebarProps) => (
+const Sidebar = ({ brand, groups = [], footer, collapsed = false, onNavClick, className = '', ...rest }: SidebarProps) => (
   <aside
+    {...rest}
     className={[
       'flex flex-col bg-panel-dark border-r border-border-dark h-full shrink-0 transition-all',
       collapsed ? 'w-12' : 'w-52',
-    ].join(' ')}
+      className,
+    ].filter(Boolean).join(' ')}
   >
     {/* Brand */}
     {brand && (

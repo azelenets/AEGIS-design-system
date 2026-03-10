@@ -1,4 +1,4 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 
 export type StepStatus = 'pending' | 'active' | 'complete' | 'error';
 export type StepperOrientation = 'horizontal' | 'vertical';
@@ -10,7 +10,7 @@ export interface StepData {
   status: StepStatus;
 }
 
-export interface StepperProps {
+export interface StepperProps extends HTMLAttributes<HTMLDivElement> {
   steps: StepData[];
   orientation?: StepperOrientation;
   children?: ReactNode;   // active step content
@@ -48,10 +48,10 @@ const LINE_COLOR: Record<StepStatus, string> = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const Stepper = ({ steps, orientation = 'horizontal', children }: StepperProps) => {
+const Stepper = ({ steps, orientation = 'horizontal', children, className = '', ...rest }: StepperProps) => {
   if (orientation === 'vertical') {
     return (
-      <div className="flex flex-col">
+      <div {...rest} className={['flex flex-col', className].filter(Boolean).join(' ')}>
         {steps.map((step, i) => {
           const isLast = i === steps.length - 1;
           return (
@@ -86,7 +86,7 @@ const Stepper = ({ steps, orientation = 'horizontal', children }: StepperProps) 
 
   // Horizontal
   return (
-    <div className="flex flex-col gap-4">
+    <div {...rest} className={['flex flex-col gap-4', className].filter(Boolean).join(' ')}>
       <div className="flex items-start">
         {steps.map((step, i) => {
           const isLast = i === steps.length - 1;

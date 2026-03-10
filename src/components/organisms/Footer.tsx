@@ -1,4 +1,4 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 
 export interface FooterLink {
   id: string;
@@ -14,17 +14,16 @@ export interface FooterGroup {
   links: FooterLink[];
 }
 
-export interface FooterProps {
+export interface FooterProps extends HTMLAttributes<HTMLElement> {
   brand?: ReactNode;
   tagline?: string;
   groups?: FooterGroup[];
   bottom?: ReactNode;
   copyright?: string;
-  className?: string;
 }
 
-const Footer = ({ brand, tagline, groups = [], bottom, copyright, className = '' }: FooterProps) => (
-  <footer className={['w-full bg-panel-dark border-t border-border-dark', className].join(' ')}>
+const Footer = ({ brand, tagline, groups = [], bottom, copyright, className = '', ...rest }: FooterProps) => (
+  <footer {...rest} className={['w-full bg-panel-dark border-t border-border-dark', className].filter(Boolean).join(' ')}>
     {/* Main content */}
     {(brand || groups.length > 0) && (
       <div className="px-6 py-8 grid grid-cols-1 gap-8 sm:grid-cols-[1fr_auto]">

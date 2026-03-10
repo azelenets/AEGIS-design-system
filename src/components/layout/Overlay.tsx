@@ -1,5 +1,6 @@
 import { memo, type HTMLAttributes } from 'react';
 import { createPortal } from 'react-dom';
+import { aegisLayers } from '@/foundations/layers';
 
 export interface OverlayProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onClick'> {
   visible: boolean;
@@ -8,7 +9,7 @@ export interface OverlayProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onCl
   zIndex?: number;
 }
 
-const Overlay = ({ visible, onClick, blur = false, zIndex = 1200, className = '', style, ...rest }: OverlayProps) => {
+const Overlay = ({ visible, onClick, blur = false, zIndex = aegisLayers.overlay, className = '', style, ...rest }: OverlayProps) => {
   if (!visible) return null;
   return createPortal(
     <div

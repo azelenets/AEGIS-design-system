@@ -9,7 +9,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLElement> {
 
 const PageHeader: FC<PageHeaderProps> = ({ eyebrow, titleMain, titleAccent, description, className = '', ...rest }) => {
   return (
-    <header {...rest} className={['mb-16 relative', className].filter(Boolean).join(' ')}>
+    <header {...rest} className={['mb-8 relative', className].filter(Boolean).join(' ')}>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-l-4 border-primary pl-4 md:pl-8">
         <div>
           {eyebrow ? (

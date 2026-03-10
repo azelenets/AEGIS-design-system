@@ -1,7 +1,9 @@
 // ─── Foundations ─────────────────────────────────────────────────────────────
 export { aegisTailwindTheme, aegisTokens, aegisCSSVars } from '@/foundations/aegisTheme';
+export { aegisLayers } from '@/foundations/layers';
 export { ThemeProvider, useTheme }                       from '@/foundations/ThemeContext';
 export type { Theme, ThemeContextValue, ThemeProviderProps } from '@/foundations/ThemeContext';
+export type { AegisLayerName } from '@/foundations/layers';
 
 // ─── Atoms ───────────────────────────────────────────────────────────────────
 export { default as Avatar }       from '@/components/atoms/Avatar';

@@ -4,12 +4,23 @@ import {
   useRef,
   useEffect,
   useCallback,
+  useId,
+  cloneElement,
+  isValidElement,
   type ReactNode,
   type HTMLAttributes,
+  type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
 import Divider from '@/components/atoms/Divider';
+
+const getTriggerText = (node: ReactNode): string => {
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(getTriggerText).join(' ').trim();
+  if (isValidElement<{ children?: ReactNode }>(node)) return getTriggerText(node.props.children);
+  return '';
+};
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -88,34 +99,70 @@ DropdownGroup.displayName = 'DropdownGroup';
 // ─── Dropdown ─────────────────────────────────────────────────────────────────
 
 const Dropdown = ({ trigger, children, align = 'left', width = '200px', className, ...rest }: DropdownProps) => {
+  const baseId = useId();
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ top: 0, left: 0 });
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const updatePosition = useCallback(() => {
-    if (!triggerRef.current) return;
+  const getPosition = useCallback(() => {
+    if (!triggerRef.current) return null;
     const rect = triggerRef.current.getBoundingClientRect();
     const left = align === 'right' ? rect.right - parseFloat(width) : rect.left;
-    setPos({ top: rect.bottom + window.scrollY + 4, left: left + window.scrollX });
+    return { top: rect.bottom + window.scrollY + 4, left: left + window.scrollX };
   }, [align, width]);
+
+  const updatePosition = useCallback(() => {
+    const next = getPosition();
+    if (!next) return;
+    setPos(next);
+  }, [getPosition]);
 
   const closeMenu = useCallback(() => setOpen(false), []);
   const toggleMenu = useCallback(() => {
-    updatePosition();
-    setOpen((value) => !value);
-  }, [updatePosition]);
+    setOpen((value) => {
+      if (value) return false;
+      const next = getPosition();
+      if (next) setPos(next);
+      return true;
+    });
+  }, [getPosition]);
+
+  const getMenuItems = useCallback((): HTMLButtonElement[] => {
+    if (!menuRef.current) return [];
+    return Array.from(menuRef.current.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'))
+      .filter((item) => !item.disabled);
+  }, []);
+
+  const focusMenuItem = useCallback((index: number) => {
+    const items = getMenuItems();
+    if (items.length === 0) return;
+    const nextIndex = (index + items.length) % items.length;
+    setActiveIndex(nextIndex);
+    items[nextIndex]?.focus();
+  }, [getMenuItems]);
 
   useEffect(() => {
     if (!open) return;
-    updatePosition();
+    const frame = requestAnimationFrame(() => {
+      focusMenuItem(0);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [open, focusMenuItem]);
+
+  useEffect(() => {
+    if (!open) return;
     const handleOutside = (e: MouseEvent) => {
       if (!triggerRef.current?.contains(e.target as Node) && !menuRef.current?.contains(e.target as Node)) {
         closeMenu();
       }
     };
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeMenu();
+      if (e.key === 'Escape') {
+        closeMenu();
+        triggerRef.current?.focus();
+      }
     };
     const handleViewportChange = () => updatePosition();
     document.addEventListener('mousedown', handleOutside);
@@ -130,19 +177,91 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
     };
   }, [open, closeMenu, updatePosition]);
 
+  const handleTriggerKeyDown = useCallback((e: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (!open) {
+        const next = getPosition();
+        if (next) setPos(next);
+        setOpen(true);
+      } else {
+        focusMenuItem(activeIndex + 1);
+      }
+    }
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!open) {
+        const next = getPosition();
+        if (next) setPos(next);
+        setOpen(true);
+      } else {
+        focusMenuItem(activeIndex - 1);
+      }
+    }
+  }, [activeIndex, focusMenuItem, getPosition, open]);
+
+  const handleMenuKeyDown = useCallback((e: ReactKeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      focusMenuItem(activeIndex + 1);
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      focusMenuItem(activeIndex - 1);
+    }
+    if (e.key === 'Home') {
+      e.preventDefault();
+      focusMenuItem(0);
+    }
+    if (e.key === 'End') {
+      e.preventDefault();
+      const items = getMenuItems();
+      focusMenuItem(items.length - 1);
+    }
+  }, [activeIndex, focusMenuItem, getMenuItems]);
+
+  const triggerLabel = getTriggerText(trigger).replace(/\s+/g, ' ').trim() || 'Open menu';
+
+  const renderedTrigger = isValidElement(trigger)
+    ? cloneElement(trigger as React.ReactElement<{ 'aria-hidden'?: boolean; tabIndex?: number }>, {
+        'aria-hidden': true,
+        tabIndex: -1,
+      })
+    : (
+      <div aria-hidden="true">
+        {trigger}
+      </div>
+    );
+
   return (
     <>
-      <div {...rest} ref={triggerRef} onClick={toggleMenu} className={['inline-flex', className].filter(Boolean).join(' ')}>
-        {trigger}
+      <div
+        {...rest}
+        ref={triggerRef}
+        onClick={toggleMenu}
+        onKeyDown={handleTriggerKeyDown}
+        className={['inline-flex', className].filter(Boolean).join(' ')}
+        role="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={`${baseId}-menu`}
+        aria-label={triggerLabel}
+        tabIndex={0}
+      >
+        {renderedTrigger}
       </div>
 
       {open && createPortal(
         <div
           ref={menuRef}
+          id={`${baseId}-menu`}
           role="menu"
           className="fixed z-50 py-1 bg-panel-dark border border-border-dark shadow-xl"
           style={{ top: pos.top, left: pos.left, width }}
           onClick={closeMenu}
+          onKeyDown={handleMenuKeyDown}
+          tabIndex={-1}
         >
           {children}
         </div>,

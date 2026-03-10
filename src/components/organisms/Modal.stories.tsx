@@ -218,6 +218,66 @@ export const ScrollableContent: Story = {
   ],
 };
 
+export const BackdropDismissSpec: Story = {
+  tags: ['!dev'],
+  decorators: [
+    () => (
+      <Trigger label="Open Backdrop Dismiss">
+        {(open, setOpen) => (
+          <Modal open={open} onClose={() => setOpen(false)}>
+            <ModalHeader title="Backdrop Dismiss" onClose={() => setOpen(false)} />
+            <ModalBody>Clicking the backdrop should close this dialog.</ModalBody>
+          </Modal>
+        )}
+      </Trigger>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: /Open Backdrop Dismiss/ }));
+    await expect(within(document.body).getByRole('dialog')).toBeVisible();
+
+    await userEvent.click(within(document.body).getByRole('button', { name: 'Close dialog backdrop' }));
+    await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+  },
+};
+
+export const EscapeAndBackdropDisabledSpec: Story = {
+  tags: ['!dev'],
+  decorators: [
+    () => (
+      <Trigger label="Open Locked Modal">
+        {(open, setOpen) => (
+          <Modal open={open} onClose={() => setOpen(false)} closeOnBackdrop={false} closeOnEscape={false}>
+            <ModalHeader title="Locked Modal" onClose={() => setOpen(false)} />
+            <ModalBody>Backdrop clicks and Escape should not close this dialog.</ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" onClick={() => setOpen(false)}>Close Manually</Button>
+            </ModalFooter>
+          </Modal>
+        )}
+      </Trigger>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: /Open Locked Modal/ }));
+    const dialog = within(document.body).getByRole('dialog');
+    await expect(dialog).toBeVisible();
+
+    await userEvent.click(within(document.body).getByRole('button', { name: 'Close dialog backdrop' }));
+    await expect(dialog).toBeVisible();
+
+    await userEvent.keyboard('{Escape}');
+    await expect(dialog).toBeVisible();
+
+    await userEvent.click(within(document.body).getByRole('button', { name: 'Close Manually' }));
+    await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+  },
+};
+
 export const NoBackdropClose: Story = {
   decorators: [
     () => (

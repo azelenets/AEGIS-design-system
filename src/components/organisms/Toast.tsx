@@ -6,10 +6,12 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useId,
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
+import { aegisLayers } from '@/foundations/layers';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -25,6 +27,7 @@ export interface ToastData {
 }
 
 interface ToastCtx {
+  toasts: ToastData[];
   toast: (opts: Omit<ToastData, 'id'>) => string;
   dismiss: (id: string) => void;
 }
@@ -99,27 +102,13 @@ ToastItem.displayName = 'ToastItem';
 
 export const Toaster = memo(({ position = 'bottom-right' }: { position?: ToastPosition }) => {
   const ctx = useContext(ToastContext);
-  // Pull toasts from provider — Toaster reads from shared state via context
-  // We re-export the dismiss from provider, toasts list comes from provider state
-  // The provider passes toasts + dismiss to context, Toaster reads them
-  const [toasts, setToasts] = useState<ToastData[]>([]);
-
-  useEffect(() => {
-    // Subscribe to toasts via a global emitter pattern
-    const handler = (e: CustomEvent<ToastData[]>) => setToasts(e.detail);
-    window.addEventListener('aegis-toasts', handler as EventListener);
-    return () => window.removeEventListener('aegis-toasts', handler as EventListener);
-  }, []);
-
-  const dismiss = (id: string) => {
-    ctx?.dismiss(id);
-  };
+  if (!ctx) throw new Error('Toaster must be used inside <ToastProvider>.');
 
   return createPortal(
-    <div className={`fixed z-[1400] flex flex-col gap-2 pointer-events-none ${POSITION_CLASSES[position]}`}>
-      {toasts.map((t) => (
+    <div className={`fixed flex flex-col gap-2 pointer-events-none ${POSITION_CLASSES[position]}`} style={{ zIndex: aegisLayers.toast }}>
+      {ctx.toasts.map((t) => (
         <div key={t.id} className="pointer-events-auto">
-          <ToastItem data={t} onDismiss={dismiss} />
+          <ToastItem data={t} onDismiss={ctx.dismiss} />
         </div>
       ))}
     </div>,
@@ -133,25 +122,18 @@ Toaster.displayName = 'Toaster';
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [toasts, setToasts] = useState<ToastData[]>([]);
-
-  const emit = useCallback((list: ToastData[]) => {
-    window.dispatchEvent(new CustomEvent('aegis-toasts', { detail: list }));
-  }, []);
-
-  useEffect(() => {
-    emit(toasts);
-  }, [emit, toasts]);
+  const toastId = useId();
 
   const toast = useCallback((opts: Omit<ToastData, 'id'>) => {
-    const id = `toast-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const id = `toast-${toastId}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     setToasts((prev) => [...prev, { ...opts, id }]);
     return id;
-  }, []);
+  }, [toastId]);
 
   const dismiss = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
-  const value = useMemo(() => ({ toast, dismiss }), [toast, dismiss]);
+  const value = useMemo(() => ({ toasts, toast, dismiss }), [toasts, toast, dismiss]);
 
   return (
     <ToastContext.Provider value={value}>

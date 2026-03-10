@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useMemo, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import type { Meta } from '@storybook/react-vite';
 
 // ─── Foundations ──────────────────────────────────────────────────────────────
@@ -257,12 +257,12 @@ const SidebarToggleButton = ({
   </Button>
 );
 
-const OperatorMenuTrigger = () => (
+const OperatorMenuTrigger = (props: ComponentPropsWithoutRef<typeof Button>) => (
   <Button
-    type="button"
     variant="ghost"
     size="sm"
     className="gap-2 border-0 px-2 py-1 normal-case tracking-normal hover:bg-primary/5"
+    {...props}
   >
     <Avatar src="https://i.pravatar.cc/150?img=12" size="sm" />
     <span className="text-[10px] font-mono font-bold text-slate-400 group-hover:text-slate-200 tracking-widest uppercase hidden sm:block">PHANTOM</span>
@@ -763,7 +763,7 @@ const DashboardContent = () => {
                           <MissionItem
                             date="2023 — 2025"
                             title="Operation Blacksite"
-                            role="Lead Engineer"
+                            missionRole="Lead Engineer"
                             scanId="SC-4891"
                             objective="Architect and ship a zero-downtime microservices migration for a high-traffic SaaS platform."
                             tactics={[

@@ -1,4 +1,5 @@
 import { memo, type ReactNode, type HTMLAttributes } from 'react';
+import { aegisLayers } from '@/foundations/layers';
 
 export interface NavItem {
   id: string;
@@ -21,10 +22,11 @@ const Navbar = ({ brand, items = [], actions, sticky = true, onNavClick, classNa
   <header
     {...rest}
     className={[
-      'w-full bg-panel-dark border-b border-border-dark relative z-[1100]',
+      'w-full bg-panel-dark border-b border-border-dark relative',
       sticky ? 'sticky top-0' : '',
       className,
     ].filter(Boolean).join(' ')}
+    style={{ zIndex: aegisLayers.navbar, ...rest.style }}
   >
     <div className="flex items-center gap-4 px-4 h-12">
       {/* Brand */}

@@ -21,7 +21,7 @@ const Navbar = ({ brand, items = [], actions, sticky = true, onNavClick, classNa
   <header
     {...rest}
     className={[
-      'w-full bg-panel-dark border-b border-border-dark z-30',
+      'w-full bg-panel-dark border-b border-border-dark relative z-[1100]',
       sticky ? 'sticky top-0' : '',
       className,
     ].filter(Boolean).join(' ')}

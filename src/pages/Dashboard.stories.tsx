@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import type { Meta } from '@storybook/react-vite';
 
 // ─── Foundations ──────────────────────────────────────────────────────────────
@@ -95,7 +95,7 @@ const operators: Operator[] = [
   { id: 'OP-005', callsign: 'SPECTER',  role: 'Frontend Systems', status: 'ACTIVE',  clearance: 'BETA-2',  ops: 104, lastSeen: '02:19', notes: 'Deployed to frontend systems observation post.' },
 ];
 
-const STATUS_BADGE: Record<string, JSX.Element> = {
+const STATUS_BADGE: Record<string, ReactNode> = {
   ACTIVE:  <Badge label="Active"  variant="success" dot />,
   STANDBY: <Badge label="Standby" variant="hazard"  dot />,
   OFFLINE: <Badge label="Offline" variant="ghost"   />,
@@ -681,9 +681,14 @@ const DashboardContent = () => {
                                 <span className="text-primary/60 mr-2">NOTES:</span>{row.notes}
                               </div>
                             )}
-                            actions={(selected) => (
-                              <Button variant="danger" size="sm" icon="delete" onClick={() => toast({ title: `${selected.size} operator(s) removed`, variant: 'warning', message: 'Action recorded in audit log.' })}>
-                                Remove Selected
+                            actions={(row) => (
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                icon="delete"
+                                onClick={() => toast({ title: `${row.callsign} removed`, variant: 'warning', message: 'Action recorded in audit log.' })}
+                              >
+                                Remove
                               </Button>
                             )}
                           />

@@ -1,3 +1,5 @@
+![AEGIS Design System banner](./docs/banner.svg)
+
 # AEGIS Design System
 
 AEGIS is a React 19 design-system workspace for the tactical UI language used across the project. It ships reusable foundations, typed components, Storybook stories, and a small Vite app for local inspection.

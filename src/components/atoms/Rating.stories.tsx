@@ -18,7 +18,7 @@ export const Controlled = {
     return (
       <div className="flex flex-col gap-2">
         <Rating value={val} onChange={setVal} label="Mission Rating" />
-        <p className="text-[10px] font-mono text-slate-600">Selected: {val} / 5</p>
+        <p className="text-[10px] font-mono text-slate-400">Selected: {val} / 5</p>
       </div>
     );
   },

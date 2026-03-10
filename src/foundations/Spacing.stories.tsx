@@ -27,9 +27,9 @@ export const SpacingScale = {
       <p className="text-[9px] font-bold uppercase tracking-widest text-primary/60 font-mono mb-2">AEGIS // Spacing Scale (Tailwind)</p>
       {steps.map(({ token, px }) => (
         <div key={token} className="flex items-center gap-4">
-          <span className="text-[10px] font-mono text-slate-500 w-8 text-right shrink-0">{token}</span>
+          <span className="text-[10px] font-mono text-slate-400 w-8 text-right shrink-0">{token}</span>
           <div className="h-4 bg-primary/40" style={{ width: px, minWidth: '2px' }} />
-          <span className="text-[10px] font-mono text-slate-600">{px}</span>
+          <span className="text-[10px] font-mono text-slate-400">{px}</span>
         </div>
       ))}
     </div>
@@ -49,7 +49,7 @@ export const BorderRadius = {
       ].map(({ label, cls }) => (
         <div key={label} className="flex flex-col items-center gap-2">
           <div className={`w-12 h-12 bg-primary/20 border border-primary/40 ${cls}`} />
-          <span className="text-[9px] font-mono text-slate-600">{label}</span>
+          <span className="text-[9px] font-mono text-slate-400">{label}</span>
         </div>
       ))}
     </div>
@@ -69,7 +69,7 @@ export const Shadows = {
       ].map(({ label, cls }) => (
         <div key={label} className="flex flex-col items-center gap-3">
           <div className={`w-16 h-16 bg-panel-dark border border-border-dark ${cls}`} />
-          <span className="text-[9px] font-mono text-slate-600">{label}</span>
+          <span className="text-[9px] font-mono text-slate-400">{label}</span>
         </div>
       ))}
     </div>

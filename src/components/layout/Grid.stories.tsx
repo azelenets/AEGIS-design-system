@@ -7,7 +7,7 @@ export default meta;
 const Cell = ({ label, dim }: { label: string; dim?: boolean }) => (
   <div className={[
     'bg-surface-terminal border border-primary/20 p-3 text-[10px] font-mono text-center',
-    dim ? 'text-slate-600 border-border-dark' : 'text-primary/60',
+    dim ? 'text-slate-400 border-border-dark' : 'text-primary/60',
   ].join(' ')}>
     {label}
   </div>
@@ -85,7 +85,7 @@ export const DashboardLayout = {
 
       {/* Main + sidebar */}
       <GridItem span={8}><div className="bg-surface-terminal border border-primary/20 h-40 flex items-center justify-center text-[10px] font-mono text-primary/60">Main Chart</div></GridItem>
-      <GridItem span={4}><div className="bg-surface-terminal border border-primary/20 h-40 flex items-center justify-center text-[10px] font-mono text-slate-600">Side Panel</div></GridItem>
+      <GridItem span={4}><div className="bg-surface-terminal border border-primary/20 h-40 flex items-center justify-center text-[10px] font-mono text-slate-400">Side Panel</div></GridItem>
 
       {/* Footer row */}
       <GridItem span="full"><Cell label="Full-width footer strip" /></GridItem>

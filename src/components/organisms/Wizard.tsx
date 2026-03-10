@@ -103,7 +103,7 @@ const Wizard = ({
         <div className="absolute inset-x-0 top-0 h-px bg-primary/30" />
         {/* Step label */}
         <div className="flex items-center gap-2 px-4 pt-4 pb-3 border-b border-border-dark">
-          <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">
+          <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">
             Step {activeIndex + 1} / {steps.length}
           </span>
           <span className="text-[9px] font-mono text-primary/60 uppercase tracking-widest">

@@ -20,7 +20,7 @@ const Swatch = ({ varName, label }: { varName: string; label: string }) => (
     />
     <div>
       <p className="text-[10px] font-mono text-slate-300">{label}</p>
-      <p className="text-[9px] font-mono text-slate-600">{varName}</p>
+      <p className="text-[9px] font-mono text-slate-400">{varName}</p>
     </div>
   </div>
 );
@@ -35,8 +35,8 @@ const LiveDemo = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">Active theme</p>
-          <p className="font-display text-sm font-bold uppercase tracking-widest text-primary mt-0.5">
+          <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">Active theme</p>
+          <p className="font-display text-sm font-bold uppercase tracking-widest [color:rgb(var(--text-base))] mt-0.5">
             {theme.toUpperCase()} MODE
           </p>
         </div>
@@ -105,7 +105,7 @@ export const SideBySide = {
       {(['dark', 'light'] as const).map(theme => (
         <div key={theme} data-theme={theme} className="flex-1 min-w-[280px]">
           <div className="bg-bg-dark border border-border-dark p-4 flex flex-col gap-3 transition-colors">
-            <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">
+            <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">
               {theme} theme
             </p>
             <div className="flex flex-wrap gap-2">
@@ -129,26 +129,26 @@ export const ToggleVariants = {
   render: () => (
     <ThemeProvider>
       <div className="flex flex-col gap-4 p-4 bg-bg-dark border border-border-dark">
-        <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">ThemeToggle variants</p>
+        <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">ThemeToggle variants</p>
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex flex-col gap-1 items-start">
-            <p className="text-[9px] font-mono text-slate-600">icon</p>
+            <p className="text-[9px] font-mono text-slate-400">icon</p>
             <ThemeToggle variant="icon" />
           </div>
           <div className="flex flex-col gap-1 items-start">
-            <p className="text-[9px] font-mono text-slate-600">button (sm)</p>
+            <p className="text-[9px] font-mono text-slate-400">button (sm)</p>
             <ThemeToggle variant="button" size="sm" />
           </div>
           <div className="flex flex-col gap-1 items-start">
-            <p className="text-[9px] font-mono text-slate-600">button (md)</p>
+            <p className="text-[9px] font-mono text-slate-400">button (md)</p>
             <ThemeToggle variant="button" size="md" />
           </div>
           <div className="flex flex-col gap-1 items-start">
-            <p className="text-[9px] font-mono text-slate-600">button (lg)</p>
+            <p className="text-[9px] font-mono text-slate-400">button (lg)</p>
             <ThemeToggle variant="button" size="lg" />
           </div>
           <div className="flex flex-col gap-1 items-start">
-            <p className="text-[9px] font-mono text-slate-600">pill</p>
+            <p className="text-[9px] font-mono text-slate-400">pill</p>
             <ThemeToggle variant="pill" />
           </div>
         </div>

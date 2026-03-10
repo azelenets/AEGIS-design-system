@@ -60,7 +60,7 @@ const Rating = ({
               type="button"
               disabled={readOnly}
               role={readOnly ? undefined : 'radio'}
-              aria-checked={star === current}
+              aria-checked={readOnly ? undefined : star === current}
               aria-label={`${star} of ${max}`}
               onClick={() => handleClick(star)}
               onMouseEnter={() => !readOnly && setHovered(star)}

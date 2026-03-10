@@ -68,7 +68,6 @@ import TagGroup                                            from '@/components/cr
 import TimelineEntry                                       from '@/components/credentials/TimelineEntry';
 import LabCard                                             from '@/components/laboratory/LabCard';
 import MissionItem                                         from '@/components/mission-log/MissionItem';
-import FeatureCard                                         from '@/components/protocols/FeatureCard';
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 const meta: Meta = {
@@ -942,13 +941,6 @@ const DashboardContent = () => {
 
               {/* ── Right sidebar ── */}
               <div className="flex flex-col gap-4">
-                <FeatureCard id="P-01" icon="memory"   title="BACKEND SYSTEMS"   status="ACTIVE"     dots={5}>
-                  High-throughput APIs, event-driven microservices, and distributed data pipelines.
-                </FeatureCard>
-                <FeatureCard id="P-02" icon="security" title="THREAT DETECTION"  status="MONITORING" dots={3}>
-                  Real-time anomaly detection across all network segments and endpoints.
-                </FeatureCard>
-
                 <Divider label="Tech Stack" />
 
                 <ul className="flex flex-col gap-1.5">

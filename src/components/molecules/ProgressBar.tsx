@@ -104,7 +104,7 @@ const ProgressBar = ({
         aria-valuenow={indeterminate ? undefined : clamped}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={label}
+        aria-label={label ?? 'Progress'}
         className={`relative w-full overflow-hidden flex gap-px ${TRACK_COLOR[variant]} ${TRACK_SIZE[size]}`}
       >
         {indeterminate ? (

@@ -35,8 +35,8 @@ export const CustomLabel: Story = {
     size: 'xl',
     label: (
       <span className="flex flex-col items-center">
-        <span className="text-lg font-bold font-mono text-white">72</span>
-        <span className="text-[8px] text-primary/60 font-mono uppercase tracking-widest">Health</span>
+        <span className="text-lg font-bold font-mono [color:rgb(var(--text-base))]">72</span>
+        <span className="text-[8px] [color:rgb(var(--text-base))] font-mono uppercase tracking-widest">Health</span>
       </span>
     ),
   },
@@ -76,7 +76,7 @@ export const StatCluster: Story = {
   decorators: [
     () => (
       <div className="bg-surface-terminal border border-border-dark p-6">
-        <p className="text-[9px] font-bold uppercase tracking-widest text-primary/60 font-mono mb-6">Node Health</p>
+        <p className="text-[9px] font-bold uppercase tracking-widest [color:rgb(var(--text-base))] font-mono mb-6">Node Health</p>
         <div className="flex gap-8 items-center">
           {[
             { label: 'CPU',  value: 43, variant: 'primary' as const },
@@ -86,7 +86,7 @@ export const StatCluster: Story = {
           ].map(({ label, value, variant }) => (
             <div key={label} className="flex flex-col items-center gap-2">
               <ProgressCircle value={value} variant={variant} size="lg" />
-              <span className="text-[9px] font-bold uppercase tracking-widest text-slate-600 font-mono">{label}</span>
+              <span className="text-[9px] font-bold uppercase tracking-widest [color:rgb(var(--text-base))] font-mono">{label}</span>
             </div>
           ))}
         </div>

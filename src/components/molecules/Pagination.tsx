@@ -46,7 +46,7 @@ const Pagination = ({ page, total, siblings = 1, onChange, showEdges = true }: P
         'flex items-center justify-center min-w-[2rem] h-8 px-2 text-[10px] font-bold font-mono uppercase tracking-wider transition-colors border',
         active
           ? 'bg-primary/15 border-primary/40 text-primary'
-          : 'bg-transparent border-border-dark text-slate-500 hover:border-primary/40 hover:text-slate-300',
+          : 'bg-transparent border-border-dark text-slate-400 hover:border-primary/40 hover:text-slate-300',
         disabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer',
       ]
         .filter(Boolean)
@@ -61,7 +61,7 @@ const Pagination = ({ page, total, siblings = 1, onChange, showEdges = true }: P
       {btn(<span className="material-symbols-outlined text-[14px]">chevron_left</span>,  prev ? page - 1 : null, false, !prev)}
       {pages.map((p, i) =>
         p === '…'
-          ? <span key={`ellipsis-${i}`} className="flex items-end justify-center w-8 h-8 pb-1 text-slate-700 font-mono text-xs">···</span>
+          ? <span key={`ellipsis-${i}`} className="flex items-end justify-center w-8 h-8 pb-1 text-slate-400 font-mono text-xs">···</span>
           : btn(p, p as number, p === page),
       )}
       {btn(<span className="material-symbols-outlined text-[14px]">chevron_right</span>, next ? page + 1 : null, false, !next)}

@@ -54,7 +54,7 @@ const StepConfirm = () => (
     <div className="grid grid-cols-2 gap-2 text-[10px] font-mono">
       {[['Operator', 'OPS-7734'], ['Clearance', 'Sigma'], ['Region', 'EU-WEST'], ['Tag', 'v2.4.1-rc']].map(([k, v]) => (
         <div key={k} className="flex justify-between bg-bg-dark border border-border-dark px-3 py-2">
-          <span className="text-slate-600">{k}</span>
+          <span className="text-slate-400">{k}</span>
           <span className="text-primary/80">{v}</span>
         </div>
       ))}
@@ -128,13 +128,13 @@ export const Controlled = {
     const [done, setDone] = useState(false);
     return (
       <div className="max-w-xl flex flex-col gap-4">
-        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-500">
+        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
           <span>Controlled step:</span>
           {deploySteps.map((s, i) => (
             <button
               key={s.id}
               onClick={() => setStep(i)}
-              className={['px-2 py-0.5 border transition-colors', i === step ? 'border-primary text-primary' : 'border-border-dark text-slate-600 hover:text-slate-300'].join(' ')}
+              className={['px-2 py-0.5 border transition-colors', i === step ? 'border-primary text-primary' : 'border-border-dark text-slate-400 hover:text-slate-300'].join(' ')}
             >
               {i + 1}
             </button>

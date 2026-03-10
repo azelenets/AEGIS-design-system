@@ -66,7 +66,7 @@ const Checkbox = ({ label, hint, indeterminate, id, className = '', ...rest }: C
               {label}
             </span>
           )}
-          {hint && <span className="text-[10px] text-slate-600 font-mono">{hint}</span>}
+          {hint && <span className="text-[10px] text-slate-400 font-mono">{hint}</span>}
         </span>
       )}
     </label>

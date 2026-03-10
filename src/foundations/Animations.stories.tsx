@@ -8,7 +8,7 @@ const Demo = ({ label, hint, children }: { label: string; hint: string; children
     <div className="w-24 h-12 flex items-center justify-center">{children}</div>
     <div>
       <p className="text-xs font-bold font-mono text-white">{label}</p>
-      <p className="text-[10px] font-mono text-slate-600">{hint}</p>
+      <p className="text-[10px] font-mono text-slate-400">{hint}</p>
     </div>
   </div>
 );
@@ -51,7 +51,7 @@ export const AllAnimations = {
       </Demo>
 
       <Demo label="transition-colors" hint="Tailwind — 150ms default">
-        <button type="button" className="px-3 py-1.5 border border-border-dark text-slate-500 font-mono text-[10px] hover:border-primary hover:text-primary transition-colors">
+        <button type="button" className="px-3 py-1.5 border border-border-dark text-slate-400 font-mono text-[10px] hover:border-primary hover:text-primary transition-colors">
           Hover me
         </button>
       </Demo>

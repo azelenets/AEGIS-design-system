@@ -41,7 +41,7 @@ const Sidebar = ({ brand, groups = [], footer, collapsed = false, onNavClick }: 
       {groups.map((group, gi) => (
         <div key={gi} className={gi > 0 ? 'mt-4' : ''}>
           {group.label && !collapsed && (
-            <p className="px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-slate-700 font-mono">
+            <p className="px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-slate-400 font-mono">
               {group.label}
             </p>
           )}
@@ -58,7 +58,7 @@ const Sidebar = ({ brand, groups = [], footer, collapsed = false, onNavClick }: 
                   'text-[10px] font-bold uppercase tracking-widest font-mono',
                   item.active
                     ? 'text-primary border-primary bg-primary/5'
-                    : 'text-slate-500 border-transparent hover:text-slate-300 hover:bg-primary/3',
+                    : 'text-slate-400 border-transparent hover:text-slate-300 hover:bg-primary/3',
                   collapsed ? 'justify-center' : '',
                 ].join(' ')}
               >

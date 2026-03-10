@@ -242,7 +242,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
       <div className="flex items-center gap-2 px-3 py-2 border-b border-border-dark bg-surface-terminal">
         {searchable && (
           <div className="flex items-center gap-1.5 bg-bg-dark border border-border-dark px-2 py-1 flex-1 max-w-xs">
-            <span className="material-symbols-outlined text-[14px] text-slate-600 shrink-0">search</span>
+            <span className="material-symbols-outlined text-[14px] text-slate-400 shrink-0">search</span>
             <input
               type="text"
               value={search}
@@ -252,14 +252,14 @@ const DataGridInner = <T extends Record<string, unknown>>({
             />
             {search && (
               <button onClick={() => { setSearch(''); setPage(1); }}>
-                <span className="material-symbols-outlined text-[14px] text-slate-600 hover:text-slate-300 transition-colors">close</span>
+                <span className="material-symbols-outlined text-[14px] text-slate-400 hover:text-slate-300 transition-colors">close</span>
               </button>
             )}
           </div>
         )}
 
         <div className="ml-auto flex items-center gap-1">
-          <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest mr-2 select-none">
+          <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest mr-2 select-none">
             {filtered.length} rows
           </span>
 
@@ -269,7 +269,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
               key={d}
               onClick={() => setDensity(d)}
               title={d}
-              className={['p-1 transition-colors', density === d ? 'text-primary' : 'text-slate-600 hover:text-slate-300'].join(' ')}
+              className={['p-1 transition-colors', density === d ? 'text-primary' : 'text-slate-400 hover:text-slate-300'].join(' ')}
             >
               <span className="material-symbols-outlined text-[16px]">{DENSITY_ICON[d]}</span>
             </button>
@@ -280,7 +280,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
             <button
               onClick={() => setShowFilters(v => !v)}
               title="Toggle filters"
-              className={['p-1 transition-colors', showFilters || hasFiltersSet ? 'text-primary' : 'text-slate-600 hover:text-slate-300'].join(' ')}
+              className={['p-1 transition-colors', showFilters || hasFiltersSet ? 'text-primary' : 'text-slate-400 hover:text-slate-300'].join(' ')}
             >
               <span className="material-symbols-outlined text-[16px]">filter_list</span>
             </button>
@@ -291,13 +291,13 @@ const DataGridInner = <T extends Record<string, unknown>>({
             <button
               onClick={() => setColPanelOpen(v => !v)}
               title="Columns"
-              className={['p-1 transition-colors', colPanelOpen || hiddenCols.size > 0 ? 'text-primary' : 'text-slate-600 hover:text-slate-300'].join(' ')}
+              className={['p-1 transition-colors', colPanelOpen || hiddenCols.size > 0 ? 'text-primary' : 'text-slate-400 hover:text-slate-300'].join(' ')}
             >
               <span className="material-symbols-outlined text-[16px]">view_column</span>
             </button>
             {colPanelOpen && (
               <div className="absolute right-0 top-full mt-1 z-50 bg-panel-dark border border-border-dark py-1 min-w-[160px]">
-                <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest px-3 py-1.5 border-b border-border-dark mb-1">
+                <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest px-3 py-1.5 border-b border-border-dark mb-1">
                   Columns
                 </p>
                 {colDefs.map(col => {
@@ -309,10 +309,10 @@ const DataGridInner = <T extends Record<string, unknown>>({
                       onClick={() => toggleColVisibility(k)}
                       className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] font-mono hover:bg-primary/10 transition-colors text-left"
                     >
-                      <span className={`material-symbols-outlined text-[14px] ${visible ? 'text-primary' : 'text-slate-600'}`}>
+                      <span className={`material-symbols-outlined text-[14px] ${visible ? 'text-primary' : 'text-slate-400'}`}>
                         {visible ? 'check_box' : 'check_box_outline_blank'}
                       </span>
-                      <span className={visible ? 'text-slate-300' : 'text-slate-600'}>{col.header}</span>
+                      <span className={visible ? 'text-slate-300' : 'text-slate-400'}>{col.header}</span>
                     </button>
                   );
                 })}
@@ -324,7 +324,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
 
       {/* ── Caption ── */}
       {caption && (
-        <div className="px-4 py-2 border-b border-border-dark text-[10px] font-mono text-slate-500 uppercase tracking-widest bg-surface-terminal">
+        <div className="px-4 py-2 border-b border-border-dark text-[10px] font-mono text-slate-400 uppercase tracking-widest bg-surface-terminal">
           {caption}
         </div>
       )}
@@ -336,20 +336,28 @@ const DataGridInner = <T extends Record<string, unknown>>({
           <thead>
             {/* Header */}
             <tr className="border-b border-primary/20 bg-surface-terminal">
-              {hasExpand && <th className="w-9 px-2" />}
-              {hasCheckbox && (
-                <th className="w-9 px-2 py-3 text-center">
-                  {selectionMode === 'multi' && (
-                    <input
-                      type="checkbox"
+                  {hasExpand && (
+                    <th className="w-9 px-2" scope="col">
+                      <span className="sr-only">Expand row</span>
+                    </th>
+                  )}
+                  {hasCheckbox && (
+                    <th className="w-9 px-2 py-3 text-center" scope="col">
+                      <span className="sr-only">
+                        {selectionMode === 'multi' ? 'Select rows' : 'Select row'}
+                      </span>
+                      {selectionMode === 'multi' && (
+                        <input
+                          type="checkbox"
                       checked={allPageSel}
                       ref={el => { if (el) el.indeterminate = !allPageSel && somePageSel; }}
                       onChange={toggleSelectAll}
+                      aria-label="Select all rows"
                       className="accent-primary w-3.5 h-3.5 cursor-pointer"
-                    />
+                        />
+                      )}
+                    </th>
                   )}
-                </th>
-              )}
               {visibleCols.map(col => {
                 const k       = col.key as string;
                 const isSorted = sortKey === k;
@@ -359,7 +367,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
                     style={{ width: col.width, minWidth: col.minWidth }}
                     onClick={() => handleSort(col)}
                     className={[
-                      'px-4 py-3 text-[9px] font-bold uppercase tracking-widest text-slate-500',
+                      'px-4 py-3 text-[9px] font-bold uppercase tracking-widest text-slate-400',
                       ALIGN[col.align ?? 'left'],
                       col.sortable ? 'cursor-pointer select-none hover:text-primary transition-colors' : '',
                     ].filter(Boolean).join(' ')}
@@ -375,7 +383,11 @@ const DataGridInner = <T extends Record<string, unknown>>({
                   </th>
                 );
               })}
-              {hasActions && <th className="w-16 px-4 py-3" />}
+                  {hasActions && (
+                    <th className="w-16 px-4 py-3" scope="col">
+                      <span className="sr-only">Actions</span>
+                    </th>
+                  )}
             </tr>
 
             {/* Filter row */}
@@ -405,7 +417,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
             {paged.length === 0 ? (
               <tr>
                 <td colSpan={totalCols} className="px-4 py-12 text-center">
-                  <div className="flex flex-col items-center gap-2 text-slate-600">
+                  <div className="flex flex-col items-center gap-2 text-slate-400">
                     <span className="material-symbols-outlined text-[32px]">{emptyIcon}</span>
                     <span className="text-[10px] uppercase tracking-widest">{emptyLabel}</span>
                   </div>
@@ -432,7 +444,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
                         <td className="w-9 px-2 text-center">
                           <button
                             onClick={() => toggleExpand(id)}
-                            className="text-slate-600 hover:text-primary transition-colors"
+                            className="text-slate-400 hover:text-primary transition-colors"
                           >
                             <span className="material-symbols-outlined text-[16px]">
                               {isExpanded ? 'expand_less' : 'expand_more'}
@@ -448,6 +460,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
                             type={selectionMode === 'single' ? 'radio' : 'checkbox'}
                             checked={isSelected}
                             onChange={() => toggleSelect(id)}
+                            aria-label={`Select row ${id}`}
                             className="accent-primary w-3.5 h-3.5 cursor-pointer"
                           />
                         </td>
@@ -507,7 +520,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
 
       {/* ── Footer ── */}
       <div className="flex items-center justify-between px-4 py-2 border-t border-border-dark bg-surface-terminal min-h-[40px]">
-        <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest select-none">
+        <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest select-none">
           {selectionMode !== 'none' && selectedIds.size > 0 ? `${selectedIds.size} selected · ` : ''}
           {filtered.length} of {data.length} rows
         </span>

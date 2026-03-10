@@ -103,7 +103,7 @@ export const MultiSelect = {
         />
         {selected.size > 0 && (
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono text-slate-500">Selected:</span>
+            <span className="text-[10px] font-mono text-slate-400">Selected:</span>
             {[...selected].map(id => (
               <span key={id} className="text-[10px] font-mono text-primary border border-primary/30 px-2 py-0.5">{id}</span>
             ))}
@@ -134,12 +134,12 @@ export const ExpandableRows = {
       renderExpanded={(row) => (
         <div className="flex gap-8 text-[10px] font-mono">
           <div>
-            <p className="text-slate-600 uppercase tracking-widest mb-1">Operator Notes</p>
+            <p className="text-slate-400 uppercase tracking-widest mb-1">Operator Notes</p>
             <p className="text-slate-300">{row.notes}</p>
           </div>
           <div>
-            <p className="text-slate-600 uppercase tracking-widest mb-1">Threat Count</p>
-            <p className={row.threats > 10 ? 'text-alert' : row.threats > 0 ? 'text-hazard' : 'text-slate-500'}>
+            <p className="text-slate-400 uppercase tracking-widest mb-1">Threat Count</p>
+            <p className={row.threats > 10 ? 'text-alert' : row.threats > 0 ? 'text-hazard' : 'text-slate-400'}>
               {row.threats} active threat{row.threats !== 1 ? 's' : ''}
             </p>
           </div>
@@ -160,21 +160,21 @@ export const WithRowActions = {
           <button
             title="View"
             onClick={() => alert(`View ${row.callSign}`)}
-            className="text-slate-600 hover:text-primary transition-colors"
+            className="text-slate-400 hover:text-primary transition-colors"
           >
             <span className="material-symbols-outlined text-[16px]">visibility</span>
           </button>
           <button
             title="Edit"
             onClick={() => alert(`Edit ${row.callSign}`)}
-            className="text-slate-600 hover:text-hazard transition-colors"
+            className="text-slate-400 hover:text-hazard transition-colors"
           >
             <span className="material-symbols-outlined text-[16px]">edit</span>
           </button>
           <button
             title="Remove"
             onClick={() => alert(`Remove ${row.callSign}`)}
-            className="text-slate-600 hover:text-alert transition-colors"
+            className="text-slate-400 hover:text-alert transition-colors"
           >
             <span className="material-symbols-outlined text-[16px]">delete</span>
           </button>
@@ -204,10 +204,10 @@ export const FullFeatured = {
         )}
         actions={(row) => (
           <>
-            <button title="View" className="text-slate-600 hover:text-primary transition-colors" onClick={() => alert(`View ${row.callSign}`)}>
+            <button title="View" className="text-slate-400 hover:text-primary transition-colors" onClick={() => alert(`View ${row.callSign}`)}>
               <span className="material-symbols-outlined text-[16px]">visibility</span>
             </button>
-            <button title="Delete" className="text-slate-600 hover:text-alert transition-colors" onClick={() => alert(`Delete ${row.callSign}`)}>
+            <button title="Delete" className="text-slate-400 hover:text-alert transition-colors" onClick={() => alert(`Delete ${row.callSign}`)}>
               <span className="material-symbols-outlined text-[16px]">delete</span>
             </button>
           </>

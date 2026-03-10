@@ -35,6 +35,7 @@ export interface DropdownProps {
 export const DropdownItem = memo(({ label, icon, hint, variant = 'default', disabled, onClick }: DropdownItemProps) => (
   <button
     type="button"
+    role="menuitem"
     disabled={disabled}
     onClick={onClick}
     className={[
@@ -66,9 +67,9 @@ DropdownSeparator.displayName = 'DropdownSeparator';
 // ─── DropdownGroup ────────────────────────────────────────────────────────────
 
 export const DropdownGroup = memo(({ label, children }: DropdownGroupProps) => (
-  <div>
+  <div role="group" aria-label={label}>
     {label && (
-      <p className="px-3 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest text-slate-600 font-mono">
+      <p className="px-3 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest text-slate-600 font-mono" aria-hidden="true">
         {label}
       </p>
     )}

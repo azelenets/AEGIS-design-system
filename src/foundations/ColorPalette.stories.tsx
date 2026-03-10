@@ -9,8 +9,8 @@ const Swatch = ({ name, value, role }: { name: string; value: string; role: stri
     <span className="w-12 h-12 border border-border-dark shrink-0" style={{ backgroundColor: value }} />
     <div>
       <p className="text-xs font-bold font-mono text-white">{name}</p>
-      <p className="text-[10px] font-mono text-slate-500">{value}</p>
-      <p className="text-[10px] font-mono text-slate-600">{role}</p>
+      <p className="text-[10px] font-mono text-slate-400">{value}</p>
+      <p className="text-[10px] font-mono text-slate-400">{role}</p>
     </div>
   </div>
 );

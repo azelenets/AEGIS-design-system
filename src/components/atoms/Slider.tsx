@@ -102,7 +102,7 @@ const Slider = ({
         onChange={handleChange}
         {...rest}
       />
-      {hint && <p className="text-[10px] text-slate-600 font-mono">{hint}</p>}
+      {hint && <p className="text-[10px] text-slate-400 font-mono">{hint}</p>}
     </div>
   );
 };

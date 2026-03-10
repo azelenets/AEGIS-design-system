@@ -20,7 +20,7 @@ const StatusItem = ({ name, detail, status, isCritical, isMaster }: StatusItemPr
   ) : isMaster ? (
     <span className={ALERT_BADGE_CLASSES}>MASTER_UNIT</span>
   ) : (
-    <span className="text-[9px] text-primary/50 font-bold uppercase px-1 border border-primary/30">ACTIVE</span>
+    <span className="text-[9px] text-primary/60 font-bold uppercase px-1 border border-primary/30">ACTIVE</span>
   );
 
   return (
@@ -29,7 +29,7 @@ const StatusItem = ({ name, detail, status, isCritical, isMaster }: StatusItemPr
         <span className={`text-sm font-bold uppercase group-hover:[color:rgb(var(--text-base))] ${nameColor}`}>{name}</span>
         {badge}
       </div>
-      <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+      <div className="flex justify-between text-[10px] text-slate-400 font-mono">
         <span>{detail}</span>
         <span>{status}</span>
       </div>

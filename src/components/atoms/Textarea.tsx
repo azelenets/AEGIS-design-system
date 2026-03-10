@@ -37,7 +37,7 @@ const Textarea = ({ label, error, hint, id, className = '', ...rest }: TextareaP
         {...rest}
       />
       {(error || hint) && (
-        <p className={`text-[10px] font-mono ${error ? 'text-alert' : 'text-slate-500'}`}>
+        <p className={`text-[10px] font-mono ${error ? 'text-alert' : 'text-slate-400'}`}>
           {error ?? hint}
         </p>
       )}

@@ -159,7 +159,7 @@ const Carousel = ({
       {indicators !== 'none' && count > 1 && (
         <div className="flex items-center justify-center gap-1.5 mt-3">
           {indicators === 'numbers' ? (
-            <span className="text-[10px] font-mono text-slate-500 tabular-nums tracking-widest">
+            <span className="text-[10px] font-mono text-slate-400 tabular-nums tracking-widest">
               <span className="text-primary">{String(active + 1).padStart(2, '0')}</span>
               {' / '}
               {String(count).padStart(2, '0')}

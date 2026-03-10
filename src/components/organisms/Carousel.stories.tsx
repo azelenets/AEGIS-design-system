@@ -17,13 +17,13 @@ const slides = [
   { id: 'alpha',   label: 'Alpha Sector',   eyebrow: 'SECTOR-01', status: 'active',  threat: 'LOW',    color: 'text-primary',  bg: 'bg-primary/5',  border: 'border-primary/20' },
   { id: 'bravo',   label: 'Bravo Sector',   eyebrow: 'SECTOR-02', status: 'standby', threat: 'MED',    color: 'text-hazard',   bg: 'bg-hazard/5',   border: 'border-hazard/20' },
   { id: 'charlie', label: 'Charlie Sector', eyebrow: 'SECTOR-03', status: 'alert',   threat: 'HIGH',   color: 'text-alert',    bg: 'bg-alert/5',    border: 'border-alert/20' },
-  { id: 'delta',   label: 'Delta Sector',   eyebrow: 'SECTOR-04', status: 'offline', threat: 'NONE',   color: 'text-slate-500',bg: 'bg-surface-terminal', border: 'border-border-dark' },
+  { id: 'delta',   label: 'Delta Sector',   eyebrow: 'SECTOR-04', status: 'offline', threat: 'NONE',   color: 'text-slate-400',bg: 'bg-surface-terminal', border: 'border-border-dark' },
 ];
 
 const TacticalSlide = ({ s }: { s: typeof slides[0] }) => (
   <div className={`${s.bg} border ${s.border} p-8 flex flex-col gap-4`}>
     <div className="flex items-center justify-between">
-      <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">{s.eyebrow}</span>
+      <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">{s.eyebrow}</span>
       <Badge
         label={s.status.toUpperCase()}
         variant={s.status === 'active' ? 'primary' : s.status === 'standby' ? 'hazard' : s.status === 'alert' ? 'alert' : 'ghost'}
@@ -32,13 +32,13 @@ const TacticalSlide = ({ s }: { s: typeof slides[0] }) => (
     </div>
     <h2 className={`font-display text-2xl font-bold tracking-widest uppercase ${s.color}`}>{s.label}</h2>
     <div className="flex items-center gap-2">
-      <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">Threat Level</span>
+      <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">Threat Level</span>
       <span className={`text-[11px] font-bold font-mono ${s.color}`}>{s.threat}</span>
     </div>
     <div className="grid grid-cols-3 gap-2 mt-2">
       {['PERIMETER', 'INTEL', 'COMMS'].map(label => (
         <div key={label} className="bg-bg-dark border border-border-dark p-2 text-center">
-          <p className="text-[9px] font-mono text-slate-600 uppercase tracking-widest">{label}</p>
+          <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest">{label}</p>
           <p className={`text-[11px] font-bold font-mono mt-1 ${s.color}`}>NOMINAL</p>
         </div>
       ))}
@@ -55,7 +55,7 @@ const ImageLikeSlide = ({ label, index }: { label: string; index: number }) => (
       <span className="font-display text-4xl font-bold text-primary/20 tracking-widest">
         {String(index + 1).padStart(2, '0')}
       </span>
-      <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">{label}</span>
+      <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">{label}</span>
     </div>
     {/* Corner accent */}
     <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-primary/40" />
@@ -184,19 +184,19 @@ export const WithCarouselSlide = {
         <CarouselSlide>
           <div className="bg-surface-terminal border border-primary/20 p-8 text-center">
             <p className="font-display text-xl text-primary tracking-widest uppercase">Mission Alpha</p>
-            <p className="text-xs font-mono text-slate-500 mt-2">Primary objective: secure the perimeter.</p>
+            <p className="text-xs font-mono text-slate-400 mt-2">Primary objective: secure the perimeter.</p>
           </div>
         </CarouselSlide>
         <CarouselSlide>
           <div className="bg-surface-terminal border border-hazard/20 p-8 text-center">
             <p className="font-display text-xl text-hazard tracking-widest uppercase">Mission Bravo</p>
-            <p className="text-xs font-mono text-slate-500 mt-2">Secondary objective: extract the asset.</p>
+            <p className="text-xs font-mono text-slate-400 mt-2">Secondary objective: extract the asset.</p>
           </div>
         </CarouselSlide>
         <CarouselSlide>
           <div className="bg-surface-terminal border border-alert/20 p-8 text-center">
             <p className="font-display text-xl text-alert tracking-widest uppercase">Mission Charlie</p>
-            <p className="text-xs font-mono text-slate-500 mt-2">Tertiary objective: neutralise the threat.</p>
+            <p className="text-xs font-mono text-slate-400 mt-2">Tertiary objective: neutralise the threat.</p>
           </div>
         </CarouselSlide>
       </Carousel>

@@ -119,5 +119,4 @@ export { default as StatBlock }    from '@/components/dashboard/StatBlock';
 export { default as StatCard }     from '@/components/dashboard/StatCard';
 export { default as LabCard }      from '@/components/laboratory/LabCard';
 export { default as MissionItem }  from '@/components/mission-log/MissionItem';
-export { default as FeatureCard } from '@/components/protocols/FeatureCard';
 export type { TimelineEntryProps, TimelineField } from '@/components/credentials/TimelineEntry';

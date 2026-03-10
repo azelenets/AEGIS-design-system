@@ -90,7 +90,7 @@ const MissionItem = ({ date, title, role, scanId, objective, tactics, tools, out
 
         {tools?.length ? (
           <div className="space-y-2">
-            <div className="text-primary/50 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-2">
+            <div className="text-primary/70 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-2">
               <span className="material-symbols-outlined text-xs">memory</span> TECH_STACK
             </div>
             <div className="flex flex-wrap gap-1.5">

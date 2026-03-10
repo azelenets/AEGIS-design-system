@@ -21,7 +21,7 @@ export const Default = {
 
     await userEvent.click(canvas.getByRole('button', { name: /Actions/ }));
     await expect(within(document.body).getByRole('menu')).toBeVisible();
-    await expect(within(document.body).getByRole('button', { name: /Delete/ })).toBeVisible();
+    await expect(within(document.body).getByRole('menuitem', { name: /Delete/ })).toBeVisible();
   },
 };
 

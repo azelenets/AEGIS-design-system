@@ -26,14 +26,14 @@ const ICON: Record<StepStatus, string> = {
 };
 
 const ICON_COLOR: Record<StepStatus, string> = {
-  pending:  'text-slate-700',
+  pending:  'text-slate-400',
   active:   'text-primary',
   complete: 'text-primary',
   error:    'text-alert',
 };
 
 const TITLE_COLOR: Record<StepStatus, string> = {
-  pending:  'text-slate-600',
+  pending:  'text-slate-400',
   active:   'text-white',
   complete: 'text-slate-400',
   error:    'text-alert',
@@ -71,7 +71,7 @@ const Stepper = ({ steps, orientation = 'horizontal', children }: StepperProps) 
                   {step.title}
                 </p>
                 {step.description && (
-                  <p className="text-[10px] text-slate-600 font-mono mt-0.5">{step.description}</p>
+                  <p className="text-[10px] text-slate-400 font-mono mt-0.5">{step.description}</p>
                 )}
                 {step.status === 'active' && children && (
                   <div className="mt-3">{children}</div>
@@ -109,7 +109,7 @@ const Stepper = ({ steps, orientation = 'horizontal', children }: StepperProps) 
                 {step.title}
               </p>
               {step.description && (
-                <p className="text-[9px] text-slate-700 font-mono text-center mt-0.5 px-1">{step.description}</p>
+                <p className="text-[9px] text-slate-400 font-mono text-center mt-0.5 px-1">{step.description}</p>
               )}
             </div>
           );

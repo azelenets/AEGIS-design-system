@@ -161,14 +161,13 @@ const Select = ({
           aria-expanded={open}
           aria-haspopup="listbox"
           aria-controls={listboxId}
-          aria-multiselectable={multiple}
           disabled={disabled}
           onKeyDown={handleKeyDown}
           onClick={() => { if (!disabled) { open ? setOpen(false) : openDropdown(); } }}
           className={[
             'w-full bg-surface-terminal border text-sm text-left font-mono',
             'px-3 py-2 pr-8 outline-none transition-all duration-150 min-h-[38px]',
-            hasSelection ? 'text-slate-200' : 'text-slate-500',
+            hasSelection ? 'text-slate-200' : 'text-slate-400',
             error
               ? 'border-alert/50 focus:border-alert'
               : open
@@ -201,16 +200,16 @@ const Select = ({
                 ))}
               </span>
             ) : (
-              <span className="text-slate-500">{placeholder ?? 'Select options…'}</span>
+              <span className="text-slate-400">{placeholder ?? 'Select options…'}</span>
             )
           ) : (
-            selectedOption?.label ?? <span className="text-slate-500">{placeholder ?? 'Select…'}</span>
+            selectedOption?.label ?? <span className="text-slate-400">{placeholder ?? 'Select…'}</span>
           )}
         </button>
 
         <span
           className={`material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[16px] pointer-events-none transition-transform duration-150 ${
-            open ? 'rotate-180 text-primary/60' : 'text-slate-500'
+            open ? 'rotate-180 text-primary/60' : 'text-slate-400'
           }`}
         >
           expand_more
@@ -221,6 +220,7 @@ const Select = ({
             ref={listboxRef}
             id={listboxId}
             role="listbox"
+            aria-multiselectable={multiple || undefined}
             onKeyDown={handleKeyDown}
             style={{ top: dropdownRect.top, left: dropdownRect.left, width: dropdownRect.width }}
             className="fixed z-[9999] mt-px bg-panel-dark border border-primary/20 py-1 max-h-52 overflow-y-auto shadow-lg shadow-black/20"
@@ -269,7 +269,7 @@ const Select = ({
       </div>
 
       {(error || hint) && (
-        <p className={`text-[10px] font-mono ${error ? 'text-alert' : 'text-slate-500'}`}>{error ?? hint}</p>
+        <p className={`text-[10px] font-mono ${error ? 'text-alert' : 'text-slate-400'}`}>{error ?? hint}</p>
       )}
     </div>
   );

@@ -66,7 +66,7 @@ const TableInner = <T extends Record<string, unknown>>({
     <div className="w-full overflow-x-auto border border-border-dark">
       <table className="w-full border-collapse text-sm font-mono">
         {caption && (
-          <caption className="text-[10px] text-slate-500 uppercase tracking-widest text-left px-4 py-2 border-b border-border-dark">
+          <caption className="text-[10px] text-slate-400 uppercase tracking-widest text-left px-4 py-2 border-b border-border-dark">
             {caption}
           </caption>
         )}
@@ -86,7 +86,7 @@ const TableInner = <T extends Record<string, unknown>>({
                   key={key}
                   style={col.width ? { width: col.width } : undefined}
                   className={[
-                    'px-4 py-3 text-[9px] font-bold uppercase tracking-widest text-slate-500',
+                    'px-4 py-3 text-[9px] font-bold uppercase tracking-widest text-slate-400',
                     ALIGN_TH[col.align ?? 'left'],
                     col.sortable ? 'cursor-pointer select-none hover:text-primary transition-colors' : '',
                   ]
@@ -113,7 +113,7 @@ const TableInner = <T extends Record<string, unknown>>({
           {data.length === 0 ? (
             <tr>
               <td colSpan={columns.length} className="px-4 py-12 text-center">
-                <div className="flex flex-col items-center gap-2 text-slate-600">
+                <div className="flex flex-col items-center gap-2 text-slate-400">
                   <span className="material-symbols-outlined text-[32px]">{emptyIcon}</span>
                   <span className="text-[10px] uppercase tracking-widest">{emptyLabel}</span>
                 </div>

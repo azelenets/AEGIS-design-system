@@ -19,10 +19,10 @@ export interface BreadcrumbsProps {
 // ─── Separator glyphs ─────────────────────────────────────────────────────────
 
 const SEPARATOR_CONTENT: Record<BreadcrumbSeparator, ReactNode> = {
-  slash:   <span className="text-slate-700 font-mono">/</span>,
-  chevron: <span className="material-symbols-outlined text-[12px] text-slate-700">chevron_right</span>,
-  dot:     <span className="w-1 h-1 rounded-full bg-slate-700 mt-px" />,
-  arrow:   <span className="material-symbols-outlined text-[12px] text-slate-700">arrow_forward</span>,
+  slash:   <span className="text-slate-400 font-mono">/</span>,
+  chevron: <span className="material-symbols-outlined text-[12px] text-slate-400">chevron_right</span>,
+  dot:     <span className="w-1 h-1 rounded-full bg-slate-400 mt-px" />,
+  arrow:   <span className="material-symbols-outlined text-[12px] text-slate-400">arrow_forward</span>,
 };
 
 // ─── Breadcrumbs ──────────────────────────────────────────────────────────────
@@ -49,7 +49,7 @@ const Breadcrumbs = ({ items, separator = 'chevron', maxItems }: BreadcrumbsProp
               {/* Collapsed ellipsis before the truncated segment */}
               {showCollapsed && (
                 <>
-                  <span className="text-[10px] text-slate-600 font-mono tracking-widest px-1">···</span>
+                  <span className="text-[10px] text-slate-400 font-mono tracking-widest px-1">···</span>
                   {SEPARATOR_CONTENT[separator]}
                 </>
               )}
@@ -68,7 +68,7 @@ const Breadcrumbs = ({ items, separator = 'chevron', maxItems }: BreadcrumbsProp
               ) : item.href ? (
                 <a
                   href={item.href}
-                  className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest font-mono text-slate-500 hover:text-slate-300 transition-colors"
+                  className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest font-mono text-slate-400 hover:text-slate-200 transition-colors"
                 >
                   {item.icon && (
                     <span className="material-symbols-outlined text-[13px]">{item.icon}</span>
@@ -76,7 +76,7 @@ const Breadcrumbs = ({ items, separator = 'chevron', maxItems }: BreadcrumbsProp
                   {item.label}
                 </a>
               ) : (
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest font-mono text-slate-500">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest font-mono text-slate-400">
                   {item.icon && (
                     <span className="material-symbols-outlined text-[13px]">{item.icon}</span>
                   )}

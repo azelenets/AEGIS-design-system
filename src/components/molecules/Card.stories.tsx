@@ -22,7 +22,7 @@ export const PrimaryVariant = {
       <CardHeader title="Anomaly Scanner" eyebrow="LAB-002" variant="primary" action={<Badge label="Active" variant="primary" dot />} />
       <CardBody><p className="text-xs text-slate-400 font-mono">Detects irregular traffic patterns across all monitored subnets.</p></CardBody>
       <CardFooter align="between">
-        <span className="text-[10px] text-slate-600 font-mono">14 endpoints</span>
+        <span className="text-[10px] text-slate-400 font-mono">14 endpoints</span>
         <Button variant="primary" size="sm" icon="open_in_new">Open</Button>
       </CardFooter>
     </Card>

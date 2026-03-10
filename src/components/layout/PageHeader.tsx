@@ -26,7 +26,7 @@ const PageHeader: FC<PageHeaderProps> = ({ eyebrow, titleMain, titleAccent, desc
             ) : null}
           </h1>
           {description ? (
-            <p className="text-slate-500 text-sm font-medium leading-relaxed uppercase pt-2">{description}</p>
+            <p className="text-slate-400 text-sm font-medium leading-relaxed uppercase pt-2">{description}</p>
           ) : null}
         </div>
       </div>

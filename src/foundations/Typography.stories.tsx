@@ -5,14 +5,14 @@ export default meta;
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="flex flex-col gap-4">
-    <p className="text-[9px] font-bold uppercase tracking-widest text-primary/60 font-mono border-b border-border-dark pb-2">{title}</p>
+    <p className="text-[9px] font-bold uppercase tracking-widest text-primary font-mono border-b border-border-dark pb-2">{title}</p>
     {children}
   </div>
 );
 
 const Row = ({ label, className, sample }: { label: string; className: string; sample?: string }) => (
   <div className="flex items-baseline gap-6">
-    <span className="text-[9px] text-slate-600 font-mono w-32 shrink-0">{label}</span>
+    <span className="text-[9px] text-slate-400 font-mono w-32 shrink-0">{label}</span>
     <span className={className}>{sample ?? 'AEGIS Tactical UI'}</span>
   </div>
 );

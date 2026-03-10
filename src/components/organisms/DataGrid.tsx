@@ -320,8 +320,8 @@ const DataGridInner = <T extends Record<string, unknown>>({
               <span className="material-symbols-outlined text-[16px]">view_column</span>
             </Button>
             {colPanelOpen && (
-              <div className="absolute right-0 top-full mt-1 z-50 bg-panel-dark border border-border-dark py-1 min-w-[160px]">
-                <p className="text-[9px] font-mono text-slate-400 uppercase tracking-widest px-3 py-1.5 border-b border-border-dark mb-1">
+              <div className="absolute right-0 top-full mt-1 z-50 flex min-w-[160px] flex-col items-stretch bg-panel-dark py-1 text-left border border-border-dark">
+                <p className="border-b border-border-dark px-3 py-1.5 text-left text-[9px] font-mono uppercase tracking-widest text-slate-400 mb-1">
                   Columns
                 </p>
                 {colDefs.map(col => {
@@ -333,12 +333,12 @@ const DataGridInner = <T extends Record<string, unknown>>({
                       onClick={() => toggleColVisibility(k)}
                       variant="ghost"
                       size="sm"
-                      className="w-full justify-start gap-2 border-0 px-3 py-1.5 text-[11px] normal-case tracking-normal hover:bg-primary/10 text-left"
+                      className="flex w-full items-center justify-start gap-2 self-stretch border-0 px-3 py-1.5 text-left text-[11px] normal-case tracking-normal hover:bg-primary/10"
                     >
                       <span className={`material-symbols-outlined text-[14px] ${visible ? 'text-primary' : 'text-slate-400'}`}>
                         {visible ? 'check_box' : 'check_box_outline_blank'}
                       </span>
-                      <span className={visible ? 'text-slate-300' : 'text-slate-400'}>{col.header}</span>
+                      <span className={`flex-1 text-left ${visible ? 'text-slate-300' : 'text-slate-400'}`}>{col.header}</span>
                     </Button>
                   );
                 })}

@@ -17,6 +17,7 @@ const withTheme: Decorator = (Story, context) => {
 // ─── Preview config ───────────────────────────────────────────────────────────
 
 const preview: Preview = {
+  tags: ['autodocs'],
   globalTypes: {
     theme: {
       description: 'Global color theme',
@@ -40,6 +41,9 @@ const preview: Preview = {
       test: 'todo',
     },
     backgrounds: { disable: true }, // theme handles bg via CSS vars
+    docs: {
+      toc: true,
+    },
     layout: 'padded',
   },
 };

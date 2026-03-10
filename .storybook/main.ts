@@ -6,7 +6,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(ts|tsx)'],
-  addons: ['@storybook/addon-vitest', '@storybook/addon-a11y', '@chromatic-com/storybook'],
+  addons: [
+    '@storybook/addon-vitest',
+    '@storybook/addon-a11y',
+    '@chromatic-com/storybook',
+    '@storybook/addon-docs'
+  ],
   features: {
     developmentModeForBuild: true,
   },

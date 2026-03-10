@@ -1,8 +1,8 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
 export type TagVariant = 'primary' | 'hazard' | 'alert' | 'ghost' | 'success';
 
-export interface TagProps {
+export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   label: string;
   variant?: TagVariant;
   icon?: string;
@@ -17,10 +17,10 @@ const VARIANT: Record<TagVariant, { tag: string; remove: string }> = {
   success: { tag: 'text-emerald-400 border-emerald-400/30 bg-emerald-400/5', remove: 'hover:text-emerald-400' },
 };
 
-const Tag = ({ label, variant = 'ghost', icon, onRemove }: TagProps) => {
+const Tag = ({ label, variant = 'ghost', icon, onRemove, className = '', ...rest }: TagProps) => {
   const v = VARIANT[variant];
   return (
-    <span className={`inline-flex items-center gap-1 pl-2 ${onRemove ? 'pr-1' : 'pr-2'} py-0.5 text-[10px] font-bold uppercase tracking-wider font-mono border ${v.tag}`}>
+    <span {...rest} className={['inline-flex items-center gap-1 pl-2', onRemove ? 'pr-1' : 'pr-2', `py-0.5 text-[10px] font-bold uppercase tracking-wider font-mono border ${v.tag}`, className].filter(Boolean).join(' ')}>
       {icon && <span className="material-symbols-outlined text-[12px]">{icon}</span>}
       {label}
       {onRemove && (

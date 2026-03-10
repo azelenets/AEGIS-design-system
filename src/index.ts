@@ -48,6 +48,7 @@ export { default as Table }        from '@/components/organisms/Table';
 export { default as Tabs, TabList, TabTrigger, TabPanel } from '@/components/organisms/Tabs';
 export { ToastProvider, Toaster, useToast } from '@/components/organisms/Toast';
 export { default as Wizard }      from '@/components/organisms/Wizard';
+export { default as Map }         from '@/components/organisms/Map';
 
 // ─── Layout ──────────────────────────────────────────────────────────────────
 export { default as Container }    from '@/components/layout/Container';
@@ -101,6 +102,7 @@ export type { TableColumn, TableProps, SortDirection, ColumnAlign }      from '@
 export type { TabsProps, TabListProps, TabTriggerProps, TabPanelProps, TabsVariant } from '@/components/organisms/Tabs';
 export type { ToastData, ToastVariant, ToastPosition }                   from '@/components/organisms/Toast';
 export type { WizardProps, WizardStep }                                  from '@/components/organisms/Wizard';
+export type { MapProps, MapMarker }                                      from '@/components/organisms/Map';
 
 // ─── Types — Layout ───────────────────────────────────────────────────────────
 export type { ContainerProps, ContainerSize }                            from '@/components/layout/Container';

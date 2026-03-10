@@ -1,8 +1,8 @@
-import { memo, type ReactNode, useState } from 'react';
+import { memo, type ReactNode, useState, type HTMLAttributes } from 'react';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
-export interface TooltipProps {
+export interface TooltipProps extends HTMLAttributes<HTMLSpanElement> {
   content: string;
   placement?: TooltipPlacement;
   children: ReactNode;
@@ -24,12 +24,13 @@ const ARROW_CLASSES: Record<TooltipPlacement, string> = {
     'right-full top-1/2 -translate-y-1/2 border-r-panel-dark border-y-transparent border-l-transparent border-4 border-solid',
 };
 
-const Tooltip = ({ content, placement = 'top', children }: TooltipProps) => {
+const Tooltip = ({ content, placement = 'top', children, className = '', ...rest }: TooltipProps) => {
   const [visible, setVisible] = useState(false);
 
   return (
     <span
-      className="relative inline-flex"
+      {...rest}
+      className={['relative inline-flex', className].filter(Boolean).join(' ')}
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
       onFocus={() => setVisible(true)}

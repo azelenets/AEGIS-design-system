@@ -1,9 +1,9 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 
 export type ProgressCircleVariant = 'primary' | 'hazard' | 'alert' | 'success';
 export type ProgressCircleSize = 'sm' | 'md' | 'lg' | 'xl';
 
-export interface ProgressCircleProps {
+export interface ProgressCircleProps extends HTMLAttributes<HTMLDivElement> {
   value?: number;           // 0–100; omit for indeterminate
   variant?: ProgressCircleVariant;
   size?: ProgressCircleSize;
@@ -53,6 +53,9 @@ const ProgressCircle = ({
   label,
   showValue = true,
   thickness,
+  className = '',
+  style,
+  ...rest
 }: ProgressCircleProps) => {
   const indeterminate = value === undefined;
   const clamped = Math.min(100, Math.max(0, value ?? 0));
@@ -72,8 +75,9 @@ const ProgressCircle = ({
 
   return (
     <div
-      className="relative inline-flex items-center justify-center shrink-0"
-      style={{ width: px, height: px }}
+      {...rest}
+      className={['relative inline-flex items-center justify-center shrink-0', className].filter(Boolean).join(' ')}
+      style={{ width: px, height: px, ...style }}
     >
       <svg
         width={px}

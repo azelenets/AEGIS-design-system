@@ -1,6 +1,6 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
-export interface MissionItemProps {
+export interface MissionItemProps extends HTMLAttributes<HTMLElement> {
   date: string;
   title: string;
   role: string;
@@ -17,9 +17,9 @@ export interface MissionItemProps {
   imageUrl?: string;
 }
 
-const MissionItem = ({ date, title, role, scanId, objective, tactics, tools, outcome, status, statusColor, align, isShield, isGhost, imageUrl }: MissionItemProps) => {
+const MissionItem = ({ date, title, role, scanId, objective, tactics, tools, outcome, status, statusColor, align, isShield, isGhost, imageUrl, className = '', ...rest }: MissionItemProps) => {
   return (
-    <article className="relative grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+    <article {...rest} className={['relative grid grid-cols-1 md:grid-cols-2 gap-12 items-start', className].filter(Boolean).join(' ')}>
       <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 z-10">
         <div className="size-4 bg-bg-dark border-2 border-primary rotate-45 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.6)]">
           <div className="size-1 bg-primary" />

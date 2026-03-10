@@ -1,4 +1,4 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -14,7 +14,7 @@ export interface TableColumn<T extends Record<string, unknown>> {
   render?: (value: unknown, row: T, index: number) => ReactNode;
 }
 
-export interface TableProps<T extends Record<string, unknown>> {
+export interface TableProps<T extends Record<string, unknown>> extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   columns: TableColumn<T>[];
   data: T[];
   keyField?: keyof T;
@@ -54,6 +54,8 @@ const TableInner = <T extends Record<string, unknown>>({
   emptyLabel = 'No data',
   emptyIcon = 'inbox',
   caption,
+  className = '',
+  ...rest
 }: TableProps<T>) => {
   const handleSort = (col: TableColumn<T>) => {
     if (!col.sortable || !onSort) return;
@@ -63,7 +65,7 @@ const TableInner = <T extends Record<string, unknown>>({
   };
 
   return (
-    <div className="w-full overflow-x-auto border border-border-dark">
+    <div {...rest} className={['w-full overflow-x-auto border border-border-dark', className].filter(Boolean).join(' ')}>
       <table className="w-full border-collapse text-sm font-mono">
         {caption && (
           <caption className="text-[10px] text-slate-400 uppercase tracking-widest text-left px-4 py-2 border-b border-border-dark">

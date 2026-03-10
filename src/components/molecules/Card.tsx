@@ -1,27 +1,25 @@
-import { memo, type ReactNode } from 'react';
+import { memo, type ReactNode, type HTMLAttributes } from 'react';
 
 export type CardVariant = 'default' | 'primary' | 'hazard' | 'alert';
 
-export interface CardProps {
+export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: CardVariant;
   hoverable?: boolean;
-  className?: string;
   children: ReactNode;
 }
 
-export interface CardHeaderProps {
+export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   eyebrow?: string;
   action?: ReactNode;
   variant?: CardVariant;
 }
 
-export interface CardBodyProps {
+export interface CardBodyProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  className?: string;
 }
 
-export interface CardFooterProps {
+export interface CardFooterProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   align?: 'left' | 'right' | 'between';
 }
@@ -57,8 +55,8 @@ const FOOTER_ALIGN: Record<'left' | 'right' | 'between', string> = {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-export const CardHeader = memo(({ title, eyebrow, action, variant = 'default' }: CardHeaderProps) => (
-  <div className="flex items-start justify-between gap-4 px-5 pt-4 pb-3 border-b border-border-dark">
+export const CardHeader = memo(({ title, eyebrow, action, variant = 'default', className = '', ...rest }: CardHeaderProps) => (
+  <div {...rest} className={['flex items-start justify-between gap-4 px-5 pt-4 pb-3 border-b border-border-dark', className].filter(Boolean).join(' ')}>
     <div className="flex flex-col gap-0.5 min-w-0">
       {eyebrow && (
         <span className={`text-[9px] font-bold uppercase tracking-widest font-mono ${VARIANT_EYEBROW[variant]}`}>
@@ -73,14 +71,14 @@ export const CardHeader = memo(({ title, eyebrow, action, variant = 'default' }:
 
 CardHeader.displayName = 'CardHeader';
 
-export const CardBody = memo(({ children, className = '' }: CardBodyProps) => (
-  <div className={`px-5 py-4 flex-1 ${className}`}>{children}</div>
+export const CardBody = memo(({ children, className = '', ...rest }: CardBodyProps) => (
+  <div {...rest} className={['px-5 py-4 flex-1', className].filter(Boolean).join(' ')}>{children}</div>
 ));
 
 CardBody.displayName = 'CardBody';
 
-export const CardFooter = memo(({ children, align = 'right' }: CardFooterProps) => (
-  <div className={`flex flex-wrap items-center gap-3 px-5 py-3 border-t border-border-dark ${FOOTER_ALIGN[align]}`}>
+export const CardFooter = memo(({ children, align = 'right', className = '', ...rest }: CardFooterProps) => (
+  <div {...rest} className={['flex flex-wrap items-center gap-3 px-5 py-3 border-t border-border-dark', FOOTER_ALIGN[align], className].filter(Boolean).join(' ')}>
     {children}
   </div>
 ));
@@ -89,8 +87,9 @@ CardFooter.displayName = 'CardFooter';
 
 // ─── Card ─────────────────────────────────────────────────────────────────────
 
-const Card = ({ variant = 'default', hoverable = false, className = '', children }: CardProps) => (
+const Card = ({ variant = 'default', hoverable = false, className = '', children, ...rest }: CardProps) => (
   <div
+    {...rest}
     className={[
       'flex flex-col bg-panel-dark border',
       VARIANT_BORDER[variant],

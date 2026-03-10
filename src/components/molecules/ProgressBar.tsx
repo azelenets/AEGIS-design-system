@@ -1,9 +1,9 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
 export type ProgressBarVariant = 'primary' | 'hazard' | 'alert' | 'success';
 export type ProgressBarSize = 'sm' | 'md' | 'lg';
 
-export interface ProgressBarProps {
+export interface ProgressBarProps extends HTMLAttributes<HTMLDivElement> {
   value?: number;           // 0–100; omit for indeterminate
   variant?: ProgressBarVariant;
   size?: ProgressBarSize;
@@ -61,6 +61,8 @@ const ProgressBar = ({
   segmented = false,
   striped = false,
   segments = 10,
+  className = '',
+  ...rest
 }: ProgressBarProps) => {
   const indeterminate = value === undefined;
   const clamped = Math.min(100, Math.max(0, value ?? 0));
@@ -78,7 +80,7 @@ const ProgressBar = ({
     : undefined;
 
   return (
-    <div className="flex flex-col gap-1.5 w-full">
+    <div {...rest} className={['flex flex-col gap-1.5 w-full', className].filter(Boolean).join(' ')}>
       {/* Label row */}
       {(label || showValue) && (
         <div className="flex items-center justify-between gap-2">

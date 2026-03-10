@@ -17,6 +17,7 @@ import Stepper                                             from '@/components/or
 import Wizard                                              from '@/components/organisms/Wizard';
 import Footer                                              from '@/components/organisms/Footer';
 import { ToastProvider, Toaster, useToast }                from '@/components/organisms/Toast';
+import Map                                                  from '@/components/organisms/Map';
 
 // ─── Layout ───────────────────────────────────────────────────────────────────
 import PageHeader                                          from '@/components/layout/PageHeader';
@@ -150,6 +151,13 @@ const sectorSlides = [
   { id: 'bravo',   label: 'Bravo Sector',   eyebrow: 'SECTOR-02', status: 'STANDBY', threat: 'MED',  color: 'text-hazard',    bg: 'bg-hazard/5',         border: 'border-hazard/20',     risk: 67, badge: 'hazard'   as const },
   { id: 'charlie', label: 'Charlie Sector', eyebrow: 'SECTOR-03', status: 'ALERT',   threat: 'HIGH', color: 'text-alert',     bg: 'bg-alert/5',          border: 'border-alert/20',      risk: 88, badge: 'alert'    as const },
   { id: 'delta',   label: 'Delta Sector',   eyebrow: 'SECTOR-04', status: 'OFFLINE', threat: 'NONE', color: 'text-slate-500', bg: 'bg-surface-terminal', border: 'border-border-dark',   risk: 0,  badge: 'ghost'    as const },
+];
+
+const opsMarkers = [
+  { lat: 51.505,  lng: -0.090, title: 'Alpha Sector — HQ',    popup: 'SECTOR-01 // ALPHA — Status: ACTIVE' },
+  { lat: 52.520,  lng: 13.405, title: 'Bravo Sector — Berlin', popup: 'SECTOR-02 // BRAVO — Status: STANDBY' },
+  { lat: 52.237,  lng: 21.017, title: 'Charlie Sector — Warsaw', popup: 'SECTOR-03 // CHARLIE — Status: ALERT' },
+  { lat: 50.075,  lng: 14.437, title: 'Delta Sector — Prague',  popup: 'SECTOR-04 // DELTA — Status: OFFLINE' },
 ];
 
 const stepperSteps = [
@@ -525,7 +533,7 @@ const DashboardContent = () => {
                                     <span className="material-symbols-outlined text-primary text-[18px]">shield</span>
                                   </div>
                                   <div className="absolute -top-1.5 -right-1.5">
-                                    <Badge label="2" variant={v} />
+                                    <Badge label="2" variant={v} solid={true} />
                                   </div>
                                 </ZStack>
                               ))}
@@ -555,6 +563,23 @@ const DashboardContent = () => {
                               </div>
                             ))}
                           </div>
+                        </CardBody>
+                      </Card>
+
+                      {/* Geo Intelligence Map */}
+                      <Card>
+                        <CardHeader
+                          eyebrow="GEO INTELLIGENCE"
+                          title="Operational Sector Map"
+                          action={<Badge label="Live" variant="alert" dot />}
+                        />
+                        <CardBody className="p-0">
+                          <Map
+                            center={[51.8, 10.5]}
+                            zoom={4}
+                            height={360}
+                            markers={opsMarkers}
+                          />
                         </CardBody>
                       </Card>
 

@@ -1,11 +1,13 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
 export type BadgeVariant = 'primary' | 'hazard' | 'alert' | 'ghost' | 'success';
 
-export interface BadgeProps {
+export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   label: string;
   variant?: BadgeVariant;
   dot?: boolean;
+  /** Solid filled background instead of the default tinted background */
+  solid?: boolean;
 }
 
 const VARIANT_CLASSES: Record<BadgeVariant, string> = {
@@ -16,6 +18,14 @@ const VARIANT_CLASSES: Record<BadgeVariant, string> = {
   success: 'text-emerald-400 border border-emerald-400/30 bg-emerald-400/5',
 };
 
+const VARIANT_SOLID_CLASSES: Record<BadgeVariant, string> = {
+  primary: 'text-bg-dark border border-primary bg-primary',
+  hazard:  'text-bg-dark border border-hazard bg-hazard',
+  alert:   'text-white border border-alert bg-alert',
+  ghost:   'text-slate-900 border border-slate-400 bg-slate-400',
+  success: 'text-bg-dark border border-emerald-400 bg-emerald-400',
+};
+
 const DOT_CLASSES: Record<BadgeVariant, string> = {
   primary: 'bg-primary',
   hazard: 'bg-hazard',
@@ -24,9 +34,10 @@ const DOT_CLASSES: Record<BadgeVariant, string> = {
   success: 'bg-emerald-400',
 };
 
-const Badge = ({ label, variant = 'ghost', dot = false }: BadgeProps) => (
+const Badge = ({ label, variant = 'ghost', dot = false, solid = false, className = '', ...rest }: BadgeProps) => (
   <span
-    className={`inline-flex items-center gap-1.5 px-2 py-1.5 text-[9px] leading-none font-bold uppercase tracking-widest font-mono ${VARIANT_CLASSES[variant]}`}
+    {...rest}
+    className={['inline-flex items-center gap-1.5 px-2 py-1.5 text-[9px] leading-none font-bold uppercase tracking-widest font-mono', solid ? VARIANT_SOLID_CLASSES[variant] : VARIANT_CLASSES[variant], className].filter(Boolean).join(' ')}
   >
     {dot && <span className={`w-1.5 h-1.5 rounded-full animate-pulse-fast ${DOT_CLASSES[variant]}`} />}
     {label}

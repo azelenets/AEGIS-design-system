@@ -1,7 +1,7 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 import Avatar, { type AvatarProps } from '@/components/atoms/Avatar';
 
-export interface AvatarGroupProps {
+export interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   avatars: Omit<AvatarProps, 'size'>[];
   max?: number;
   size?: AvatarProps['size'];
@@ -14,12 +14,12 @@ const COUNTER_SIZE: Record<NonNullable<AvatarProps['size']>, string> = {
   xl: 'w-16 h-16 text-sm',
 };
 
-const AvatarGroup = ({ avatars, max = 5, size = 'md' }: AvatarGroupProps) => {
+const AvatarGroup = ({ avatars, max = 5, size = 'md', className = '', ...rest }: AvatarGroupProps) => {
   const visible = avatars.slice(0, max);
   const overflow = avatars.length - max;
 
   return (
-    <div className="flex items-center gap-1">
+    <div {...rest} className={['flex items-center gap-1', className].filter(Boolean).join(' ')}>
       {visible.map((av, i) => (
         <Avatar key={i} {...av} size={size} />
       ))}

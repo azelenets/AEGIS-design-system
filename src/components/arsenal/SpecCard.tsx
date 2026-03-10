@@ -1,13 +1,13 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
-export interface SpecCardProps {
+export interface SpecCardProps extends HTMLAttributes<HTMLElement> {
   title: string;
   subtitle: string;
   img: string;
 }
 
-const SpecCard = ({ title, subtitle, img }: SpecCardProps) => (
-  <figure className="group relative overflow-hidden bg-surface-terminal border border-primary/10 aspect-video grayscale hover:grayscale-0 transition-all cursor-pointer">
+const SpecCard = ({ title, subtitle, img, className = '', ...rest }: SpecCardProps) => (
+  <figure {...rest} className={['group relative overflow-hidden bg-surface-terminal border border-primary/10 aspect-video grayscale hover:grayscale-0 transition-all cursor-pointer', className].filter(Boolean).join(' ')}>
     <div className="absolute inset-0 bg-primary/20 z-10 opacity-40 group-hover:opacity-10 transition-opacity" />
     <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style={{ backgroundImage: `url('${img}')` }} />
     <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-transparent z-20" />

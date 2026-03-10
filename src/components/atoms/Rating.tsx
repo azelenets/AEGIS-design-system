@@ -1,8 +1,8 @@
-import { memo, useState } from 'react';
+import { memo, useState, type HTMLAttributes } from 'react';
 
 export type RatingVariant = 'primary' | 'hazard';
 
-export interface RatingProps {
+export interface RatingProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'onChange'> {
   value?: number;          // controlled
   defaultValue?: number;   // uncontrolled
   max?: number;
@@ -25,6 +25,8 @@ const Rating = ({
   readOnly = false,
   onChange,
   label,
+  className = '',
+  ...rest
 }: RatingProps) => {
   const [hovered, setHovered] = useState(0);
   const [internal, setInternal] = useState(defaultValue);
@@ -41,7 +43,7 @@ const Rating = ({
   };
 
   return (
-    <span className="inline-flex flex-col gap-1">
+    <span {...rest} className={['inline-flex flex-col gap-1', className].filter(Boolean).join(' ')}>
       {label && (
         <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 font-mono">{label}</span>
       )}

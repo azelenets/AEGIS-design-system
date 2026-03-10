@@ -52,22 +52,6 @@
 [data-theme="light"] .text-slate-600    { color: rgb(71 85 105) !important; }
 [data-theme="light"] .text-slate-700    { color: rgb(51 65 85) !important; }
 
-/* ─── Storybook docs page theming ────────────────────────────────────────────
-   Override Storybook's hardcoded white docs background so it matches the
-   active theme selected in the toolbar.
-──────────────────────────────────────────────────────────────────────────── */
-#storybook-docs,
-.sbdocs.sbdocs-wrapper,
-.sbdocs-content {
-  background-color: rgb(var(--color-bg-dark)) !important;
-  color: rgb(var(--text-base)) !important;
-}
-
-/* Story preview containers inside docs */
-.docs-story {
-  background-color: rgb(var(--color-panel-dark)) !important;
-}
-
 html,
 body,
 #root {

@@ -4,6 +4,7 @@ import {
   useCallback,
   type ReactNode,
   type KeyboardEvent,
+  type HTMLAttributes,
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
@@ -13,7 +14,7 @@ import Button from '@/components/atoms/Button';
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 export type ModalVariant = 'primary' | 'hazard' | 'alert';
 
-export interface ModalProps {
+export interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   open: boolean;
   onClose: () => void;
   size?: ModalSize;
@@ -25,19 +26,18 @@ export interface ModalProps {
 
 // ─── Sub-component prop types ─────────────────────────────────────────────────
 
-export interface ModalHeaderProps {
+export interface ModalHeaderProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   eyebrow?: string;
   onClose?: () => void;
   variant?: ModalVariant;
 }
 
-export interface ModalBodyProps {
+export interface ModalBodyProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  className?: string;
 }
 
-export interface ModalFooterProps {
+export interface ModalFooterProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   align?: 'left' | 'right' | 'center';
 }
@@ -72,8 +72,8 @@ const FOOTER_ALIGN: Record<'left' | 'right' | 'center', string> = {
 
 // ─── ModalHeader ──────────────────────────────────────────────────────────────
 
-export const ModalHeader = memo(({ title, eyebrow, onClose, variant = 'primary' }: ModalHeaderProps) => (
-  <div className="flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-border-dark shrink-0">
+export const ModalHeader = memo(({ title, eyebrow, onClose, variant = 'primary', className = '', ...rest }: ModalHeaderProps) => (
+  <div {...rest} className={['flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-border-dark shrink-0', className].filter(Boolean).join(' ')}>
     <div className="flex flex-col gap-0.5 min-w-0">
       {eyebrow && (
         <span className={`text-[9px] font-bold uppercase tracking-widest font-mono ${VARIANT_EYEBROW[variant]}`}>
@@ -100,8 +100,8 @@ ModalHeader.displayName = 'ModalHeader';
 
 // ─── ModalBody ────────────────────────────────────────────────────────────────
 
-export const ModalBody = memo(({ children, className = '' }: ModalBodyProps) => (
-  <div className={`px-6 py-5 overflow-y-auto flex-1 text-sm text-slate-400 font-mono leading-relaxed ${className}`}>
+export const ModalBody = memo(({ children, className = '', ...rest }: ModalBodyProps) => (
+  <div {...rest} className={['px-6 py-5 overflow-y-auto flex-1 text-sm text-slate-400 font-mono leading-relaxed', className].filter(Boolean).join(' ')}>
     {children}
   </div>
 ));
@@ -110,8 +110,8 @@ ModalBody.displayName = 'ModalBody';
 
 // ─── ModalFooter ──────────────────────────────────────────────────────────────
 
-export const ModalFooter = memo(({ children, align = 'right' }: ModalFooterProps) => (
-  <div className={`flex flex-wrap items-center gap-3 px-6 py-4 border-t border-border-dark shrink-0 ${FOOTER_ALIGN[align]}`}>
+export const ModalFooter = memo(({ children, align = 'right', className = '', ...rest }: ModalFooterProps) => (
+  <div {...rest} className={['flex flex-wrap items-center gap-3 px-6 py-4 border-t border-border-dark shrink-0', FOOTER_ALIGN[align], className].filter(Boolean).join(' ')}>
     {children}
   </div>
 ));
@@ -128,6 +128,8 @@ const Modal = ({
   closeOnBackdrop = true,
   closeOnEscape = true,
   children,
+  className = '',
+  ...rest
 }: ModalProps) => {
   // Escape key handler
   const handleKeyDown = useCallback(
@@ -179,6 +181,7 @@ const Modal = ({
 
       {/* Panel */}
       <div
+        {...rest}
         role="presentation"
         onKeyDown={handlePanelKeyDown}
         className={[
@@ -186,7 +189,8 @@ const Modal = ({
           'bg-panel-dark border hud-border',
           VARIANT_BORDER[variant],
           SIZE_CLASSES[size],
-        ].join(' ')}
+          className,
+        ].filter(Boolean).join(' ')}
       >
         {children}
       </div>

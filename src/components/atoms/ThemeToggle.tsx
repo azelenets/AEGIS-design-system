@@ -1,13 +1,12 @@
-import { memo } from 'react';
+import { memo, type ButtonHTMLAttributes } from 'react';
 import { useTheme, type Theme } from '@/foundations/ThemeContext';
 
 export type ThemeToggleSize    = 'sm' | 'md' | 'lg';
 export type ThemeToggleVariant = 'icon' | 'button' | 'pill';
 
-export interface ThemeToggleProps {
+export interface ThemeToggleProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
   size?:    ThemeToggleSize;
   variant?: ThemeToggleVariant;
-  className?: string;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -37,13 +36,14 @@ const THEME_META: Record<Theme, { icon: string; label: string; next: string }> =
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-const ThemeToggle = ({ size = 'md', variant = 'button', className = '' }: ThemeToggleProps) => {
+const ThemeToggle = ({ size = 'md', variant = 'button', className = '', ...rest }: ThemeToggleProps) => {
   const { theme, toggleTheme } = useTheme();
   const meta = THEME_META[theme];
 
   if (variant === 'icon') {
     return (
       <button
+        {...rest}
         onClick={toggleTheme}
         title={meta.next}
         aria-label={meta.next}
@@ -62,6 +62,7 @@ const ThemeToggle = ({ size = 'md', variant = 'button', className = '' }: ThemeT
   if (variant === 'pill') {
     return (
       <button
+        {...rest}
         onClick={toggleTheme}
         title={meta.next}
         aria-label={meta.next}
@@ -90,6 +91,7 @@ const ThemeToggle = ({ size = 'md', variant = 'button', className = '' }: ThemeT
   // Default: 'button'
   return (
     <button
+      {...rest}
       onClick={toggleTheme}
       title={meta.next}
       aria-label={meta.next}

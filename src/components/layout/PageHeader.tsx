@@ -1,15 +1,15 @@
-import type { FC } from 'react';
+import type { FC, HTMLAttributes } from 'react';
 
-export interface PageHeaderProps {
+export interface PageHeaderProps extends HTMLAttributes<HTMLElement> {
   eyebrow?: string;
   titleMain: string;
   titleAccent?: string;
   description?: string;
 }
 
-const PageHeader: FC<PageHeaderProps> = ({ eyebrow, titleMain, titleAccent, description }) => {
+const PageHeader: FC<PageHeaderProps> = ({ eyebrow, titleMain, titleAccent, description, className = '', ...rest }) => {
   return (
-    <header className="mb-16 relative">
+    <header {...rest} className={['mb-16 relative', className].filter(Boolean).join(' ')}>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-l-4 border-primary pl-4 md:pl-8">
         <div>
           {eyebrow ? (

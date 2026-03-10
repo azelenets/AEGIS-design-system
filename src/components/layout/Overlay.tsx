@@ -1,27 +1,29 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 import { createPortal } from 'react-dom';
 
-export interface OverlayProps {
+export interface OverlayProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onClick'> {
   visible: boolean;
   onClick?: () => void;
   blur?: boolean;
   zIndex?: number;
 }
 
-const Overlay = ({ visible, onClick, blur = false, zIndex = 40 }: OverlayProps) => {
+const Overlay = ({ visible, onClick, blur = false, zIndex = 40, className = '', style, ...rest }: OverlayProps) => {
   if (!visible) return null;
   return createPortal(
     <div
+      {...rest}
       aria-hidden="true"
       onClick={onClick}
       className={[
         'fixed inset-0 bg-bg-dark/70',
         blur ? 'backdrop-blur-sm' : '',
         onClick ? 'cursor-pointer' : '',
+        className,
       ]
         .filter(Boolean)
         .join(' ')}
-      style={{ zIndex }}
+      style={{ zIndex, ...style }}
     />,
     document.body,
   );

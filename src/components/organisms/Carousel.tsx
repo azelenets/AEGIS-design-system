@@ -1,6 +1,6 @@
 import {
   memo, useState, useEffect, useCallback, useRef,
-  Children, type ReactNode,
+  Children, type ReactNode, type HTMLAttributes,
 } from 'react';
 import Button from '@/components/atoms/Button';
 
@@ -9,7 +9,7 @@ import Button from '@/components/atoms/Button';
 export type CarouselIndicator = 'dots' | 'bars' | 'numbers' | 'none';
 export type CarouselTransition = 'slide' | 'fade';
 
-export interface CarouselProps {
+export interface CarouselProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   /** Controlled active index */
   activeSlide?: number;
@@ -43,6 +43,7 @@ const Carousel = ({
   showArrows = true,
   pauseOnHover = true,
   className = '',
+  ...rest
 }: CarouselProps) => {
   const slides = Children.toArray(children);
   const count  = slides.length;
@@ -114,17 +115,15 @@ const Carousel = ({
 
   return (
     <div
-      className={['group/carousel select-none', className].join(' ')}
+      {...rest}
+      className={['group/carousel select-none', className].filter(Boolean).join(' ')}
       onMouseEnter={() => pauseOnHover && setPaused(true)}
       onMouseLeave={() => pauseOnHover && setPaused(false)}
     >
-      {/* ── Row: prev arrow + slides track + next arrow ── */}
-      <div className="flex items-center gap-2">
-        {/* ── Prev arrow ── */}
-        {showArrows && count > 1 && arrowBtn(goPrev, atStart, 'chevron_left', 'Previous slide')}
-
+      {/* ── Slides track with edge-mounted arrows ── */}
+      <div className="relative">
         {/* ── Slides track ── */}
-        <div className="flex-1 overflow-hidden relative min-w-0">
+        <div className="overflow-hidden relative min-w-0">
           {transition === 'slide' ? (
             <div
               className="flex transition-transform duration-500 ease-in-out"
@@ -154,8 +153,19 @@ const Carousel = ({
           )}
         </div>
 
-        {/* ── Next arrow ── */}
-        {showArrows && count > 1 && arrowBtn(goNext, atEnd, 'chevron_right', 'Next slide')}
+        {/* ── Prev arrow — half outside left edge ── */}
+        {showArrows && count > 1 && (
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10">
+            {arrowBtn(goPrev, atStart, 'chevron_left', 'Previous slide')}
+          </div>
+        )}
+
+        {/* ── Next arrow — half outside right edge ── */}
+        {showArrows && count > 1 && (
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10">
+            {arrowBtn(goNext, atEnd, 'chevron_right', 'Next slide')}
+          </div>
+        )}
       </div>
 
       {/* ── Indicators ── */}
@@ -206,14 +216,13 @@ export default memo(Carousel);
 
 // ─── CarouselSlide ─────────────────────────────────────────────────────────────
 
-export interface CarouselSlideProps {
+export interface CarouselSlideProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
-  className?: string;
 }
 
 /** Semantic wrapper for carousel slide content */
-export const CarouselSlide = memo(({ children, className = '' }: CarouselSlideProps) => (
-  <div className={['w-full', className].join(' ')}>
+export const CarouselSlide = memo(({ children, className = '', ...rest }: CarouselSlideProps) => (
+  <div {...rest} className={['w-full', className].filter(Boolean).join(' ')}>
     {children}
   </div>
 ));

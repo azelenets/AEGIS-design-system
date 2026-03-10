@@ -1,6 +1,6 @@
-import { memo } from 'react';
+import { memo, type HTMLAttributes } from 'react';
 
-export interface StatCardProps {
+export interface StatCardProps extends HTMLAttributes<HTMLElement> {
   id: string;
   label: string;
   value: string;
@@ -10,10 +10,10 @@ export interface StatCardProps {
 
 const SEGMENTS = 5;
 
-const StatCard = ({ id, label, value, progress, segmented }: StatCardProps) => {
+const StatCard = ({ id, label, value, progress, segmented, className = '', ...rest }: StatCardProps) => {
   const filledCount = Math.round((progress / 100) * SEGMENTS);
   return (
-    <article className="bg-surface-terminal border border-primary/10 p-6 relative group overflow-hidden hover:border-primary/40 transition-colors">
+    <article {...rest} className={['bg-surface-terminal border border-primary/10 p-6 relative group overflow-hidden hover:border-primary/40 transition-colors', className].filter(Boolean).join(' ')}>
       <div
         aria-hidden="true"
         className="absolute top-0 right-0 pointer-events-none select-none"

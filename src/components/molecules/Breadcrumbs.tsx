@@ -1,4 +1,4 @@
-import { memo, type ReactNode, type HTMLAttributes } from 'react';
+import { memo, useMemo, type ReactNode, type HTMLAttributes } from 'react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -28,14 +28,16 @@ const SEPARATOR_CONTENT: Record<BreadcrumbSeparator, ReactNode> = {
 // ─── Breadcrumbs ──────────────────────────────────────────────────────────────
 
 const Breadcrumbs = ({ items, separator = 'chevron', maxItems, className, ...rest }: BreadcrumbsProps) => {
-  // Collapse middle items when maxItems is set
-  let visible = items;
-  let collapsed = false;
+  const { visible, collapsed } = useMemo(() => {
+    if (!maxItems || items.length <= maxItems) {
+      return { visible: items, collapsed: false };
+    }
 
-  if (maxItems && items.length > maxItems) {
-    collapsed = true;
-    visible = [items[0], ...items.slice(-(maxItems - 1))];
-  }
+    return {
+      visible: [items[0], ...items.slice(-(maxItems - 1))],
+      collapsed: true,
+    };
+  }, [items, maxItems]);
 
   return (
     <nav {...rest} aria-label="Breadcrumb" className={className}>

@@ -1,5 +1,5 @@
 import {
-  createContext, useContext, useEffect, useState, memo,
+  createContext, useContext, useEffect, useState, memo, useCallback, useMemo,
   type ReactNode,
 } from 'react';
 
@@ -81,11 +81,12 @@ export const ThemeProvider = memo(({
     return () => mq.removeEventListener('change', handler);
   }, [storageKey, disableStorage]);
 
-  const setTheme = (t: Theme) => setThemeState(t);
-  const toggleTheme = () => setThemeState(t => (t === 'dark' ? 'light' : 'dark'));
+  const setTheme = useCallback((t: Theme) => setThemeState(t), []);
+  const toggleTheme = useCallback(() => setThemeState(t => (t === 'dark' ? 'light' : 'dark')), []);
+  const value = useMemo(() => ({ theme, setTheme, toggleTheme }), [theme, setTheme, toggleTheme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { Meta } from '@storybook/react-vite';
 
 // ─── Foundations ──────────────────────────────────────────────────────────────
@@ -323,17 +323,45 @@ const DashboardContent = () => {
   const [overlayVisible,  setOverlayVisible]  = useState(false);
 
   const PAGE_SIZE = 3;
-  const filteredOperators = operators.filter(o =>
-    (opsFilter === 'all' || o.status === opsFilter) &&
-    (o.callsign.toLowerCase().includes(search.toLowerCase()) || o.role.toLowerCase().includes(search.toLowerCase()))
+  const normalizedSearch = search.toLowerCase();
+  const filteredOperators = useMemo(() => operators.filter((operator) =>
+    (opsFilter === 'all' || operator.status === opsFilter) &&
+    (operator.callsign.toLowerCase().includes(normalizedSearch) || operator.role.toLowerCase().includes(normalizedSearch))
+  ), [normalizedSearch, opsFilter]);
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(filteredOperators.length / PAGE_SIZE)), [filteredOperators.length]);
+  const pagedOps = useMemo(
+    () => filteredOperators.slice((tablePage - 1) * PAGE_SIZE, tablePage * PAGE_SIZE),
+    [filteredOperators, tablePage],
   );
-  const totalPages  = Math.max(1, Math.ceil(filteredOperators.length / PAGE_SIZE));
-  const pagedOps    = filteredOperators.slice((tablePage - 1) * PAGE_SIZE, tablePage * PAGE_SIZE);
-  const dgRows: DGRow[] = operators.map(o => ({ id: o.id, callsign: o.callsign, role: o.role, clearance: o.clearance, status: o.status, ops: o.ops, lastSeen: o.lastSeen, notes: o.notes }));
+  const dgRows: DGRow[] = useMemo(() => operators.map((operator) => ({
+    id: operator.id,
+    callsign: operator.callsign,
+    role: operator.role,
+    clearance: operator.clearance,
+    status: operator.status,
+    ops: operator.ops,
+    lastSeen: operator.lastSeen,
+    notes: operator.notes,
+  })), []);
+  const assignOperatorOptions = useMemo(
+    () => operators.map((operator) => ({ value: operator.id, label: `${operator.callsign} — ${operator.role}` })),
+    [],
+  );
 
-  const sidebarBrand = sidebarCollapsed
-    ? <span className="material-symbols-outlined text-primary text-[20px]">shield</span>
-    : <span className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-[18px]">shield</span><span className="font-display font-bold text-white text-xs tracking-widest">AEGIS</span></span>;
+  const sidebarBrand = useMemo(() => (
+    sidebarCollapsed
+      ? <span className="material-symbols-outlined text-primary text-[20px]">shield</span>
+      : <span className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-[18px]">shield</span><span className="font-display font-bold text-white text-xs tracking-widest">AEGIS</span></span>
+  ), [sidebarCollapsed]);
+  const toggleSidebar = useCallback(() => setSidebarCollapsed((value) => !value), []);
+  const openMissionModal = useCallback(() => setMissionModalOpen(true), []);
+  const closeMissionModal = useCallback(() => setMissionModalOpen(false), []);
+  const showOverlay = useCallback(() => setOverlayVisible(true), []);
+  const hideOverlay = useCallback(() => setOverlayVisible(false), []);
+  const launchMission = useCallback(() => {
+    setMissionModalOpen(false);
+    toast({ title: 'Mission initiated', message: `${missionName || 'New mission'} is now active.`, variant: 'success' });
+  }, [missionName, toast]);
 
   return (
     <ThemeProvider>
@@ -341,14 +369,14 @@ const DashboardContent = () => {
         <Toaster position="top-right" />
 
         {/* ── Sidebar ── */}
-        <Sidebar
+            <Sidebar
           brand={sidebarBrand}
           groups={sidebarGroups}
           collapsed={sidebarCollapsed}
           footer={
             <SidebarToggleButton
               collapsed={sidebarCollapsed}
-              onToggle={() => setSidebarCollapsed(v => !v)}
+              onToggle={toggleSidebar}
             />
           }
         />
@@ -421,7 +449,7 @@ const DashboardContent = () => {
                   </Button>
                 </Tooltip>
                 <Button variant="ghost"   size="sm" icon="refresh"      onClick={() => toast({ title: 'Sync complete', message: 'All 14 endpoints confirmed.', variant: 'success' })}>Sync</Button>
-                <Button variant="primary" size="sm" icon="add"           onClick={() => setMissionModalOpen(true)}>New Mission</Button>
+                <Button variant="primary" size="sm" icon="add"           onClick={openMissionModal}>New Mission</Button>
               </HStack>
             </HStack>
 
@@ -994,7 +1022,7 @@ const DashboardContent = () => {
                             {/* Overlay trigger */}
                             <div>
                               <p className="text-[10px] text-primary/60 font-bold uppercase tracking-widest mb-3">Overlay</p>
-                              <Button variant="secondary" size="sm" icon="blur_on" onClick={() => setOverlayVisible(true)}>
+                              <Button variant="secondary" size="sm" icon="blur_on" onClick={showOverlay}>
                                 Show Full-Screen Overlay
                               </Button>
                               <p className="text-[10px] text-slate-600 font-mono mt-1">Click overlay to dismiss.</p>
@@ -1045,8 +1073,8 @@ const DashboardContent = () => {
         </div>
 
         {/* ── New Mission Modal ── */}
-        <Modal open={missionModalOpen} onClose={() => setMissionModalOpen(false)} size="md">
-          <ModalHeader eyebrow="AEGIS // COMMAND" title="Initiate New Mission" onClose={() => setMissionModalOpen(false)} />
+        <Modal open={missionModalOpen} onClose={closeMissionModal} size="md">
+          <ModalHeader eyebrow="AEGIS // COMMAND" title="Initiate New Mission" onClose={closeMissionModal} />
           <ModalBody>
             <VStack gap={4}>
               <Input
@@ -1067,7 +1095,7 @@ const DashboardContent = () => {
                   { value: 'audit',     label: 'Security Audit'   },
                 ]}
               />
-              <Select label="Assign Operator" options={operators.map(o => ({ value: o.id, label: `${o.callsign} — ${o.role}` }))} />
+              <Select label="Assign Operator" options={assignOperatorOptions} />
               <Slider label="Priority Level" min={1} max={5} defaultValue={3} hint="1 = Routine  ·  5 = Critical" />
               <Textarea
                 label="Mission Notes"
@@ -1079,15 +1107,15 @@ const DashboardContent = () => {
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button variant="ghost"   size="sm" onClick={() => setMissionModalOpen(false)}>Cancel</Button>
-            <Button variant="primary" size="sm" icon="rocket_launch" onClick={() => { setMissionModalOpen(false); toast({ title: 'Mission initiated', message: `${missionName || 'New mission'} is now active.`, variant: 'success' }); }}>
+            <Button variant="ghost"   size="sm" onClick={closeMissionModal}>Cancel</Button>
+            <Button variant="primary" size="sm" icon="rocket_launch" onClick={launchMission}>
               Launch Mission
             </Button>
           </ModalFooter>
         </Modal>
 
         {/* ── Full-screen Overlay ── */}
-        <Overlay visible={overlayVisible} onClick={() => setOverlayVisible(false)} blur />
+        <Overlay visible={overlayVisible} onClick={hideOverlay} blur />
 
       </div>
     </ThemeProvider>

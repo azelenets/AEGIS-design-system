@@ -1,4 +1,4 @@
-import { memo, useState, useMemo, useCallback, useEffect, useRef, Fragment, type ReactNode, type ChangeEvent, type HTMLAttributes } from 'react';
+import { memo, useState, useMemo, useCallback, useEffect, useRef, Fragment, useDeferredValue, type ReactNode, type ChangeEvent, type HTMLAttributes } from 'react';
 import Button from '@/components/atoms/Button';
 import Checkbox from '@/components/atoms/Checkbox';
 import { RadioOption } from '@/components/atoms/Radio';
@@ -114,6 +114,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
 
   // ── Search + per-column filters ───────────────────────────────────────────
   const [search, setSearch] = useState('');
+  const deferredSearch = useDeferredValue(search);
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [showFilters, setShowFilters] = useState(false);
 
@@ -142,8 +143,8 @@ const DataGridInner = <T extends Record<string, unknown>>({
   // ── Pipeline: search → filter → sort → paginate ────────────────────────────
   const filtered = useMemo(() => {
     let rows = data;
-    if (search.trim()) {
-      const q = search.toLowerCase();
+    if (deferredSearch.trim()) {
+      const q = deferredSearch.toLowerCase();
       rows = rows.filter(r => Object.values(r).some(v => String(v ?? '').toLowerCase().includes(q)));
     }
     Object.entries(filters).forEach(([k, v]) => {
@@ -152,7 +153,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
       rows = rows.filter(r => String(r[k] ?? '').toLowerCase().includes(q));
     });
     return rows;
-  }, [data, search, filters]);
+  }, [data, deferredSearch, filters]);
 
   const sorted = useMemo(() => {
     if (!sortKey) return filtered;
@@ -226,14 +227,14 @@ const DataGridInner = <T extends Record<string, unknown>>({
   }, []);
 
   // ── Derived flags ─────────────────────────────────────────────────────────
-  const pageIds       = paged.map(r => String(r[keyField]));
+  const pageIds       = useMemo(() => paged.map(r => String(r[keyField])), [paged, keyField]);
   const allPageSel    = pageIds.length > 0 && pageIds.every(id => selectedIds.has(id));
   const somePageSel   = pageIds.some(id => selectedIds.has(id));
-  const hasExpand     = !!renderExpanded;
-  const hasActions    = !!actions;
+  const hasExpand     = Boolean(renderExpanded);
+  const hasActions    = Boolean(actions);
   const hasCheckbox   = selectionMode !== 'none';
-  const hasFiltersRow = colDefs.some(c => c.filterable);
-  const hasFiltersSet = Object.values(filters).some(v => v.trim());
+  const hasFiltersRow = useMemo(() => colDefs.some(c => c.filterable), [colDefs]);
+  const hasFiltersSet = useMemo(() => Object.values(filters).some(v => v.trim()), [filters]);
   const cellPad       = CELL_PAD[density];
   const totalCols     = visibleCols.length
     + (hasCheckbox ? 1 : 0)

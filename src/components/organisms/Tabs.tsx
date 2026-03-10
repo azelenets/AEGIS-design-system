@@ -4,6 +4,8 @@ import {
   useId,
   createContext,
   useContext,
+  useCallback,
+  useMemo,
   type ReactNode,
   type HTMLAttributes,
 } from 'react';
@@ -156,13 +158,17 @@ const Tabs = ({ defaultTab, variant = 'line', onChange, children, className = ''
   const baseId = useId();
   const [active, setActive] = useState(defaultTab);
 
-  const handleChange = (id: string) => {
+  const handleChange = useCallback((id: string) => {
     setActive(id);
     onChange?.(id);
-  };
+  }, [onChange]);
+  const contextValue = useMemo(
+    () => ({ active, setActive: handleChange, baseId, variant }),
+    [active, handleChange, baseId, variant],
+  );
 
   return (
-    <TabsContext.Provider value={{ active, setActive: handleChange, baseId, variant }}>
+    <TabsContext.Provider value={contextValue}>
       <div {...rest} className={['flex flex-col', className].filter(Boolean).join(' ')}>{children}</div>
     </TabsContext.Provider>
   );

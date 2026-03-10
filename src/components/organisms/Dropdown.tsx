@@ -3,6 +3,7 @@ import {
   useState,
   useRef,
   useEffect,
+  useCallback,
   type ReactNode,
   type HTMLAttributes,
 } from 'react';
@@ -92,33 +93,46 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
   const menuRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ top: 0, left: 0 });
 
-  const updatePosition = () => {
+  const updatePosition = useCallback(() => {
     if (!triggerRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
     const left = align === 'right' ? rect.right - parseFloat(width) : rect.left;
     setPos({ top: rect.bottom + window.scrollY + 4, left: left + window.scrollX });
-  };
+  }, [align, width]);
+
+  const closeMenu = useCallback(() => setOpen(false), []);
+  const toggleMenu = useCallback(() => {
+    updatePosition();
+    setOpen((value) => !value);
+  }, [updatePosition]);
 
   useEffect(() => {
     if (!open) return;
     updatePosition();
     const handleOutside = (e: MouseEvent) => {
       if (!triggerRef.current?.contains(e.target as Node) && !menuRef.current?.contains(e.target as Node)) {
-        setOpen(false);
+        closeMenu();
       }
     };
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeMenu();
+    };
+    const handleViewportChange = () => updatePosition();
     document.addEventListener('mousedown', handleOutside);
     document.addEventListener('keydown', handleKey);
+    window.addEventListener('resize', handleViewportChange);
+    window.addEventListener('scroll', handleViewportChange, true);
     return () => {
       document.removeEventListener('mousedown', handleOutside);
       document.removeEventListener('keydown', handleKey);
+      window.removeEventListener('resize', handleViewportChange);
+      window.removeEventListener('scroll', handleViewportChange, true);
     };
-  }, [open]);
+  }, [open, closeMenu, updatePosition]);
 
   return (
     <>
-      <div {...rest} ref={triggerRef} onClick={() => { updatePosition(); setOpen((v) => !v); }} className={['inline-flex', className].filter(Boolean).join(' ')}>
+      <div {...rest} ref={triggerRef} onClick={toggleMenu} className={['inline-flex', className].filter(Boolean).join(' ')}>
         {trigger}
       </div>
 
@@ -128,7 +142,7 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
           role="menu"
           className="fixed z-50 py-1 bg-panel-dark border border-border-dark shadow-xl"
           style={{ top: pos.top, left: pos.left, width }}
-          onClick={() => setOpen(false)}
+          onClick={closeMenu}
         >
           {children}
         </div>,

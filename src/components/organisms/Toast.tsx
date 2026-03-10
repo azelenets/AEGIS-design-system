@@ -5,6 +5,7 @@ import {
   useState,
   useCallback,
   useEffect,
+  useMemo,
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
@@ -134,30 +135,27 @@ Toaster.displayName = 'Toaster';
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [toasts, setToasts] = useState<ToastData[]>([]);
 
-  const emit = (list: ToastData[]) => {
+  const emit = useCallback((list: ToastData[]) => {
     window.dispatchEvent(new CustomEvent('aegis-toasts', { detail: list }));
-  };
+  }, []);
+
+  useEffect(() => {
+    emit(toasts);
+  }, [emit, toasts]);
 
   const toast = useCallback((opts: Omit<ToastData, 'id'>) => {
     const id = `toast-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    setToasts((prev) => {
-      const next = [...prev, { ...opts, id }];
-      emit(next);
-      return next;
-    });
+    setToasts((prev) => [...prev, { ...opts, id }]);
     return id;
   }, []);
 
   const dismiss = useCallback((id: string) => {
-    setToasts((prev) => {
-      const next = prev.filter((t) => t.id !== id);
-      emit(next);
-      return next;
-    });
+    setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
+  const value = useMemo(() => ({ toast, dismiss }), [toast, dismiss]);
 
   return (
-    <ToastContext.Provider value={{ toast, dismiss }}>
+    <ToastContext.Provider value={value}>
       {children}
     </ToastContext.Provider>
   );

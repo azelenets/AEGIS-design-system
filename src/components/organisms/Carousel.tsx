@@ -1,5 +1,5 @@
 import {
-  memo, useState, useEffect, useCallback, useRef,
+  memo, useState, useEffect, useCallback, useRef, useMemo,
   Children, type ReactNode, type HTMLAttributes,
 } from 'react';
 import Button from '@/components/atoms/Button';
@@ -45,7 +45,7 @@ const Carousel = ({
   className = '',
   ...rest
 }: CarouselProps) => {
-  const slides = Children.toArray(children);
+  const slides = useMemo(() => Children.toArray(children), [children]);
   const count  = slides.length;
 
   const [internal, setInternal] = useState(0);
@@ -80,14 +80,15 @@ const Carousel = ({
     return () => clearInterval(timer);
   }, [autoPlay, paused, count, interval]);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft')  goPrev();
-      if (e.key === 'ArrowRight') goNext();
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goPrev();
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      goNext();
+    }
   }, [goPrev, goNext]);
 
   const atStart = !loop && active === 0;
@@ -116,6 +117,8 @@ const Carousel = ({
   return (
     <div
       {...rest}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
       className={['group/carousel select-none', className].filter(Boolean).join(' ')}
       onMouseEnter={() => pauseOnHover && setPaused(true)}
       onMouseLeave={() => pauseOnHover && setPaused(false)}

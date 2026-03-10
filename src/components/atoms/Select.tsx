@@ -1,4 +1,4 @@
-import { memo, useId, useState, useRef, useEffect, useCallback } from 'react';
+import { memo, useId, useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
 export interface SelectOption {
@@ -67,11 +67,22 @@ const Select = ({
 
   const currentValue = (value !== undefined && onChange !== undefined) ? value : internalValue;
   const currentValues = (values !== undefined && onChangeMultiple !== undefined) ? values : internalValues;
+  const currentValueSet = useMemo(() => new Set(currentValues), [currentValues]);
+  const optionMap = useMemo(() => new Map(options.map((option) => [option.value, option])), [options]);
 
-  const isSelected = (val: string) => multiple ? currentValues.includes(val) : val === currentValue;
+  const isSelected = useCallback((val: string) => {
+    return multiple ? currentValueSet.has(val) : val === currentValue;
+  }, [multiple, currentValueSet, currentValue]);
 
-  const selectedOption = !multiple ? options.find((o) => o.value === currentValue) : null;
-  const selectedOptions = multiple ? options.filter((o) => currentValues.includes(o.value)) : [];
+  const selectedOption = useMemo(() => {
+    return multiple || currentValue === undefined ? null : optionMap.get(currentValue) ?? null;
+  }, [multiple, currentValue, optionMap]);
+  const selectedOptions = useMemo(() => {
+    if (!multiple) return [];
+    return currentValues
+      .map((selectedValue) => optionMap.get(selectedValue))
+      .filter((option): option is SelectOption => Boolean(option));
+  }, [multiple, currentValues, optionMap]);
 
   const hasSelection = multiple ? currentValues.length > 0 : !!selectedOption;
 
@@ -89,7 +100,7 @@ const Select = ({
 
   const selectOption = useCallback((val: string) => {
     if (multiple) {
-      const next = currentValues.includes(val)
+      const next = currentValueSet.has(val)
         ? currentValues.filter((v) => v !== val)
         : [...currentValues, val];
       setInternalValues(next);
@@ -100,7 +111,7 @@ const Select = ({
       setOpen(false);
       triggerRef.current?.focus();
     }
-  }, [multiple, currentValues, onChange, onChangeMultiple]);
+  }, [multiple, currentValueSet, currentValues, onChange, onChangeMultiple]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -138,12 +149,12 @@ const Select = ({
     [open, highlighted, options, selectOption, disabled, currentValue],
   );
 
-  const removeValue = (val: string, e: React.MouseEvent) => {
+  const removeValue = useCallback((val: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const next = currentValues.filter((v) => v !== val);
     setInternalValues(next);
     onChangeMultiple?.(next);
-  };
+  }, [currentValues, onChangeMultiple]);
 
   return (
     <div className="flex flex-col gap-1.5">

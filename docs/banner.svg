@@ -1,26 +1,29 @@
 <svg width="1600" height="520" viewBox="0 0 1600 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">AEGIS Design System banner</title>
-  <desc id="desc">Futuristic tactical banner for the AEGIS Design System project.</desc>
+  <desc id="desc">Banner styled like the AEGIS interface, with HUD panels, tabs, data cards, and tactical map motifs.</desc>
   <defs>
-    <linearGradient id="bg" x1="140" y1="60" x2="1460" y2="460" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#040608"/>
-      <stop offset="0.55" stop-color="#081018"/>
-      <stop offset="1" stop-color="#050505"/>
+    <linearGradient id="bg" x1="160" y1="40" x2="1440" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#050505"/>
+      <stop offset="0.45" stop-color="#0a0a0a"/>
+      <stop offset="1" stop-color="#0d1117"/>
     </linearGradient>
-    <linearGradient id="accent" x1="226" y1="120" x2="1310" y2="380" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#00F3FF"/>
-      <stop offset="0.5" stop-color="#34D5E5"/>
-      <stop offset="1" stop-color="#0097A7"/>
+    <linearGradient id="panelGlow" x1="240" y1="104" x2="1360" y2="416" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00f3ff" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#00f3ff" stop-opacity="0.03"/>
     </linearGradient>
-    <linearGradient id="warm" x1="1120" y1="118" x2="1426" y2="192" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FACC15"/>
-      <stop offset="1" stop-color="#FF7A00"/>
+    <linearGradient id="accentLine" x1="224" y1="104" x2="760" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00f3ff"/>
+      <stop offset="1" stop-color="#00f3ff" stop-opacity="0"/>
     </linearGradient>
-    <pattern id="grid" x="0" y="0" width="48" height="48" patternUnits="userSpaceOnUse">
-      <path d="M48 0H0V48" stroke="#10313A" stroke-width="1"/>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0V30" stroke="#00f3ff" stroke-opacity="0.08"/>
     </pattern>
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="8" result="blur"/>
+    <pattern id="scanlines" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="3" fill="#000000" fill-opacity="0"/>
+      <rect y="3" width="6" height="3" fill="#000000" fill-opacity="0.12"/>
+    </pattern>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
@@ -29,38 +32,84 @@
   </defs>
 
   <rect width="1600" height="520" rx="24" fill="url(#bg)"/>
-  <rect width="1600" height="520" rx="24" fill="url(#grid)" opacity="0.55"/>
+  <rect width="1600" height="520" rx="24" fill="url(#grid)"/>
+  <rect width="1600" height="520" rx="24" fill="url(#scanlines)" opacity="0.55"/>
 
-  <path d="M94 90H320" stroke="#00F3FF" stroke-width="4" opacity="0.9"/>
-  <path d="M94 90V178" stroke="#00F3FF" stroke-width="4" opacity="0.9"/>
-  <path d="M1506 430H1280" stroke="#00F3FF" stroke-width="4" opacity="0.9"/>
-  <path d="M1506 430V342" stroke="#00F3FF" stroke-width="4" opacity="0.9"/>
+  <rect x="92" y="70" width="1416" height="380" rx="18" fill="#0a0a0a" stroke="#1a1a1a" stroke-width="2"/>
+  <rect x="108" y="86" width="1384" height="348" rx="12" fill="#0d1117"/>
+  <rect x="108" y="86" width="1384" height="348" rx="12" fill="url(#panelGlow)"/>
 
-  <rect x="94" y="92" width="1412" height="336" rx="16" stroke="#17323A" stroke-width="2"/>
-  <rect x="118" y="116" width="1364" height="288" rx="10" fill="#07111A" fill-opacity="0.58" stroke="#143640"/>
+  <path d="M92 70H312" stroke="#00f3ff" stroke-width="4"/>
+  <path d="M92 70V146" stroke="#00f3ff" stroke-width="4"/>
+  <path d="M1508 450H1288" stroke="#00f3ff" stroke-width="4"/>
+  <path d="M1508 450V374" stroke="#00f3ff" stroke-width="4"/>
 
-  <circle cx="1272" cy="160" r="64" fill="#00F3FF" opacity="0.08"/>
-  <circle cx="1272" cy="160" r="42" fill="#00F3FF" opacity="0.1"/>
-  <circle cx="1272" cy="160" r="18" fill="#00F3FF" opacity="0.8" filter="url(#glow)"/>
+  <rect x="136" y="108" width="444" height="36" rx="6" fill="#0a0a0a" stroke="#1a1a1a"/>
+  <rect x="154" y="118" width="92" height="16" rx="3" fill="#00f3ff" fill-opacity="0.14" stroke="#00f3ff" stroke-opacity="0.35"/>
+  <text x="170" y="130" fill="#00f3ff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2">OVERVIEW</text>
+  <text x="272" y="130" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2">OPERATORS</text>
+  <text x="392" y="130" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2">LAB</text>
+  <text x="452" y="130" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="2">CONFIG</text>
 
-  <path d="M1160 160H1384" stroke="#1F5F69" stroke-width="2"/>
-  <path d="M1272 48V272" stroke="#1F5F69" stroke-width="2"/>
-
-  <text x="146" y="156" fill="#00F3FF" font-family="JetBrains Mono, monospace" font-size="20" letter-spacing="8">AEGIS // DESIGN SYSTEM</text>
-  <text x="146" y="248" fill="url(#accent)" font-family="Orbitron, Arial, sans-serif" font-size="84" font-weight="700" letter-spacing="10">TACTICAL UI</text>
-  <text x="146" y="322" fill="#CBD5E1" font-family="Space Grotesk, Arial, sans-serif" font-size="30" font-weight="500" letter-spacing="1.2">
-    Foundations, components, Storybook docs, accessibility, visual tests.
+  <text x="154" y="182" fill="#00f3ff" font-family="JetBrains Mono, monospace" font-size="18" letter-spacing="6">AEGIS // DESIGN SYSTEM</text>
+  <text x="154" y="258" fill="#E2E8F0" font-family="Orbitron, sans-serif" font-size="72" font-weight="700" letter-spacing="8">TACTICAL UI</text>
+  <path d="M154 274H760" stroke="url(#accentLine)" stroke-width="3"/>
+  <text x="154" y="318" fill="#CBD5E1" font-family="Space Grotesk, sans-serif" font-size="26" font-weight="500">
+    Typed components, Storybook docs, browser tests, themes, dashboards.
   </text>
 
-  <rect x="146" y="356" width="222" height="34" rx="17" fill="#06141A" stroke="#1D4D57"/>
-  <circle cx="170" cy="373" r="6" fill="#00F3FF"/>
-  <text x="188" y="380" fill="#E2F9FF" font-family="JetBrains Mono, monospace" font-size="16" letter-spacing="2">REACT 19 READY</text>
+  <rect x="154" y="352" width="214" height="34" rx="4" fill="#0a0a0a" stroke="#1a1a1a"/>
+  <path d="M154 352H198" stroke="#00f3ff" stroke-width="2"/>
+  <circle cx="176" cy="369" r="5" fill="#00f3ff"/>
+  <text x="192" y="375" fill="#CBD5E1" font-family="JetBrains Mono, monospace" font-size="14" letter-spacing="1.5">REACT 19</text>
 
-  <rect x="390" y="356" width="210" height="34" rx="17" fill="#141205" stroke="#5E4A12"/>
-  <circle cx="414" cy="373" r="6" fill="#FACC15"/>
-  <text x="432" y="380" fill="#FFF6D5" font-family="JetBrains Mono, monospace" font-size="16" letter-spacing="2">STORYBOOK 10</text>
+  <rect x="384" y="352" width="228" height="34" rx="4" fill="#0a0a0a" stroke="#1a1a1a"/>
+  <path d="M384 352H428" stroke="#facc15" stroke-width="2"/>
+  <circle cx="406" cy="369" r="5" fill="#facc15"/>
+  <text x="422" y="375" fill="#CBD5E1" font-family="JetBrains Mono, monospace" font-size="14" letter-spacing="1.5">STORYBOOK 10</text>
 
-  <rect x="622" y="356" width="226" height="34" rx="17" fill="#190B12" stroke="#6B1B30"/>
-  <circle cx="646" cy="373" r="6" fill="#FF003C"/>
-  <text x="664" y="380" fill="#FFE0E8" font-family="JetBrains Mono, monospace" font-size="16" letter-spacing="2">CHROMATIC VRT</text>
+  <rect x="628" y="352" width="244" height="34" rx="4" fill="#0a0a0a" stroke="#1a1a1a"/>
+  <path d="M628 352H672" stroke="#ff003c" stroke-width="2"/>
+  <circle cx="650" cy="369" r="5" fill="#ff003c"/>
+  <text x="666" y="375" fill="#CBD5E1" font-family="JetBrains Mono, monospace" font-size="14" letter-spacing="1.5">VITEST + CI</text>
+
+  <rect x="930" y="116" width="516" height="290" rx="10" fill="#0a0a0a" stroke="#1a1a1a"/>
+  <rect x="950" y="138" width="476" height="116" rx="8" fill="#0d1117" stroke="#1a1a1a"/>
+  <path d="M950 138H1114" stroke="#00f3ff" stroke-opacity="0.45" stroke-width="2"/>
+  <text x="968" y="162" fill="#00f3ff" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="2">LIVE GRID</text>
+  <text x="968" y="192" fill="#E2E8F0" font-family="Orbitron, sans-serif" font-size="28" font-weight="700" letter-spacing="2">AEGIS OPS DASHBOARD</text>
+  <text x="968" y="222" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="12" letter-spacing="1.2">SYSTEM NOMINAL · ALERT ROUTING ACTIVE · 14 ENDPOINTS</text>
+
+  <rect x="968" y="280" width="146" height="96" rx="6" fill="#0d1117" stroke="#1a1a1a"/>
+  <path d="M968 280H1008" stroke="#00f3ff" stroke-width="2"/>
+  <text x="982" y="302" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.6">UPTIME</text>
+  <text x="982" y="344" fill="#00f3ff" font-family="Orbitron, sans-serif" font-size="34" font-weight="700">99.9%</text>
+
+  <rect x="1126" y="280" width="146" height="96" rx="6" fill="#0d1117" stroke="#1a1a1a"/>
+  <path d="M1126 280H1166" stroke="#facc15" stroke-width="2"/>
+  <text x="1140" y="302" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.6">THREATS</text>
+  <text x="1140" y="344" fill="#facc15" font-family="Orbitron, sans-serif" font-size="34" font-weight="700">07</text>
+
+  <rect x="1284" y="280" width="142" height="96" rx="6" fill="#0d1117" stroke="#1a1a1a"/>
+  <path d="M1284 280H1324" stroke="#ff003c" stroke-width="2"/>
+  <text x="1298" y="302" fill="#64748b" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.6">STATUS</text>
+  <rect x="1298" y="325" width="78" height="20" rx="4" fill="#ff003c" fill-opacity="0.10" stroke="#ff003c" stroke-opacity="0.35"/>
+  <text x="1312" y="338" fill="#ff003c" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="1.6">ACTIVE</text>
+
+  <circle cx="1336" cy="198" r="72" fill="#00f3ff" fill-opacity="0.05"/>
+  <circle cx="1336" cy="198" r="48" fill="#00f3ff" fill-opacity="0.05"/>
+  <circle cx="1336" cy="198" r="16" fill="#00f3ff" filter="url(#softGlow)"/>
+  <path d="M1238 198H1434" stroke="#00f3ff" stroke-opacity="0.18" stroke-width="2"/>
+  <path d="M1336 100V296" stroke="#00f3ff" stroke-opacity="0.18" stroke-width="2"/>
+
+  <rect x="1210" y="146" width="32" height="18" rx="3" fill="#0a0a0a" stroke="#1a1a1a"/>
+  <text x="1218" y="158" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.3">MAP</text>
+
+  <path d="M1308 188L1336 164L1364 188V220L1336 244L1308 220V188Z" fill="#00f3ff" fill-opacity="0.10" stroke="#00f3ff" stroke-width="2"/>
+  <circle cx="1336" cy="202" r="5" fill="#00f3ff"/>
+
+  <rect x="144" y="402" width="1304" height="18" rx="4" fill="#0a0a0a" stroke="#1a1a1a"/>
+  <rect x="154" y="408" width="422" height="6" rx="3" fill="#00f3ff" fill-opacity="0.55"/>
+  <rect x="586" y="408" width="246" height="6" rx="3" fill="#facc15" fill-opacity="0.30"/>
+  <rect x="842" y="408" width="140" height="6" rx="3" fill="#ff003c" fill-opacity="0.24"/>
 </svg>

@@ -445,7 +445,6 @@ const Map = memo(({
 
     const bounds = L.latLngBounds(markers.map(({ lat, lng }) => [lat, lng] as [number, number]));
     map.fitBounds(bounds, { padding: [32, 32], maxZoom: zoom, animate: false });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [center, fitMarkers, markers, theme, zoom]);
 
   const heightValue = typeof height === 'number' ? `${height}px` : height;

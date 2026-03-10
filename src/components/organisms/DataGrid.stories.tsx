@@ -3,7 +3,6 @@ import type { Meta } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import DataGrid, { type DataGridColumn } from './DataGrid';
 import Badge from '@/components/atoms/Badge';
-import Button from '@/components/atoms/Button';
 
 const meta: Meta<typeof DataGrid> = { title: 'Organisms/DataGrid', component: DataGrid };
 export default meta;

@@ -9,7 +9,7 @@ import Input from '@/components/atoms/Input';
 import Stack from '@/components/layout/Stack';
 import Divider from '@/components/atoms/Divider';
 
-const meta = { title: 'Foundations/Themes' };
+const meta: Meta = { title: 'Foundations/Themes' };
 export default meta;
 
 // ─── Token swatch ─────────────────────────────────────────────────────────────
@@ -32,7 +32,7 @@ const Swatch = ({ varName, label }: { varName: string; label: string }) => (
 // ─── Live demo wrapped in its own ThemeProvider ───────────────────────────────
 
 const LiveDemo = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <Card className="max-w-xl transition-colors duration-300">

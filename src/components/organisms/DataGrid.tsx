@@ -197,7 +197,11 @@ const DataGridInner = <T extends Record<string, unknown>>({
       return;
     }
     const next = new Set(selectedIds);
-    next.has(id) ? next.delete(id) : next.add(id);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
     setSelected(next);
   }, [selectionMode, selectedIds, setSelected]);
 
@@ -206,14 +210,22 @@ const DataGridInner = <T extends Record<string, unknown>>({
     const pageIds = paged.map(r => String(r[keyField]));
     const allSel  = pageIds.every(id => selectedIds.has(id));
     const next    = new Set(selectedIds);
-    allSel ? pageIds.forEach(id => next.delete(id)) : pageIds.forEach(id => next.add(id));
+    if (allSel) {
+      pageIds.forEach(id => next.delete(id));
+    } else {
+      pageIds.forEach(id => next.add(id));
+    }
     setSelected(next);
   }, [selectionMode, paged, keyField, selectedIds, setSelected]);
 
   const toggleExpand = useCallback((id: string) => {
     setExpandedIds(prev => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   }, []);
@@ -221,7 +233,11 @@ const DataGridInner = <T extends Record<string, unknown>>({
   const toggleColVisibility = useCallback((key: string) => {
     setHiddenCols(prev => {
       const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
       return next;
     });
   }, []);

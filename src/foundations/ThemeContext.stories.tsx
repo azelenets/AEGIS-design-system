@@ -142,7 +142,6 @@ export const RespectsStoredTheme: Story = {
   render: () => <ThemeContextHarness />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const currentTheme = canvas.getByText(/Current theme:/);
 
     await expect(canvas.getByText('Current theme: light')).toBeVisible();
     await expect(document.documentElement).toHaveAttribute('data-theme', 'light');

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { Meta } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import Wizard from './Wizard';
-import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
 import Select from '@/components/atoms/Select';
 import Toggle from '@/components/atoms/Toggle';

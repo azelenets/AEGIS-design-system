@@ -98,7 +98,6 @@ ToastItem.displayName = 'ToastItem';
 // ─── Toaster ──────────────────────────────────────────────────────────────────
 
 export const Toaster = memo(({ position = 'bottom-right' }: { position?: ToastPosition }) => {
-  const { } = useContext(ToastContext) ?? {};
   const ctx = useContext(ToastContext);
   // Pull toasts from provider — Toaster reads from shared state via context
   // We re-export the dismiss from provider, toasts list comes from provider state

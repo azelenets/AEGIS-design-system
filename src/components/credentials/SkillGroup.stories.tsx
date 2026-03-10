@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import SkillGroup from './SkillGroup';
 
 const meta: Meta<typeof SkillGroup> = {
-  title: 'Credentials/SkillGroup',
+  title: 'Molecules/SkillGroup',
   component: SkillGroup,
 };
 

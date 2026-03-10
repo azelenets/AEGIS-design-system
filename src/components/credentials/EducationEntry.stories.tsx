@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import EducationEntry from './EducationEntry';
 
 const meta: Meta<typeof EducationEntry> = {
-  title: 'Credentials/EducationEntry',
+  title: 'Molecules/EducationEntry',
   component: EducationEntry,
 };
 

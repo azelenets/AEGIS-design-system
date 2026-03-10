@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import LabCard from './LabCard';
 
 const meta: Meta<typeof LabCard> = {
-  title: 'Laboratory/LabCard',
+  title: 'Molecules/LabCard',
   component: LabCard,
 };
 

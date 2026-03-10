@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import FilterButton from './FilterButton';
 
 const meta: Meta<typeof FilterButton> = {
-  title: 'Arsenal/FilterButton',
+  title: 'Atoms/FilterButton',
   component: FilterButton,
 };
 

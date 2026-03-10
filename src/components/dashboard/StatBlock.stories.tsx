@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import StatBlock from './StatBlock';
 
 const meta: Meta<typeof StatBlock> = {
-  title: 'Dashboard/StatBlock',
+  title: 'Molecules/StatBlock',
   component: StatBlock,
 };
 

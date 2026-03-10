@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import ProtocolCard from './ProtocolCard';
 
 const meta: Meta<typeof ProtocolCard> = {
-  title: 'Protocols/ProtocolCard',
+  title: 'Molecules/ProtocolCard',
   component: ProtocolCard,
 };
 

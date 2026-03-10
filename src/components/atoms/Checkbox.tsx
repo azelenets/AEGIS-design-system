@@ -35,7 +35,7 @@ const Checkbox = ({ label, hint, indeterminate, id, className = '', ...rest }: C
         <span
           className={[
             'flex items-center justify-center w-4 h-4 border transition-colors',
-            'bg-surface-terminal border-border-dark',
+            'bg-surface-terminal border-slate-600',
             'group-has-[input:checked]/box:border-primary group-has-[input:checked]/box:bg-primary/10',
             'group-has-[input:indeterminate]/box:border-primary group-has-[input:indeterminate]/box:bg-primary/10',
             'group-hover/cb:border-primary/50',
@@ -46,7 +46,7 @@ const Checkbox = ({ label, hint, indeterminate, id, className = '', ...rest }: C
             className={[
               'material-symbols-outlined text-primary text-[12px] transition-opacity',
               indeterminate
-                ? 'opacity-0'
+                ? 'hidden'
                 : 'opacity-0 group-has-[input:checked]/box:opacity-100',
             ].join(' ')}
           >
@@ -54,9 +54,7 @@ const Checkbox = ({ label, hint, indeterminate, id, className = '', ...rest }: C
           </span>
           {/* Dash — visible when indeterminate */}
           {indeterminate && (
-            <span className="material-symbols-outlined text-primary text-[12px]">
-              remove
-            </span>
+            <span className="block w-2 h-px bg-primary" />
           )}
         </span>
       </span>

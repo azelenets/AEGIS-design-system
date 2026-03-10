@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import TechItem from './TechItem';
 
 const meta: Meta<typeof TechItem> = {
-  title: 'Arsenal/TechItem',
+  title: 'Molecules/TechItem',
   component: TechItem,
   decorators: [
     (Story) => (

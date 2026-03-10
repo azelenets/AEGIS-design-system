@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import CertCard from './CertCard';
 
 const meta: Meta<typeof CertCard> = {
-  title: 'Credentials/CertCard',
+  title: 'Molecules/CertCard',
   component: CertCard,
 };
 

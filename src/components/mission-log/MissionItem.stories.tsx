@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import MissionItem from './MissionItem';
 
 const meta: Meta<typeof MissionItem> = {
-  title: 'Mission Log/MissionItem',
+  title: 'Organisms/MissionItem',
   component: MissionItem,
   parameters: {
     layout: 'fullscreen',

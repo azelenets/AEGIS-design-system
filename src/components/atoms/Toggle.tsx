@@ -50,7 +50,7 @@ const Toggle = ({
       <span
         className={[
           'block rounded-full border transition-colors',
-          'bg-surface-terminal border-border-dark',
+          'bg-surface-terminal border-slate-600',
           'group-hover/toggle:border-primary/40',
           VARIANT_TRACK[variant],
           s.track,

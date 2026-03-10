@@ -26,7 +26,7 @@ const DOT_CLASSES: Record<BadgeVariant, string> = {
 
 const Badge = ({ label, variant = 'ghost', dot = false }: BadgeProps) => (
   <span
-    className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest font-mono ${VARIANT_CLASSES[variant]}`}
+    className={`inline-flex items-center gap-1.5 px-2 py-1.5 text-[9px] leading-none font-bold uppercase tracking-widest font-mono ${VARIANT_CLASSES[variant]}`}
   >
     {dot && <span className={`w-1.5 h-1.5 rounded-full animate-pulse-fast ${DOT_CLASSES[variant]}`} />}
     {label}

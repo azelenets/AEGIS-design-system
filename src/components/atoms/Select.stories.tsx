@@ -28,3 +28,11 @@ export const WithError: Story = {
 export const Disabled: Story = {
   args: { label: 'Zone Lock', options: statusOptions, value: 'classified', disabled: true },
 };
+
+export const Multiple: Story = {
+  args: { label: 'Operator Roles', options: statusOptions, multiple: true, placeholder: 'Select roles...' },
+};
+
+export const MultiplePreselected: Story = {
+  args: { label: 'Active Zones', options: statusOptions, multiple: true, values: ['active', 'standby'] },
+};

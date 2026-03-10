@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import SpecCard from './SpecCard';
 
 const meta: Meta<typeof SpecCard> = {
-  title: 'Arsenal/SpecCard',
+  title: 'Molecules/SpecCard',
   component: SpecCard,
 };
 

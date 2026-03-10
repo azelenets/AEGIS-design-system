@@ -91,83 +91,69 @@ const Carousel = ({
   const atStart = !loop && active === 0;
   const atEnd   = !loop && active === count - 1;
 
+  const arrowBtn = (onClick: () => void, disabled: boolean, icon: string, label: string) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      className={[
+        'shrink-0 flex items-center justify-center w-8 h-8',
+        'bg-bg-dark/80 border border-slate-600',
+        'text-slate-400 transition-all duration-200',
+        'hover:border-primary/50 hover:text-primary',
+        'opacity-0 group-hover/carousel:opacity-100',
+        disabled ? 'opacity-30 cursor-not-allowed pointer-events-none' : '',
+      ].filter(Boolean).join(' ')}
+    >
+      <span className="material-symbols-outlined text-[18px]">{icon}</span>
+    </button>
+  );
+
   return (
     <div
-      className={['relative group/carousel select-none', className].join(' ')}
+      className={['group/carousel select-none', className].join(' ')}
       onMouseEnter={() => pauseOnHover && setPaused(true)}
       onMouseLeave={() => pauseOnHover && setPaused(false)}
     >
-      {/* ── Slides track ── */}
-      <div className="overflow-hidden relative">
-        {transition === 'slide' ? (
-          <div
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${active * 100}%)` }}
-          >
-            {slides.map((slide, i) => (
-              <div key={i} className="w-full shrink-0 min-w-0">
-                {slide}
-              </div>
-            ))}
-          </div>
-        ) : (
-          // Fade transition — stack slides absolutely
-          <div className="relative">
-            {slides.map((slide, i) => (
-              <div
-                key={i}
-                aria-hidden={i !== active}
-                className={[
-                  'transition-opacity duration-500',
-                  i === active ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none',
-                ].join(' ')}
-              >
-                {slide}
-              </div>
-            ))}
-          </div>
-        )}
+      {/* ── Row: prev arrow + slides track + next arrow ── */}
+      <div className="flex items-center gap-2">
+        {/* ── Prev arrow ── */}
+        {showArrows && count > 1 && arrowBtn(goPrev, atStart, 'chevron_left', 'Previous slide')}
+
+        {/* ── Slides track ── */}
+        <div className="flex-1 overflow-hidden relative min-w-0">
+          {transition === 'slide' ? (
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${active * 100}%)` }}
+            >
+              {slides.map((slide, i) => (
+                <div key={i} className="w-full shrink-0 min-w-0">
+                  {slide}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="relative">
+              {slides.map((slide, i) => (
+                <div
+                  key={i}
+                  aria-hidden={i !== active}
+                  className={[
+                    'transition-opacity duration-500',
+                    i === active ? 'opacity-100 relative' : 'opacity-0 absolute inset-0 pointer-events-none',
+                  ].join(' ')}
+                >
+                  {slide}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* ── Next arrow ── */}
+        {showArrows && count > 1 && arrowBtn(goNext, atEnd, 'chevron_right', 'Next slide')}
       </div>
-
-      {/* ── Prev arrow ── */}
-      {showArrows && count > 1 && (
-        <button
-          onClick={goPrev}
-          disabled={atStart}
-          aria-label="Previous slide"
-          className={[
-            'absolute left-2 top-1/2 -translate-y-1/2 z-10',
-            'flex items-center justify-center w-8 h-8',
-            'bg-bg-dark/80 border border-border-dark backdrop-blur-sm',
-            'text-slate-400 transition-all duration-200',
-            'hover:border-primary/50 hover:text-primary',
-            'opacity-0 group-hover/carousel:opacity-100',
-            atStart ? 'opacity-30 cursor-not-allowed pointer-events-none' : '',
-          ].filter(Boolean).join(' ')}
-        >
-          <span className="material-symbols-outlined text-[18px]">chevron_left</span>
-        </button>
-      )}
-
-      {/* ── Next arrow ── */}
-      {showArrows && count > 1 && (
-        <button
-          onClick={goNext}
-          disabled={atEnd}
-          aria-label="Next slide"
-          className={[
-            'absolute right-2 top-1/2 -translate-y-1/2 z-10',
-            'flex items-center justify-center w-8 h-8',
-            'bg-bg-dark/80 border border-border-dark backdrop-blur-sm',
-            'text-slate-400 transition-all duration-200',
-            'hover:border-primary/50 hover:text-primary',
-            'opacity-0 group-hover/carousel:opacity-100',
-            atEnd ? 'opacity-30 cursor-not-allowed pointer-events-none' : '',
-          ].filter(Boolean).join(' ')}
-        >
-          <span className="material-symbols-outlined text-[18px]">chevron_right</span>
-        </button>
-      )}
 
       {/* ── Indicators ── */}
       {indicators !== 'none' && count > 1 && (
@@ -198,7 +184,7 @@ const Carousel = ({
 
       {/* ── Auto-play progress bar ── */}
       {autoPlay && !paused && (
-        <div className="absolute bottom-0 inset-x-0 h-px bg-border-dark overflow-hidden pointer-events-none">
+        <div className="h-px bg-border-dark overflow-hidden pointer-events-none mt-1">
           <div
             key={`${active}-${dir}`}
             className="h-full bg-primary/50 origin-left"

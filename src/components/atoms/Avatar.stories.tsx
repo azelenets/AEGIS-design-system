@@ -9,6 +9,10 @@ const meta: Meta<typeof Avatar> = {
 export default meta;
 type Story = StoryObj<typeof Avatar>;
 
+export const WithImage: Story = {
+  args: { src: 'https://i.pravatar.cc/150?img=12', alt: 'Agent Avatar', size: 'md' },
+};
+
 export const WithInitials: Story = {
   args: { initials: 'AZ', variant: 'primary', size: 'md' },
 };
@@ -41,10 +45,10 @@ export const AllSizes: Story = {
   decorators: [
     () => (
       <div className="flex gap-4 items-end">
-        <Avatar initials="AZ" variant="primary" size="sm" />
-        <Avatar initials="AZ" variant="primary" size="md" />
-        <Avatar initials="AZ" variant="primary" size="lg" />
-        <Avatar initials="AZ" variant="primary" size="xl" />
+        <Avatar src="https://i.pravatar.cc/150?img=12" alt="Agent" size="sm" />
+        <Avatar src="https://i.pravatar.cc/150?img=12" alt="Agent" size="md" />
+        <Avatar src="https://i.pravatar.cc/150?img=12" alt="Agent" size="lg" />
+        <Avatar src="https://i.pravatar.cc/150?img=12" alt="Agent" size="xl" />
       </div>
     ),
   ],

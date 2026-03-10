@@ -16,14 +16,14 @@ const Swatch = ({ name, value, role }: { name: string; value: string; role: stri
 );
 
 const palette = [
-  { name: 'primary',          value: aegisTokens.colors.primary,  role: 'Main accent — cyan' },
-  { name: 'hazard',           value: aegisTokens.colors.hazard,   role: 'Warning — yellow' },
-  { name: 'alert',            value: aegisTokens.colors.alert,    role: 'Critical / danger — red' },
-  { name: 'background',       value: aegisTokens.colors.background, role: 'Page background' },
-  { name: 'panel',            value: aegisTokens.colors.panel,    role: 'Card / panel surface' },
-  { name: 'terminal',         value: aegisTokens.colors.terminal, role: 'Input / terminal surface' },
-  { name: 'border',           value: aegisTokens.colors.border,   role: 'Default border' },
-  { name: 'text',             value: aegisTokens.colors.text,     role: 'Body text' },
+  { name: 'primary',          value: aegisTokens.dark.primary,    role: 'Main accent — cyan' },
+  { name: 'hazard',           value: aegisTokens.dark.hazard,     role: 'Warning — yellow' },
+  { name: 'alert',            value: aegisTokens.dark.alert,      role: 'Critical / danger — red' },
+  { name: 'background',       value: aegisTokens.dark.background, role: 'Page background' },
+  { name: 'panel',            value: aegisTokens.dark.panel,      role: 'Card / panel surface' },
+  { name: 'surface',          value: aegisTokens.dark.surface,    role: 'Input / terminal surface' },
+  { name: 'border',           value: aegisTokens.dark.border,     role: 'Default border' },
+  { name: 'text',             value: aegisTokens.dark.text,       role: 'Body text' },
   { name: 'emerald (success)',value: '#34d399',                   role: 'Success state' },
   { name: 'slate-400',        value: '#94a3b8',                   role: 'Secondary text' },
   { name: 'slate-600',        value: '#475569',                   role: 'Muted / hint text' },

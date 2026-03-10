@@ -5,14 +5,7 @@ export interface AvatarGroupProps {
   avatars: Omit<AvatarProps, 'size'>[];
   max?: number;
   size?: AvatarProps['size'];
-  overlap?: 'sm' | 'md' | 'lg';
 }
-
-const OVERLAP: Record<'sm' | 'md' | 'lg', string> = {
-  sm: '-ml-1',
-  md: '-ml-2',
-  lg: '-ml-3',
-};
 
 const COUNTER_SIZE: Record<NonNullable<AvatarProps['size']>, string> = {
   sm: 'w-7 h-7 text-[9px]',
@@ -21,21 +14,18 @@ const COUNTER_SIZE: Record<NonNullable<AvatarProps['size']>, string> = {
   xl: 'w-16 h-16 text-sm',
 };
 
-const AvatarGroup = ({ avatars, max = 5, size = 'md', overlap = 'md' }: AvatarGroupProps) => {
+const AvatarGroup = ({ avatars, max = 5, size = 'md' }: AvatarGroupProps) => {
   const visible = avatars.slice(0, max);
   const overflow = avatars.length - max;
-  const offsetClass = OVERLAP[overlap];
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center gap-1">
       {visible.map((av, i) => (
-        <span key={i} className={`relative ${i > 0 ? offsetClass : ''} ring-2 ring-bg-dark`}>
-          <Avatar {...av} size={size} />
-        </span>
+        <Avatar key={i} {...av} size={size} />
       ))}
       {overflow > 0 && (
         <span
-          className={`relative ${offsetClass} ring-2 ring-bg-dark inline-flex items-center justify-center bg-surface-terminal border border-border-dark font-bold font-mono text-slate-400 ${COUNTER_SIZE[size]}`}
+          className={`inline-flex items-center justify-center bg-surface-terminal border border-slate-600 font-bold font-mono text-slate-400 ${COUNTER_SIZE[size]}`}
         >
           +{overflow}
         </span>

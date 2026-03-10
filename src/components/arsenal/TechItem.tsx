@@ -26,7 +26,7 @@ const TechItem = ({ name, version, status, isCritical, isMaster }: TechItemProps
   return (
     <li className={`border p-3 bg-bg-dark group transition-colors relative ${borderColor}`}>
       <div className="flex justify-between items-center mb-1">
-        <span className={`text-sm font-bold uppercase group-hover:text-white ${nameColor}`}>{name}</span>
+        <span className={`text-sm font-bold uppercase group-hover:[color:rgb(var(--text-base))] ${nameColor}`}>{name}</span>
         {badge}
       </div>
       <div className="flex justify-between text-[10px] text-slate-500 font-mono">

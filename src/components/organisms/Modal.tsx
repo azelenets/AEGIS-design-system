@@ -4,7 +4,6 @@ import {
   useCallback,
   type ReactNode,
   type KeyboardEvent,
-  type MouseEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -149,10 +148,6 @@ const Modal = ({
 
   if (!open) return null;
 
-  const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (closeOnBackdrop && e.target === e.currentTarget) onClose();
-  };
-
   const handlePanelKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     // Prevent Escape from bubbling to backdrop when panel is focused
     if (e.key === 'Escape') e.stopPropagation();
@@ -163,10 +158,12 @@ const Modal = ({
       role="dialog"
       aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={handleBackdropClick}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-bg-dark/80 backdrop-blur-sm" />
+      <div
+        className="absolute inset-0 bg-bg-dark/80 backdrop-blur-sm"
+        onClick={() => closeOnBackdrop && onClose()}
+      />
 
       {/* Scanline overlay on backdrop */}
       <div

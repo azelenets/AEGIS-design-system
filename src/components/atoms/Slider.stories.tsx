@@ -10,6 +10,7 @@ export const Default: Story = { args: { label: 'Volume', defaultValue: 60 } };
 export const Hazard: Story = { args: { label: 'Threat Threshold', defaultValue: 80, variant: 'hazard' } };
 export const Alert: Story = { args: { label: 'Critical Level', defaultValue: 95, variant: 'alert' } };
 export const WithFormat: Story = { args: { label: 'Gain', defaultValue: 75, formatValue: (v) => `${v} dB` } };
+export const WithHint: Story = { args: { label: 'Signal Strength', defaultValue: 55, hint: 'Adjust the incoming signal amplification level' } };
 export const Disabled: Story = { args: { label: 'Locked', defaultValue: 40, disabled: true } };
 
 export const Controlled = {

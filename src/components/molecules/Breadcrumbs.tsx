@@ -100,4 +100,7 @@ const Breadcrumbs = ({ items, separator = 'chevron', maxItems, className, ...res
   );
 };
 
-export default memo(Breadcrumbs);
+const MemoBreadcrumbs = memo(Breadcrumbs);
+MemoBreadcrumbs.displayName = 'Breadcrumbs';
+
+export default MemoBreadcrumbs;

@@ -75,4 +75,7 @@ const Alert = ({ variant = 'info', title, children, onDismiss, className = '', .
   );
 };
 
-export default memo(Alert);
+const MemoAlert = memo(Alert);
+MemoAlert.displayName = 'Alert';
+
+export default MemoAlert;

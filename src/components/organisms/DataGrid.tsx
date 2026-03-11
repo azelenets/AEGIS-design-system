@@ -573,5 +573,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
 };
 
 // memo cast preserves generics
-const DataGrid = memo(DataGridInner) as typeof DataGridInner;
+const DataGrid = memo(DataGridInner) as typeof DataGridInner & { displayName?: string };
+DataGrid.displayName = 'DataGrid';
+
 export default DataGrid;

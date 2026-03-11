@@ -30,4 +30,7 @@ const Overlay = ({ visible, onClick, blur = false, zIndex = aegisLayers.overlay,
   );
 };
 
-export default memo(Overlay);
+const MemoOverlay = memo(Overlay);
+MemoOverlay.displayName = 'Overlay';
+
+export default MemoOverlay;

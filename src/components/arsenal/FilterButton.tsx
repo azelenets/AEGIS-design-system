@@ -21,4 +21,7 @@ const FilterButton = ({ active, label, onClick, className = '', ...rest }: Filte
   </button>
 );
 
-export default memo(FilterButton);
+const MemoFilterButton = memo(FilterButton);
+MemoFilterButton.displayName = 'FilterButton';
+
+export default MemoFilterButton;

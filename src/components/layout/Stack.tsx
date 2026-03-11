@@ -71,7 +71,10 @@ const Stack = ({
   </Tag>
 );
 
-export default memo(Stack);
+const MemoStack = memo(Stack);
+MemoStack.displayName = 'Stack';
+
+export default MemoStack;
 
 // ─── HStack ───────────────────────────────────────────────────────────────────
 // Horizontal flex row — shorthand for Stack direction="row"

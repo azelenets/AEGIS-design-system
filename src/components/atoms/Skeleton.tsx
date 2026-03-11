@@ -51,4 +51,7 @@ const Skeleton = ({ shape = 'text', width, height, lines = 3, size, className = 
   );
 };
 
-export default memo(Skeleton);
+const MemoSkeleton = memo(Skeleton);
+MemoSkeleton.displayName = 'Skeleton';
+
+export default MemoSkeleton;

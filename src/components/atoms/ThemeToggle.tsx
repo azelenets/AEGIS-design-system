@@ -110,4 +110,7 @@ const ThemeToggle = ({ size = 'md', variant = 'button', className = '', ...rest 
   );
 };
 
-export default memo(ThemeToggle);
+const MemoThemeToggle = memo(ThemeToggle);
+MemoThemeToggle.displayName = 'ThemeToggle';
+
+export default MemoThemeToggle;

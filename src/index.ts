@@ -1,3 +1,5 @@
+import '@/foundations/globals.css';
+
 // ─── Foundations ─────────────────────────────────────────────────────────────
 export { aegisTailwindTheme, aegisTokens, aegisCSSVars } from '@/foundations/aegisTheme';
 export { aegisLayers } from '@/foundations/layers';

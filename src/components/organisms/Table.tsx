@@ -171,6 +171,7 @@ const TableInner = <T extends Record<string, unknown>>({
   );
 };
 
-const Table = memo(TableInner) as typeof TableInner;
+const Table = memo(TableInner) as typeof TableInner & { displayName?: string };
+Table.displayName = 'Table';
 
 export default Table;

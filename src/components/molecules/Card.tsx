@@ -103,4 +103,7 @@ const Card = ({ variant = 'default', hoverable = false, className = '', children
   </div>
 );
 
-export default memo(Card);
+const MemoCard = memo(Card);
+MemoCard.displayName = 'Card';
+
+export default MemoCard;

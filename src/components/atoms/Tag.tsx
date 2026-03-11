@@ -37,4 +37,7 @@ const Tag = ({ label, variant = 'ghost', icon, onRemove, className = '', ...rest
   );
 };
 
-export default memo(Tag);
+const MemoTag = memo(Tag);
+MemoTag.displayName = 'Tag';
+
+export default MemoTag;

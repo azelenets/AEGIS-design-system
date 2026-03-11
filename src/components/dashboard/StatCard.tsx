@@ -40,4 +40,7 @@ const StatCard = ({ id, label, value, progress, segmented, className = '', ...re
   );
 };
 
-export default memo(StatCard);
+const MemoStatCard = memo(StatCard);
+MemoStatCard.displayName = 'StatCard';
+
+export default MemoStatCard;

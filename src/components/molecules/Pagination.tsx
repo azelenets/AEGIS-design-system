@@ -72,4 +72,7 @@ const Pagination = ({ page, total, siblings = 1, onChange, showEdges = true, cla
   );
 };
 
-export default memo(Pagination);
+const MemoPagination = memo(Pagination);
+MemoPagination.displayName = 'Pagination';
+
+export default MemoPagination;

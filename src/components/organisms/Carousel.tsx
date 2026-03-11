@@ -205,7 +205,10 @@ const Carousel = ({
   );
 };
 
-export default memo(Carousel);
+const MemoCarousel = memo(Carousel);
+MemoCarousel.displayName = 'Carousel';
+
+export default MemoCarousel;
 
 // ─── CarouselSlide ─────────────────────────────────────────────────────────────
 

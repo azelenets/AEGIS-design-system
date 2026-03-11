@@ -97,4 +97,7 @@ const Toggle = ({
   );
 };
 
-export default memo(Toggle);
+const MemoToggle = memo(Toggle);
+MemoToggle.displayName = 'Toggle';
+
+export default MemoToggle;

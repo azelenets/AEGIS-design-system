@@ -125,7 +125,10 @@ const Grid = ({
   </Tag>
 );
 
-export default memo(Grid);
+const MemoGrid = memo(Grid);
+MemoGrid.displayName = 'Grid';
+
+export default MemoGrid;
 
 // ─── GridItem ─────────────────────────────────────────────────────────────────
 

@@ -17,4 +17,7 @@ const StatBlock = ({ label, value, barColor, width, className = '', ...rest }: S
   </div>
 );
 
-export default memo(StatBlock);
+const MemoStatBlock = memo(StatBlock);
+MemoStatBlock.displayName = 'StatBlock';
+
+export default MemoStatBlock;

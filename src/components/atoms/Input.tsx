@@ -56,4 +56,7 @@ const Input = ({ label, error, hint, icon, id, className = '', ...rest }: InputP
   );
 };
 
-export default memo(Input);
+const MemoInput = memo(Input);
+MemoInput.displayName = 'Input';
+
+export default MemoInput;

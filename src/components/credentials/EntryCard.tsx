@@ -29,4 +29,7 @@ const EntryCard = ({ id, code, title, full, className = '', ...rest }: EntryCard
   </article>
 );
 
-export default memo(EntryCard);
+const MemoEntryCard = memo(EntryCard);
+MemoEntryCard.displayName = 'EntryCard';
+
+export default MemoEntryCard;

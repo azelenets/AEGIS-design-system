@@ -91,4 +91,7 @@ const Sidebar = ({ brand, groups = [], footer, collapsed = false, onNavClick, cl
   </aside>
 );
 
-export default memo(Sidebar);
+const MemoSidebar = memo(Sidebar);
+MemoSidebar.displayName = 'Sidebar';
+
+export default MemoSidebar;

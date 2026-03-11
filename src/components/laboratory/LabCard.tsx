@@ -73,4 +73,7 @@ const LabCard = ({ id, codename, title, desc, status, statusColor, color, stats,
   );
 };
 
-export default memo(LabCard);
+const MemoLabCard = memo(LabCard);
+MemoLabCard.displayName = 'LabCard';
+
+export default MemoLabCard;

@@ -18,4 +18,7 @@ const TagGroup = ({ title, items, className = '', ...rest }: TagGroupProps) => (
   </div>
 );
 
-export default memo(TagGroup);
+const MemoTagGroup = memo(TagGroup);
+MemoTagGroup.displayName = 'TagGroup';
+
+export default MemoTagGroup;

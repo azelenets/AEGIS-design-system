@@ -86,4 +86,7 @@ const Form = ({ children, className = '', ...rest }: FormProps) => (
   </form>
 );
 
-export default memo(Form);
+const MemoForm = memo(Form);
+MemoForm.displayName = 'Form';
+
+export default MemoForm;

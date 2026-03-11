@@ -74,4 +74,7 @@ const Button = ({
   );
 };
 
-export default memo(Button);
+const MemoButton = memo(Button);
+MemoButton.displayName = 'Button';
+
+export default MemoButton;

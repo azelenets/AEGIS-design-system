@@ -22,4 +22,7 @@ const Container = ({ as: Tag = 'div', size = 'xl', children, className = '', ...
   </Tag>
 );
 
-export default memo(Container);
+const MemoContainer = memo(Container);
+MemoContainer.displayName = 'Container';
+
+export default MemoContainer;

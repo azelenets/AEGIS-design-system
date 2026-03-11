@@ -179,7 +179,7 @@ function injectLeafletOverrides() {
       box-shadow: 0 0 20px rgba(var(--color-primary), 0.08) !important;
       font-family: 'JetBrains Mono', monospace !important;
       font-size: 11px !important;
-      padding: 10px 14px !important;
+      padding: 10px 32px 10px 14px !important;
     }
     .leaflet-popup-content {
       margin: 0 !important;
@@ -197,10 +197,16 @@ function injectLeafletOverrides() {
       color: rgb(var(--color-primary)) !important;
       background: none !important;
       font-size: 18px !important;
-      line-height: 18px !important;
-      top: 6px !important;
-      right: 8px !important;
+      line-height: 1 !important;
+      width: 24px !important;
+      height: 24px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      top: 4px !important;
+      right: 4px !important;
       padding: 0 !important;
+      text-indent: 0 !important;
     }
     .leaflet-popup-close-button:hover {
       color: rgb(var(--text-base)) !important;

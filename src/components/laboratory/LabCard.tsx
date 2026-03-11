@@ -1,4 +1,6 @@
 import { memo, type ReactNode, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 export interface LabCardProps extends HTMLAttributes<HTMLElement> {
   id: string;
@@ -10,7 +12,7 @@ export interface LabCardProps extends HTMLAttributes<HTMLElement> {
   color: 'primary' | 'hazard' | 'alert';
   stats: string;
   action: string;
-  icon: string;
+  icon: MaterialIconName;
   link?: string;
   children: ReactNode;
 }
@@ -60,11 +62,11 @@ const LabCard = ({ id, codename, title, desc, status, statusColor, color, stats,
               rel="noopener noreferrer"
               className={`flex items-center gap-1 uppercase ${actionClasses.hover}`}
             >
-              <span className="material-symbols-outlined text-xs">{icon}</span> {action}
+              <><MaterialIcon name={icon} className="text-xs" /> {action}</>
             </a>
           ) : (
             <span className={`flex items-center gap-1 cursor-pointer uppercase ${actionClasses.hover}`}>
-              <span className="material-symbols-outlined text-xs">{icon}</span> {action}
+              <><MaterialIcon name={icon} className="text-xs" /> {action}</>
             </span>
           )}
         </div>

@@ -1,9 +1,11 @@
 import { memo, type ReactNode, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 export interface SidebarNavItem {
   id: string;
   label: string;
-  icon?: string;
+  icon?: MaterialIconName;
   href?: string;
   active?: boolean;
   badge?: string;
@@ -65,9 +67,7 @@ const Sidebar = ({ brand, groups = [], footer, collapsed = false, onNavClick, cl
                 ].join(' ')}
               >
                 {item.icon && (
-                  <span className={`material-symbols-outlined text-[18px] shrink-0 ${item.active ? 'text-primary' : ''}`}>
-                    {item.icon}
-                  </span>
+                  <MaterialIcon name={item.icon} className={`text-[18px] shrink-0 ${item.active ? 'text-primary' : ''}`} />
                 )}
                 {!collapsed && <span className="flex-1 truncate">{item.label}</span>}
                 {!collapsed && item.badge && (

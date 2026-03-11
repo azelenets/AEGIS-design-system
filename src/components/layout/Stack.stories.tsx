@@ -2,6 +2,7 @@ import type { Meta } from '@storybook/react-vite';
 import Stack, { HStack, VStack, ZStack, Spacer, Center } from './Stack';
 import Badge from '@/components/atoms/Badge';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 const meta: Meta<typeof Stack> = { title: 'Layout/Stack', component: Stack };
 export default meta;
@@ -169,9 +170,10 @@ export const ZStackBadgeOverlay = {
           <ZStack align="start" className="inline-grid">
             {/* Base element */}
             <div className="w-12 h-12 bg-surface-terminal border border-border-dark flex items-center justify-center">
-              <span className="material-symbols-outlined text-[20px] text-slate-400">
-                {i === 0 ? 'notifications' : i === 1 ? 'person' : 'mail'}
-              </span>
+              <MaterialIcon
+                name={i === 0 ? 'notifications' : i === 1 ? 'person' : 'mail'}
+                className="text-[20px] text-slate-400"
+              />
             </div>
             {/* Overlay element */}
             <div className="justify-self-end self-start translate-x-1/2 -translate-y-1/2">

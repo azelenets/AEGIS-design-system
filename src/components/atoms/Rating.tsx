@@ -1,4 +1,5 @@
 import { memo, useState, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 export type RatingVariant = 'primary' | 'hazard';
 
@@ -67,13 +68,12 @@ const Rating = ({
               onClick={() => handleClick(star)}
               onMouseEnter={() => !readOnly && setHovered(star)}
               className={[
-                'material-symbols-outlined text-[20px] transition-colors',
+                'text-[20px] transition-colors',
                 filled ? c.filled : c.empty,
                 readOnly ? 'cursor-default' : 'cursor-pointer hover:scale-110 transition-transform',
               ].join(' ')}
-              style={{ fontVariationSettings: filled ? "'FILL' 1" : "'FILL' 0" }}
             >
-              star
+              <MaterialIcon name="star" filled={filled} />
             </button>
           );
         })}

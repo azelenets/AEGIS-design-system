@@ -1,4 +1,6 @@
 import { memo, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -7,7 +9,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
-  icon?: string;
+  icon?: MaterialIconName;
   children?: ReactNode;
 }
 
@@ -63,11 +65,9 @@ const Button = ({
       {...rest}
     >
       {loading ? (
-        <span className={`material-symbols-outlined animate-spin ${ICON_SIZE_CLASSES[size]}`}>
-          progress_activity
-        </span>
+        <MaterialIcon name="progress_activity" className={`animate-spin ${ICON_SIZE_CLASSES[size]}`} />
       ) : icon ? (
-        <span className={`material-symbols-outlined ${ICON_SIZE_CLASSES[size]}`}>{icon}</span>
+        <MaterialIcon name={icon} className={ICON_SIZE_CLASSES[size]} />
       ) : null}
       {children}
     </button>

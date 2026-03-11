@@ -1,4 +1,5 @@
 import { memo, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 export interface TimelineField {
   label: string;
@@ -26,7 +27,7 @@ const TimelineEntry = ({ level, title, organization, period, distinguished, fiel
           <h3 className="text-xl font-bold text-white">{title}</h3>
           {distinguished ? (
             <span className="inline-flex items-center gap-1 border border-yellow-400/60 bg-yellow-400/10 text-yellow-400 text-[8px] font-black uppercase tracking-widest px-2 py-0.5">
-              <span className="material-symbols-outlined text-[10px]">military_tech</span>
+              <MaterialIcon name="military_tech" className="text-[10px]" />
               Distinguished
             </span>
           ) : null}

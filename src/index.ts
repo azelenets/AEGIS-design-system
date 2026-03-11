@@ -15,6 +15,7 @@ export { default as Checkbox }     from '@/components/atoms/Checkbox';
 export { default as Divider }      from '@/components/atoms/Divider';
 export { default as Input }        from '@/components/atoms/Input';
 export { default as Kbd }          from '@/components/atoms/Kbd';
+export { default as MaterialIcon } from '@/components/atoms/MaterialIcon';
 export { default as RadioGroup, RadioOption } from '@/components/atoms/Radio';
 export { default as Rating }       from '@/components/atoms/Rating';
 export { default as SearchInput }  from '@/components/atoms/SearchInput';
@@ -69,6 +70,7 @@ export type { CheckboxProps }                                            from '@
 export type { DividerProps, DividerVariant }                             from '@/components/atoms/Divider';
 export type { InputProps }                                               from '@/components/atoms/Input';
 export type { KbdProps }                                                 from '@/components/atoms/Kbd';
+export type { MaterialIconProps }                                        from '@/components/atoms/MaterialIcon';
 export type { RadioGroupProps, RadioOptionProps, RadioGroupOrientation } from '@/components/atoms/Radio';
 export type { RatingProps, RatingVariant }                               from '@/components/atoms/Rating';
 export type { SearchInputProps }                                         from '@/components/atoms/SearchInput';

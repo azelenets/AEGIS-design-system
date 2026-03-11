@@ -1,18 +1,20 @@
 import type { Meta } from '@storybook/react-vite';
 import Footer from './Footer';
+import type { FooterGroup } from './Footer';
 import Badge from '@/components/atoms/Badge';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 const meta: Meta<typeof Footer> = { title: 'Organisms/Footer', component: Footer, parameters: { layout: 'fullscreen' } };
 export default meta;
 
 const Brand = () => (
   <div className="flex items-center gap-2">
-    <span className="material-symbols-outlined text-primary text-[18px]">shield</span>
+    <MaterialIcon name="shield" className="text-primary text-[18px]" />
     <span className="font-display text-sm font-bold tracking-widest text-primary uppercase">AEGIS</span>
   </div>
 );
 
-const groups = [
+const groups: FooterGroup[] = [
   {
     id: 'system',
     label: 'System',

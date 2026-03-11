@@ -3,6 +3,7 @@ import type { Meta } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import DataGrid, { type DataGridColumn } from './DataGrid';
 import Badge from '@/components/atoms/Badge';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 const meta: Meta<typeof DataGrid> = { title: 'Organisms/DataGrid', component: DataGrid };
 export default meta;
@@ -108,10 +109,10 @@ const FullFeaturedStory = () => {
       actions={(row) => (
         <>
           <button title="View" className="text-slate-400 hover:text-primary transition-colors" onClick={() => alert(`View ${row.callSign}`)}>
-            <span className="material-symbols-outlined text-[16px]">visibility</span>
+            <MaterialIcon name="visibility" className="text-[16px]" />
           </button>
           <button title="Delete" className="text-slate-400 hover:text-alert transition-colors" onClick={() => alert(`Delete ${row.callSign}`)}>
-            <span className="material-symbols-outlined text-[16px]">delete</span>
+            <MaterialIcon name="delete" className="text-[16px]" />
           </button>
         </>
       )}
@@ -249,21 +250,21 @@ export const WithRowActions = {
             onClick={() => alert(`View ${row.callSign}`)}
             className="text-slate-400 hover:text-primary transition-colors"
           >
-            <span className="material-symbols-outlined text-[16px]">visibility</span>
+            <MaterialIcon name="visibility" className="text-[16px]" />
           </button>
           <button
             title="Edit"
             onClick={() => alert(`Edit ${row.callSign}`)}
             className="text-slate-400 hover:text-hazard transition-colors"
           >
-            <span className="material-symbols-outlined text-[16px]">edit</span>
+            <MaterialIcon name="edit" className="text-[16px]" />
           </button>
           <button
             title="Remove"
             onClick={() => alert(`Remove ${row.callSign}`)}
             className="text-slate-400 hover:text-alert transition-colors"
           >
-            <span className="material-symbols-outlined text-[16px]">delete</span>
+            <MaterialIcon name="delete" className="text-[16px]" />
           </button>
         </>
       )}

@@ -1,5 +1,7 @@
 import { memo, type ReactNode, type HTMLAttributes } from 'react';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 export type AlertVariant = 'info' | 'warning' | 'danger' | 'success';
 
@@ -12,7 +14,7 @@ export interface AlertProps extends HTMLAttributes<HTMLDivElement> {
 
 const VARIANT_CONFIG: Record<
   AlertVariant,
-  { border: string; icon: string; iconColor: string; titleColor: string; bg: string }
+  { border: string; icon: MaterialIconName; iconColor: string; titleColor: string; bg: string }
 > = {
   info: {
     border: 'border-primary/30',
@@ -49,9 +51,7 @@ const Alert = ({ variant = 'info', title, children, onDismiss, className = '', .
 
   return (
     <div {...rest} className={[`border ${config.border} ${config.bg} p-4 flex gap-3`, className].filter(Boolean).join(' ')}>
-      <span className={`material-symbols-outlined text-[20px] shrink-0 mt-0.5 ${config.iconColor}`}>
-        {config.icon}
-      </span>
+      <MaterialIcon name={config.icon} className={`text-[20px] shrink-0 mt-0.5 ${config.iconColor}`} />
       <div className="flex-1 min-w-0">
         {title && (
           <p className={`text-[10px] font-bold uppercase tracking-widest font-mono mb-1 ${config.titleColor}`}>
@@ -68,7 +68,7 @@ const Alert = ({ variant = 'info', title, children, onDismiss, className = '', .
           className="shrink-0 min-w-0 border-0 px-1 py-1 text-slate-600 hover:text-slate-300"
           aria-label="Dismiss"
         >
-          <span className="material-symbols-outlined text-[16px]">close</span>
+          <MaterialIcon name="close" className="text-[16px]" />
         </Button>
       )}
     </div>

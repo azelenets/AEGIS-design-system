@@ -55,8 +55,9 @@ export const ShieldMode: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const shieldIcon = canvasElement.querySelector('svg.material-symbols_shield_lock');
 
-    await expect(canvas.getByText('shield_lock')).toBeVisible();
+    await expect(shieldIcon).toBeInTheDocument();
     await expect(canvas.getByText('SC-4891')).toBeVisible();
   },
 };

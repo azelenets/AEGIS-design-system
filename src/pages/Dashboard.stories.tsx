@@ -6,6 +6,8 @@ import { ThemeProvider } from '@/foundations/ThemeContext';
 
 // ─── Organisms ────────────────────────────────────────────────────────────────
 import Navbar                                               from '@/components/organisms/Navbar';
+import type { SidebarGroup }                                from '@/components/organisms/Sidebar';
+import type { FooterGroup }                                 from '@/components/organisms/Footer';
 import Dropdown, { DropdownItem, DropdownSeparator, DropdownGroup } from '@/components/organisms/Dropdown';
 import Sidebar                                             from '@/components/organisms/Sidebar';
 import Tabs, { TabList, TabTrigger, TabPanel }             from '@/components/organisms/Tabs';
@@ -52,6 +54,7 @@ import Select                                              from '@/components/at
 import Skeleton                                            from '@/components/atoms/Skeleton';
 import Slider                                              from '@/components/atoms/Slider';
 import Spinner                                             from '@/components/atoms/Spinner';
+import MaterialIcon                                        from '@/components/atoms/MaterialIcon';
 import Tag                                                 from '@/components/atoms/Tag';
 import Textarea                                            from '@/components/atoms/Textarea';
 import ThemeToggle                                         from '@/components/atoms/ThemeToggle';
@@ -167,12 +170,12 @@ const stepperSteps = [
   { id: '4', title: 'Confirm',    description: 'Final review',      status: 'pending'  as const },
 ];
 
-const footerGroups = [
+const footerGroups: FooterGroup[] = [
   { id: 'system',    label: 'System',    links: [{ id: 'dash', label: 'Dashboard', href: '#', icon: 'dashboard' }, { id: 'ops', label: 'Operations', href: '#', icon: 'radar' }, { id: 'lab', label: 'Laboratory', href: '#', icon: 'science' }] },
   { id: 'resources', label: 'Resources', links: [{ id: 'docs', label: 'Documentation', href: '#', icon: 'description' }, { id: 'api', label: 'API Reference', href: '#', icon: 'api' }, { id: 'changes', label: 'Changelog', href: '#' }] },
 ];
 
-const sidebarGroups = [
+const sidebarGroups: SidebarGroup[] = [
   { items: [
     { id: 'dashboard',   label: 'Dashboard',   icon: 'dashboard', active: true },
     { id: 'operators',   label: 'Operators',   icon: 'group',     badge: '5'   },
@@ -266,7 +269,7 @@ const OperatorMenuTrigger = (props: ComponentPropsWithoutRef<typeof Button>) => 
   >
     <Avatar src="https://i.pravatar.cc/150?img=12" size="sm" />
     <span className="text-[10px] font-mono font-bold text-slate-400 group-hover:text-slate-200 tracking-widest uppercase hidden sm:block">PHANTOM</span>
-    <span className="material-symbols-outlined text-[14px] text-slate-600">expand_more</span>
+    <MaterialIcon name="expand_more" className="text-[14px] text-slate-600" />
   </Button>
 );
 
@@ -350,8 +353,8 @@ const DashboardContent = () => {
 
   const sidebarBrand = useMemo(() => (
     sidebarCollapsed
-      ? <span className="material-symbols-outlined text-primary text-[20px]">shield</span>
-      : <span className="flex items-center gap-2"><span className="material-symbols-outlined text-primary text-[18px]">shield</span><span className="font-display font-bold text-white text-xs tracking-widest">AEGIS</span></span>
+      ? <MaterialIcon name="shield" className="text-primary text-[20px]" />
+      : <span className="flex items-center gap-2"><MaterialIcon name="shield" className="text-primary text-[18px]" /><span className="font-display font-bold text-white text-xs tracking-widest">AEGIS</span></span>
   ), [sidebarCollapsed]);
   const toggleSidebar = useCallback(() => setSidebarCollapsed((value) => !value), []);
   const openMissionModal = useCallback(() => setMissionModalOpen(true), []);
@@ -388,7 +391,7 @@ const DashboardContent = () => {
           <Navbar
             brand={
               <span className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[18px]">shield</span>
+                <MaterialIcon name="shield" className="text-primary text-[18px]" />
                 <span className="text-sm font-bold font-display text-white tracking-widest">AEGIS</span>
                 <Badge label="v2.4.1" variant="ghost" />
               </span>
@@ -558,7 +561,7 @@ const DashboardContent = () => {
                               {(['success', 'hazard', 'alert'] as const).map(v => (
                                 <ZStack key={v} className="relative inline-flex">
                                   <div className="w-10 h-10 bg-surface-terminal border border-primary/20 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-primary text-[18px]">shield</span>
+                                    <MaterialIcon name="shield" className="text-primary text-[18px]" />
                                   </div>
                                   <div className="absolute -top-1.5 -right-1.5">
                                     <Badge label="2" variant={v} solid={true} />
@@ -1066,7 +1069,7 @@ const DashboardContent = () => {
           <Footer
             brand={
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[18px]">shield</span>
+                <MaterialIcon name="shield" className="text-primary text-[18px]" />
                 <span className="font-display text-sm font-bold tracking-widest text-primary uppercase">AEGIS</span>
               </div>
             }

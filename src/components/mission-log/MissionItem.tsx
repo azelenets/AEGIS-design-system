@@ -1,4 +1,5 @@
 import { memo, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 export interface MissionItemProps extends HTMLAttributes<HTMLElement> {
   date: string;
@@ -35,7 +36,7 @@ const MissionItem = ({ date, title, missionRole, scanId, objective, tactics, too
           {isShield ? (
             <div className="w-full h-40 bg-black/40 flex items-center justify-center border border-primary/10 overflow-hidden relative">
               <div className="absolute inset-0 cyber-grid opacity-30" />
-              <span className="material-symbols-outlined text-6xl text-primary/20 scale-150">shield_lock</span>
+              <MaterialIcon name="shield_lock" className="text-6xl text-primary/20 scale-150" />
               <div className="absolute bottom-2 left-2 text-[8px] text-primary/30 uppercase">{scanId}</div>
             </div>
           ) : isGhost ? (
@@ -69,14 +70,14 @@ const MissionItem = ({ date, title, missionRole, scanId, objective, tactics, too
       <div className="hud-border p-6 bg-white/5 backdrop-blur-sm space-y-6">
         <div className="space-y-2">
           <div className="text-hazard text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-2">
-            <span className="material-symbols-outlined text-xs">priority_high</span> MISSION_OBJECTIVE
+            <><MaterialIcon name="priority_high" className="text-xs" /> MISSION_OBJECTIVE</>
           </div>
           <p className="text-sm text-slate-400 leading-relaxed">{objective}</p>
         </div>
 
         <div className="space-y-2">
           <div className="text-primary text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-2">
-            <span className="material-symbols-outlined text-xs">architecture</span> TACTICAL_IMPLEMENTATION
+            <><MaterialIcon name="architecture" className="text-xs" /> TACTICAL_IMPLEMENTATION</>
           </div>
           <ul className="text-xs text-slate-300 space-y-2 list-none font-mono">
             {tactics.map((tactic) => (
@@ -91,7 +92,7 @@ const MissionItem = ({ date, title, missionRole, scanId, objective, tactics, too
         {tools?.length ? (
           <div className="space-y-2">
             <div className="text-primary/70 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-2">
-              <span className="material-symbols-outlined text-xs">memory</span> TECH_STACK
+              <><MaterialIcon name="memory" className="text-xs" /> TECH_STACK</>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {tools.map((tool) => (

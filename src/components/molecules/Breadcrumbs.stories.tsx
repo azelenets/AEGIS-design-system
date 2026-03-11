@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import Breadcrumbs from './Breadcrumbs';
+import type { BreadcrumbItem } from './Breadcrumbs';
 
 const meta: Meta<typeof Breadcrumbs> = {
   title: 'Molecules/Breadcrumbs',
@@ -9,7 +10,7 @@ const meta: Meta<typeof Breadcrumbs> = {
 export default meta;
 type Story = StoryObj<typeof Breadcrumbs>;
 
-const base = [
+const base: BreadcrumbItem[] = [
   { label: 'AEGIS', href: '#', icon: 'shield' },
   { label: 'Laboratory', href: '#' },
   { label: 'Signal Trace', href: '#' },

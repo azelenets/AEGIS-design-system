@@ -1,10 +1,12 @@
 import { memo, type InputHTMLAttributes, useId } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   hint?: string;
-  icon?: string;
+  icon?: MaterialIconName;
 }
 
 const Input = ({ label, error, hint, icon, id, className = '', ...rest }: InputProps) => {
@@ -23,9 +25,10 @@ const Input = ({ label, error, hint, icon, id, className = '', ...rest }: InputP
       )}
       <div className="relative">
         {icon && (
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[16px] text-slate-500 pointer-events-none">
-            {icon}
-          </span>
+          <MaterialIcon
+            name={icon}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[16px] text-slate-500 pointer-events-none"
+          />
         )}
         <input
           id={inputId}

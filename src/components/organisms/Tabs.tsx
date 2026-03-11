@@ -10,6 +10,8 @@ import {
   type HTMLAttributes,
 } from 'react';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -46,7 +48,7 @@ export interface TabListProps {
 
 export interface TabTriggerProps {
   id: string;
-  icon?: string;
+  icon?: MaterialIconName;
   children: ReactNode;
   disabled?: boolean;
 }
@@ -123,7 +125,7 @@ export const TabTrigger = memo(({ id, icon, children, disabled = false }: TabTri
       ].join(' ')}
     >
       {icon && (
-        <span className="material-symbols-outlined text-[14px]">{icon}</span>
+        <MaterialIcon name={icon} className="text-[14px]" />
       )}
       {children}
     </Button>

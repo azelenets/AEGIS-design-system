@@ -14,6 +14,8 @@ import {
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
 import Divider from '@/components/atoms/Divider';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 const getTriggerText = (node: ReactNode): string => {
   if (typeof node === 'string' || typeof node === 'number') return String(node);
@@ -26,7 +28,7 @@ const getTriggerText = (node: ReactNode): string => {
 
 export interface DropdownItemProps {
   label: string;
-  icon?: string;
+  icon?: MaterialIconName;
   hint?: string;
   variant?: 'default' | 'danger';
   disabled?: boolean;
@@ -61,7 +63,7 @@ export const DropdownItem = memo(({ label, icon, hint, variant = 'default', disa
         : 'text-slate-300 hover:bg-primary/5 hover:text-slate-100',
     ].join(' ')}
   >
-    {icon && <span className="material-symbols-outlined text-[16px] shrink-0 opacity-70">{icon}</span>}
+    {icon && <MaterialIcon name={icon} className="text-[16px] shrink-0 opacity-70" />}
     <span className="flex-1 min-w-0">
       <span className="block text-[11px] font-mono font-bold uppercase tracking-wider">{label}</span>
       {hint && <span className="block text-[10px] text-slate-600 font-mono normal-case tracking-normal mt-0.5">{hint}</span>}

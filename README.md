@@ -10,6 +10,8 @@ The design direction is deliberate rather than generic: HUD framing, grid overla
 
 - Typed React components exported from a single package entrypoint
 - Design tokens and CSS variable contracts for dark/light theming
+- Tailwind-powered global stylesheet bundled with the package
+- SVG-based Material Symbols integration without font or CDN dependencies
 - Storybook stories for components, foundations, and page-level assemblies
 - Browser-based Storybook interaction tests with Vitest and Playwright
 - Accessibility checks through Storybook a11y tooling
@@ -40,6 +42,45 @@ AEGIS is built for tactical product surfaces rather than consumer UI defaults.
 
 Primary exports live in [`src/index.ts`](./src/index.ts).
 
+## Installation
+
+```bash
+npm install @azelenets/aegis-design-system
+```
+
+Peer dependencies:
+
+- `react`
+- `react-dom`
+
+The package ships its compiled stylesheet. Import the package entry once and the styles are included automatically:
+
+```tsx
+import '@azelenets/aegis-design-system';
+```
+
+If you prefer an explicit style import, use either of these exports:
+
+```tsx
+import '@azelenets/aegis-design-system/styles.css';
+// or
+import '@azelenets/aegis-design-system/globals.css';
+```
+
+Minimal usage:
+
+```tsx
+import { Button, ThemeProvider } from '@azelenets/aegis-design-system';
+
+export function App() {
+  return (
+    <ThemeProvider>
+      <Button variant="primary">Launch</Button>
+    </ThemeProvider>
+  );
+}
+```
+
 ### Foundations
 
 - `aegisTailwindTheme`
@@ -50,7 +91,8 @@ Primary exports live in [`src/index.ts`](./src/index.ts).
 
 CSS entrypoint:
 
-- `@aegis/design-system/globals.css`
+- `@azelenets/aegis-design-system/styles.css`
+- `@azelenets/aegis-design-system/globals.css`
 
 ### Atoms
 
@@ -61,6 +103,7 @@ CSS entrypoint:
 - `Divider`
 - `Input`
 - `Kbd`
+- `MaterialIcon`
 - `RadioGroup`, `RadioOption`
 - `Rating`
 - `SearchInput`
@@ -130,6 +173,34 @@ Key foundation capabilities:
 - Reusable visual utilities for HUD and terminal presentation
 - App-level theme switching through `ThemeProvider`
 
+## Tailwind and Styling
+
+AEGIS uses Tailwind in the library build rather than a runtime CDN include.
+
+- Consumers do not need to add a Tailwind CDN script
+- The published package includes compiled CSS in `dist/index.css`
+- Utility classes used internally are already compiled into the shipped stylesheet
+- `aegisTailwindTheme` remains available for sharing token values with app-level Tailwind config
+
+## Icons
+
+Material symbols are rendered through [`MaterialIcon`](./src/components/atoms/MaterialIcon.tsx), backed by `@material-symbols-svg/react`.
+
+- Icons are SVG React components, not font glyphs
+- No Google Fonts or icon CDN dependency is required
+- Icon props across the component API use a typed `MaterialIconName` union
+- Filled variants are supported where the icon set provides them, such as `star` in `Rating`
+
+Example:
+
+```tsx
+import { MaterialIcon } from '@azelenets/aegis-design-system';
+
+export function Status() {
+  return <MaterialIcon name="warning" className="text-aegis-alert" />;
+}
+```
+
 ## Project Structure
 
 ```text
@@ -197,6 +268,7 @@ npm run test-storybook
 npm run test-storybook:watch
 npm run test-storybook:coverage
 npm run visual-test
+npm run publish:npm
 ```
 
 Meaning:
@@ -206,6 +278,7 @@ Meaning:
 - `typecheck`: TypeScript compile-time validation with `tsc --noEmit`
 - `test-storybook`: Storybook interaction suite
 - `test-storybook:coverage`: Storybook interaction suite with V8 coverage output
+- `publish:npm`: publish the package to `npmjs.org`
 
 ## Testing and Quality Gates
 
@@ -282,6 +355,5 @@ It is less about generic marketing-site components and more about structured, st
 
 ## Notes
 
-- The repo is currently private and structured as a package workspace rather than a published npm package release flow.
 - The Vite app in [`src/App.tsx`](./src/App.tsx) is a local preview shell, not the primary documentation surface.
 - Storybook remains the canonical showcase and test surface for the component library.

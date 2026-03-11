@@ -1,4 +1,5 @@
 import { memo, useId, useRef, type InputHTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 export interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;
@@ -37,9 +38,10 @@ const SearchInput = ({
       )}
       <div className="relative">
         {/* Search icon */}
-        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[16px] text-slate-500 pointer-events-none">
-          search
-        </span>
+        <MaterialIcon
+          name="search"
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-[16px] text-slate-500 pointer-events-none"
+        />
         <input
           ref={inputRef}
           id={inputId}
@@ -64,7 +66,7 @@ const SearchInput = ({
             aria-label="Clear search"
             className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-300 transition-colors"
           >
-            <span className="material-symbols-outlined text-[16px]">close</span>
+            <MaterialIcon name="close" className="text-[16px]" />
           </button>
         )}
       </div>

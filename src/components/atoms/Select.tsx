@@ -1,5 +1,6 @@
 import { memo, useId, useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 export interface SelectOption {
   value: string;
@@ -221,9 +222,9 @@ const Select = ({
                           removeValue(opt.value, e as unknown as React.MouseEvent);
                         }
                       }}
-                      className="material-symbols-outlined text-[10px] text-primary/60 hover:text-primary cursor-pointer"
+                      className="inline-flex text-[10px] text-primary/60 hover:text-primary cursor-pointer"
                     >
-                      close
+                      <MaterialIcon name="close" />
                     </span>
                   </span>
                 ))}
@@ -236,13 +237,12 @@ const Select = ({
           )}
         </button>
 
-        <span
-          className={`material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[16px] pointer-events-none transition-transform duration-150 ${
+        <MaterialIcon
+          name="keyboard_arrow_down"
+          className={`absolute right-2 top-1/2 -translate-y-1/2 text-[16px] pointer-events-none transition-transform duration-150 ${
             open ? 'rotate-180 text-primary/60' : 'text-slate-400'
           }`}
-        >
-          expand_more
-        </span>
+        />
 
         {open && createPortal(
           <ul
@@ -284,7 +284,7 @@ const Select = ({
                       }`}
                     >
                       {selected && (
-                        <span className="material-symbols-outlined text-primary text-[10px] leading-none">check</span>
+                        <MaterialIcon name="check" className="text-primary text-[10px] leading-none" />
                       )}
                     </span>
                   )}

@@ -1,20 +1,22 @@
 import { useState } from 'react';
 import type { Meta } from '@storybook/react-vite';
 import Sidebar from './Sidebar';
+import type { SidebarGroup } from './Sidebar';
 import Avatar from '@/components/atoms/Avatar';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 const meta: Meta<typeof Sidebar> = { title: 'Organisms/Sidebar', component: Sidebar, parameters: { layout: 'fullscreen' } };
 export default meta;
 
 const brand = (
   <span className="flex items-center gap-2">
-    <span className="material-symbols-outlined text-primary text-[20px]">shield</span>
+    <MaterialIcon name="shield" className="text-primary text-[20px]" />
     <span className="font-display font-bold text-white text-xs tracking-widest">AEGIS</span>
   </span>
 );
 
-const groups = [
+const groups: SidebarGroup[] = [
   {
     items: [
       { id: 'dashboard', label: 'Dashboard',   icon: 'dashboard',    active: true },
@@ -46,7 +48,7 @@ export const Default = {
 export const Collapsed = {
   render: () => (
     <div className="h-screen flex">
-      <Sidebar brand={<span className="material-symbols-outlined text-primary text-[20px]">shield</span>} groups={groups} footer={footer} collapsed />
+      <Sidebar brand={<MaterialIcon name="shield" className="text-primary text-[20px]" />} groups={groups} footer={footer} collapsed />
       <main className="flex-1 p-8 text-xs font-mono text-slate-400">Main content area</main>
     </div>
   ),
@@ -57,7 +59,7 @@ export const Toggleable = {
     const [collapsed, setCollapsed] = useState(false);
     return (
       <div className="h-screen flex">
-        <Sidebar brand={collapsed ? <span className="material-symbols-outlined text-primary text-[20px]">shield</span> : brand} groups={groups} collapsed={collapsed}
+        <Sidebar brand={collapsed ? <MaterialIcon name="shield" className="text-primary text-[20px]" /> : brand} groups={groups} collapsed={collapsed}
           footer={<Button variant="ghost" size="sm" icon={collapsed ? 'chevron_right' : 'chevron_left'} onClick={() => setCollapsed((v) => !v)}>{collapsed ? '' : 'Collapse'}</Button>}
         />
         <main className="flex-1 p-8 text-xs font-mono text-slate-400">Click footer button to toggle sidebar.</main>

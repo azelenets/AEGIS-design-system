@@ -1,4 +1,6 @@
 import { memo, type ReactNode, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -23,7 +25,7 @@ export interface TableProps<T extends Record<string, unknown>> extends Omit<HTML
   onSort?: (key: string, dir: SortDirection) => void;
   striped?: boolean;
   emptyLabel?: string;
-  emptyIcon?: string;
+  emptyIcon?: MaterialIconName;
   caption?: string;
 }
 
@@ -99,11 +101,7 @@ const TableInner = <T extends Record<string, unknown>>({
                   <span className="inline-flex items-center gap-1">
                     {col.header}
                     {col.sortable && (
-                      <span
-                        className={`material-symbols-outlined text-[12px] ${isSorted ? 'text-primary' : 'opacity-30'}`}
-                      >
-                        {sortIcon}
-                      </span>
+                      <MaterialIcon name={sortIcon} className={`text-[12px] ${isSorted ? 'text-primary' : 'opacity-30'}`} />
                     )}
                   </span>
                 </th>
@@ -116,7 +114,7 @@ const TableInner = <T extends Record<string, unknown>>({
             <tr>
               <td colSpan={columns.length} className="px-4 py-12 text-center">
                 <div className="flex flex-col items-center gap-2 text-slate-400">
-                  <span className="material-symbols-outlined text-[32px]">{emptyIcon}</span>
+                  <MaterialIcon name={emptyIcon} className="text-[32px]" />
                   <span className="text-[10px] uppercase tracking-widest">{emptyLabel}</span>
                 </div>
               </td>

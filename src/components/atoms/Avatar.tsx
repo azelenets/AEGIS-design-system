@@ -1,4 +1,6 @@
 import { memo, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarVariant = 'primary' | 'hazard' | 'alert' | 'ghost';
@@ -7,7 +9,7 @@ export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
   src?: string;
   alt?: string;
   initials?: string;
-  icon?: string;
+  icon?: MaterialIconName;
   size?: AvatarSize;
   variant?: AvatarVariant;
   status?: 'online' | 'offline' | 'busy';
@@ -60,11 +62,11 @@ const Avatar = ({
         {src ? (
           <img src={src} alt={alt} className="w-full h-full object-cover" />
         ) : icon ? (
-          <span className={`material-symbols-outlined ${sizes.icon}`}>{icon}</span>
+          <MaterialIcon name={icon} className={sizes.icon} />
         ) : initials ? (
           <span className={sizes.text}>{initials.slice(0, 2).toUpperCase()}</span>
         ) : (
-          <span className={`material-symbols-outlined ${sizes.icon}`}>person</span>
+          <MaterialIcon name="person" className={sizes.icon} />
         )}
       </span>
       {status && (

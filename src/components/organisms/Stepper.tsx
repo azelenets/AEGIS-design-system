@@ -1,4 +1,6 @@
 import { memo, type ReactNode, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 export type StepStatus = 'pending' | 'active' | 'complete' | 'error';
 export type StepperOrientation = 'horizontal' | 'vertical';
@@ -20,7 +22,7 @@ export interface StepperProps extends HTMLAttributes<HTMLDivElement> {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const ICON: Record<StepStatus, string> = {
+const ICON: Record<StepStatus, MaterialIconName> = {
   pending:  'radio_button_unchecked',
   active:   'adjust',
   complete: 'check_circle',
@@ -79,12 +81,10 @@ const Stepper = ({
                     aria-label={`Go to step ${i + 1}: ${step.title}`}
                     className={`shrink-0 transition-colors hover:text-white focus:outline-none focus-visible:text-white ${ICON_COLOR[step.status]}`}
                   >
-                    <span className="material-symbols-outlined text-[22px]">{ICON[step.status]}</span>
+                    <MaterialIcon name={ICON[step.status]} className="text-[22px]" />
                   </button>
                 ) : (
-                  <span className={`material-symbols-outlined text-[22px] shrink-0 ${ICON_COLOR[step.status]}`}>
-                    {ICON[step.status]}
-                  </span>
+                  <MaterialIcon name={ICON[step.status]} className={`text-[22px] shrink-0 ${ICON_COLOR[step.status]}`} />
                 )}
                 {!isLast && (
                   <div className={`w-px flex-1 min-h-[1.5rem] mt-1 mb-1 ${LINE_COLOR[step.status]}`} />
@@ -148,16 +148,14 @@ const Stepper = ({
                   aria-label={`Go to step ${i + 1}: ${step.title}`}
                   className={`z-10 flex flex-col items-center bg-bg-dark px-1 transition-colors hover:text-white focus:outline-none focus-visible:text-white ${ICON_COLOR[step.status]}`}
                 >
-                  <span className="material-symbols-outlined text-[22px]">{ICON[step.status]}</span>
+                  <MaterialIcon name={ICON[step.status]} className="text-[22px]" />
                   <span className={`text-[9px] font-bold uppercase tracking-widest font-mono text-center mt-1.5 ${TITLE_COLOR[step.status]}`}>
                     {step.title}
                   </span>
                 </button>
               ) : (
                 <>
-                  <span className={`material-symbols-outlined text-[22px] z-10 bg-bg-dark ${ICON_COLOR[step.status]}`}>
-                    {ICON[step.status]}
-                  </span>
+                  <MaterialIcon name={ICON[step.status]} className={`text-[22px] z-10 bg-bg-dark ${ICON_COLOR[step.status]}`} />
                   <p className={`text-[9px] font-bold uppercase tracking-widest font-mono text-center mt-1.5 px-1 ${TITLE_COLOR[step.status]}`}>
                     {step.title}
                   </p>

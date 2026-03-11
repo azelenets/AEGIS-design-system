@@ -11,6 +11,8 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 import { aegisLayers } from '@/foundations/layers';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -34,7 +36,7 @@ interface ToastCtx {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const VARIANT_CONFIG: Record<ToastVariant, { border: string; icon: string; iconColor: string; titleColor: string; bg: string }> = {
+const VARIANT_CONFIG: Record<ToastVariant, { border: string; icon: MaterialIconName; iconColor: string; titleColor: string; bg: string }> = {
   info:    { border: 'border-primary/30',       bg: 'bg-panel-dark',  icon: 'info',         iconColor: 'text-primary',     titleColor: 'text-primary' },
   success: { border: 'border-emerald-400/30',   bg: 'bg-panel-dark',  icon: 'check_circle', iconColor: 'text-emerald-400', titleColor: 'text-emerald-400' },
   warning: { border: 'border-hazard/30',        bg: 'bg-panel-dark',  icon: 'warning',      iconColor: 'text-hazard',      titleColor: 'text-hazard' },
@@ -76,7 +78,7 @@ const ToastItem = memo(({ data, onDismiss }: { data: ToastData; onDismiss: (id: 
 
   return (
     <div className={`flex items-start gap-3 w-80 max-w-[calc(100vw-2rem)] border ${cfg.border} ${cfg.bg} p-4 shadow-xl`}>
-      <span className={`material-symbols-outlined text-[20px] shrink-0 mt-0.5 ${cfg.iconColor}`}>{cfg.icon}</span>
+      <MaterialIcon name={cfg.icon} className={`text-[20px] shrink-0 mt-0.5 ${cfg.iconColor}`} />
       <div className="flex-1 min-w-0">
         {data.title && (
           <p className={`text-[10px] font-bold uppercase tracking-widest font-mono mb-0.5 ${cfg.titleColor}`}>{data.title}</p>
@@ -90,7 +92,7 @@ const ToastItem = memo(({ data, onDismiss }: { data: ToastData; onDismiss: (id: 
         size="sm"
         className="shrink-0 min-w-0 border-0 px-1 py-1 text-slate-700 hover:text-slate-300"
       >
-        <span className="material-symbols-outlined text-[16px]">close</span>
+        <MaterialIcon name="close" className="text-[16px]" />
       </Button>
     </div>
   );

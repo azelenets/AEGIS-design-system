@@ -1,11 +1,13 @@
 import { memo, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 export type TagVariant = 'primary' | 'hazard' | 'alert' | 'ghost' | 'success';
 
 export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   label: string;
   variant?: TagVariant;
-  icon?: string;
+  icon?: MaterialIconName;
   onRemove?: () => void;
 }
 
@@ -21,7 +23,7 @@ const Tag = ({ label, variant = 'ghost', icon, onRemove, className = '', ...rest
   const v = VARIANT[variant];
   return (
     <span {...rest} className={['inline-flex items-center gap-1 pl-2', onRemove ? 'pr-1' : 'pr-2', `py-0.5 text-[10px] font-bold uppercase tracking-wider font-mono border ${v.tag}`, className].filter(Boolean).join(' ')}>
-      {icon && <span className="material-symbols-outlined text-[12px]">{icon}</span>}
+      {icon && <MaterialIcon name={icon} className="text-[12px]" />}
       {label}
       {onRemove && (
         <button
@@ -30,7 +32,7 @@ const Tag = ({ label, variant = 'ghost', icon, onRemove, className = '', ...rest
           aria-label={`Remove ${label}`}
           className={`ml-0.5 text-current opacity-50 ${v.remove} transition-colors`}
         >
-          <span className="material-symbols-outlined text-[12px]">close</span>
+          <MaterialIcon name="close" className="text-[12px]" />
         </button>
       )}
     </span>

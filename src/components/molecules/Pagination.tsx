@@ -1,5 +1,6 @@
 import { memo, type HTMLAttributes } from 'react';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
   page: number;
@@ -61,13 +62,13 @@ const Pagination = ({ page, total, siblings = 1, onChange, showEdges = true, cla
 
   return (
     <nav {...rest} aria-label="Pagination" className={['flex items-center gap-1 flex-wrap', className].filter(Boolean).join(' ')}>
-      {btn(<span className="material-symbols-outlined text-[14px]">chevron_left</span>, prev ? page - 1 : null, false, !prev, 'pagination-prev')}
+      {btn(<MaterialIcon name="chevron_left" className="text-[14px]" />, prev ? page - 1 : null, false, !prev, 'pagination-prev')}
       {pages.map((p, i) =>
         p === '…'
           ? <span key={`ellipsis-${i}`} className="flex items-end justify-center w-8 h-8 pb-1 text-slate-400 font-mono text-xs">···</span>
           : btn(p, p as number, p === page, false, `page-${p}`),
       )}
-      {btn(<span className="material-symbols-outlined text-[14px]">chevron_right</span>, next ? page + 1 : null, false, !next, 'pagination-next')}
+      {btn(<MaterialIcon name="chevron_right" className="text-[14px]" />, next ? page + 1 : null, false, !next, 'pagination-next')}
     </nav>
   );
 };

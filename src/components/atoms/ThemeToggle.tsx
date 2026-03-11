@@ -1,4 +1,6 @@
 import { memo, type ButtonHTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 import { useTheme, type Theme } from '@/foundations/ThemeContext';
 
 export type ThemeToggleSize    = 'sm' | 'md' | 'lg';
@@ -29,7 +31,7 @@ const SIZE_TEXT: Record<ThemeToggleSize, string> = {
   lg: 'text-[11px]',
 };
 
-const THEME_META: Record<Theme, { icon: string; label: string; next: string }> = {
+const THEME_META: Record<Theme, { icon: MaterialIconName; label: string; next: string }> = {
   dark:  { icon: 'light_mode',  label: 'Light',  next: 'Switch to light mode' },
   light: { icon: 'dark_mode',   label: 'Dark',   next: 'Switch to dark mode'  },
 };
@@ -54,7 +56,7 @@ const ThemeToggle = ({ size = 'md', variant = 'button', className = '', ...rest 
           className,
         ].filter(Boolean).join(' ')}
       >
-        <span className={`material-symbols-outlined ${SIZE_ICON[size]}`}>{meta.icon}</span>
+        <MaterialIcon name={meta.icon} className={SIZE_ICON[size]} />
       </button>
     );
   }
@@ -102,7 +104,7 @@ const ThemeToggle = ({ size = 'md', variant = 'button', className = '', ...rest 
         className,
       ].filter(Boolean).join(' ')}
     >
-      <span className={`material-symbols-outlined ${SIZE_ICON[size]}`}>{meta.icon}</span>
+      <MaterialIcon name={meta.icon} className={SIZE_ICON[size]} />
       <span className={['font-mono font-bold uppercase tracking-widest', SIZE_TEXT[size]].join(' ')}>
         {meta.label}
       </span>

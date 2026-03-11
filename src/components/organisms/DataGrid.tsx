@@ -1,6 +1,8 @@
 import { memo, useState, useMemo, useCallback, useEffect, useRef, Fragment, useDeferredValue, type ReactNode, type ChangeEvent, type HTMLAttributes } from 'react';
 import Button from '@/components/atoms/Button';
 import Checkbox from '@/components/atoms/Checkbox';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 import { RadioOption } from '@/components/atoms/Radio';
 import SearchInput from '@/components/atoms/SearchInput';
 import Pagination from '@/components/molecules/Pagination';
@@ -44,7 +46,7 @@ export interface DataGridProps<T extends Record<string, unknown>> extends Omit<H
   searchable?: boolean;
   caption?: string;
   emptyLabel?: string;
-  emptyIcon?: string;
+  emptyIcon?: MaterialIconName;
   className?: string;
 }
 
@@ -60,7 +62,7 @@ const CELL_PAD: Record<DGDensity, string> = {
   comfortable: 'py-5',
 };
 
-const DENSITY_ICON: Record<DGDensity, string> = {
+const DENSITY_ICON: Record<DGDensity, MaterialIconName> = {
   compact:     'density_small',
   default:     'density_medium',
   comfortable: 'density_large',
@@ -291,7 +293,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
               size="sm"
               className={['min-w-0 border-0 px-1 py-1', density === d ? 'text-primary' : 'text-slate-400 hover:text-slate-300'].join(' ')}
             >
-              <span className="material-symbols-outlined text-[16px]">{DENSITY_ICON[d]}</span>
+              <MaterialIcon name={DENSITY_ICON[d]} className="text-[16px]" />
             </Button>
           ))}
 
@@ -304,7 +306,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
               size="sm"
               className={['min-w-0 border-0 px-1 py-1', showFilters || hasFiltersSet ? 'text-primary' : 'text-slate-400 hover:text-slate-300'].join(' ')}
             >
-              <span className="material-symbols-outlined text-[16px]">filter_list</span>
+              <MaterialIcon name="filter_list" className="text-[16px]" />
             </Button>
           )}
 
@@ -317,7 +319,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
               size="sm"
               className={['min-w-0 border-0 px-1 py-1', colPanelOpen || hiddenCols.size > 0 ? 'text-primary' : 'text-slate-400 hover:text-slate-300'].join(' ')}
             >
-              <span className="material-symbols-outlined text-[16px]">view_column</span>
+              <MaterialIcon name="view_column" className="text-[16px]" />
             </Button>
             {colPanelOpen && (
               <div className="absolute right-0 top-full mt-1 z-50 flex min-w-[160px] flex-col items-stretch bg-panel-dark py-1 text-left border border-border-dark">
@@ -335,9 +337,10 @@ const DataGridInner = <T extends Record<string, unknown>>({
                       size="sm"
                       className="flex w-full items-center justify-start gap-2 self-stretch border-0 px-3 py-1.5 text-left text-[11px] normal-case tracking-normal hover:bg-primary/10"
                     >
-                      <span className={`material-symbols-outlined text-[14px] ${visible ? 'text-primary' : 'text-slate-400'}`}>
-                        {visible ? 'check_box' : 'check_box_outline_blank'}
-                      </span>
+                      <MaterialIcon
+                        name={visible ? 'check_box' : 'check_box_outline_blank'}
+                        className={`text-[14px] ${visible ? 'text-primary' : 'text-slate-400'}`}
+                      />
                       <span className={`flex-1 text-left ${visible ? 'text-slate-300' : 'text-slate-400'}`}>{col.header}</span>
                     </Button>
                   );
@@ -400,9 +403,10 @@ const DataGridInner = <T extends Record<string, unknown>>({
                     <span className="inline-flex items-center gap-1">
                       {col.header}
                       {col.sortable && (
-                        <span className={`material-symbols-outlined text-[12px] ${isSorted ? 'text-primary' : 'opacity-30'}`}>
-                          {isSorted ? (sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward') : 'unfold_more'}
-                        </span>
+                        <MaterialIcon
+                          name={isSorted ? (sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward') : 'unfold_more'}
+                          className={`text-[12px] ${isSorted ? 'text-primary' : 'opacity-30'}`}
+                        />
                       )}
                     </span>
                   </th>
@@ -443,7 +447,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
               <tr>
                 <td colSpan={totalCols} className="px-4 py-12 text-center">
                   <div className="flex flex-col items-center gap-2 text-slate-400">
-                    <span className="material-symbols-outlined text-[32px]">{emptyIcon}</span>
+                    <MaterialIcon name={emptyIcon} className="text-[32px]" />
                     <span className="text-[10px] uppercase tracking-widest">{emptyLabel}</span>
                   </div>
                 </td>
@@ -473,9 +477,10 @@ const DataGridInner = <T extends Record<string, unknown>>({
                             size="sm"
                             className="min-w-0 border-0 px-1 py-1 text-slate-400 hover:text-primary"
                           >
-                            <span className="material-symbols-outlined text-[16px]">
-                              {isExpanded ? 'expand_less' : 'expand_more'}
-                            </span>
+                            <MaterialIcon
+                              name="keyboard_arrow_down"
+                              className={`text-[16px] transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                            />
                           </Button>
                         </td>
                       )}

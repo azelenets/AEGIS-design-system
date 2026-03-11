@@ -1,5 +1,6 @@
 import { memo, useState, type ReactNode, type HTMLAttributes } from 'react';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 export type AccordionVariant = 'default' | 'flush';
 
@@ -57,11 +58,10 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
                 .join(' ')}
             >
               <span>{item.trigger}</span>
-              <span
-                className={`material-symbols-outlined text-[18px] shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                >
-                  expand_more
-                </span>
+              <MaterialIcon
+                name="expand_more"
+                className={`text-[18px] shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+              />
             </Button>
 
             {/* Panel */}

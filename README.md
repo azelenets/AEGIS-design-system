@@ -10,6 +10,9 @@ The design direction is deliberate rather than generic: HUD framing, grid overla
 
 - Typed React components exported from a single package entrypoint
 - Design tokens and CSS variable contracts for dark/light theming
+- Tailwind-powered global stylesheet bundled with the package
+- Optional bundled local font assets for AEGIS display and mono typography
+- SVG-based Material Symbols integration without font or CDN dependencies
 - Storybook stories for components, foundations, and page-level assemblies
 - Browser-based Storybook interaction tests with Vitest and Playwright
 - Accessibility checks through Storybook a11y tooling
@@ -40,6 +43,168 @@ AEGIS is built for tactical product surfaces rather than consumer UI defaults.
 
 Primary exports live in [`src/index.ts`](./src/index.ts).
 
+## Installation
+
+```bash
+npm install @azelenets/aegis-design-system
+```
+
+Peer dependencies:
+
+- `react`
+- `react-dom`
+
+The package ships its compiled core stylesheet. Import the package entry once and the component styles are included automatically:
+
+```tsx
+import '@azelenets/aegis-design-system';
+```
+
+To load the bundled AEGIS fonts as well, import the optional font stylesheet:
+
+```tsx
+import '@azelenets/aegis-design-system/fonts.css';
+```
+
+That keeps the default bundle smaller for consumers who do not need the exact design-system typography.
+
+If you prefer an explicit style import, use either of these exports:
+
+```tsx
+import '@azelenets/aegis-design-system/styles.css';
+// or
+import '@azelenets/aegis-design-system/globals.css';
+```
+
+Minimal usage:
+
+```tsx
+import { Button, ThemeProvider } from '@azelenets/aegis-design-system';
+
+export function App() {
+  return (
+    <ThemeProvider>
+      <Button variant="primary">Launch</Button>
+    </ThemeProvider>
+  );
+}
+```
+
+## Usage Examples
+
+App setup with optional fonts:
+
+```tsx
+import '@azelenets/aegis-design-system/fonts.css';
+import {
+  ThemeProvider,
+  ThemeToggle,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+} from '@azelenets/aegis-design-system';
+
+export function App() {
+  return (
+    <ThemeProvider defaultTheme="dark">
+      <main className="min-h-screen bg-bg-dark p-6">
+        <div className="mb-4 flex justify-end">
+          <ThemeToggle />
+        </div>
+        <Card variant="default">
+          <CardHeader title="Mission Control" eyebrow="AEGIS" />
+          <CardBody>
+            <Button variant="primary">Launch Sequence</Button>
+          </CardBody>
+        </Card>
+      </main>
+    </ThemeProvider>
+  );
+}
+```
+
+Explicit stylesheet imports:
+
+```tsx
+import '@azelenets/aegis-design-system/styles.css';
+import '@azelenets/aegis-design-system/fonts.css';
+```
+
+Typed icon usage:
+
+```tsx
+import { MaterialIcon, Tag } from '@azelenets/aegis-design-system';
+
+export function ThreatStatus() {
+  return (
+    <div className="flex items-center gap-2">
+      <MaterialIcon name="warning" className="text-alert text-[18px]" />
+      <Tag label="Critical" variant="hazard" />
+    </div>
+  );
+}
+```
+
+Data grid usage:
+
+```tsx
+import { DataGrid, type DataGridColumn } from '@azelenets/aegis-design-system';
+
+type Operator = {
+  id: string;
+  callSign: string;
+  sector: string;
+};
+
+const columns: DataGridColumn<Operator>[] = [
+  { key: 'id', header: 'ID', sortable: true },
+  { key: 'callSign', header: 'Call Sign', sortable: true },
+  { key: 'sector', header: 'Sector' },
+];
+
+const rows: Operator[] = [
+  { id: 'OP-001', callSign: 'GHOST', sector: 'Alpha-7' },
+  { id: 'OP-002', callSign: 'RAVEN', sector: 'Delta-3' },
+];
+
+export function OperatorsTable() {
+  return (
+    <DataGrid
+      columns={columns}
+      data={rows}
+      keyField="id"
+      searchable
+      caption="AEGIS // Operator Registry"
+    />
+  );
+}
+```
+
+Map usage:
+
+```tsx
+import { Map, type MapMarker } from '@azelenets/aegis-design-system';
+
+const markers: MapMarker[] = [
+  { id: 'alpha', lat: 51.5007, lng: -0.1246, title: 'Alpha Node' },
+  { id: 'beta', lat: 51.5081, lng: -0.0759, title: 'Beta Node' },
+];
+
+export function TacticalMap() {
+  return (
+    <Map
+      ariaLabel="AEGIS tactical map"
+      center={[51.505, -0.09]}
+      zoom={12}
+      markers={markers}
+      fitMarkers
+      height={420}
+    />
+  );
+}
+```
+
 ### Foundations
 
 - `aegisTailwindTheme`
@@ -50,7 +215,9 @@ Primary exports live in [`src/index.ts`](./src/index.ts).
 
 CSS entrypoint:
 
-- `@aegis/design-system/globals.css`
+- `@azelenets/aegis-design-system/styles.css`
+- `@azelenets/aegis-design-system/globals.css`
+- `@azelenets/aegis-design-system/fonts.css`
 
 ### Atoms
 
@@ -61,6 +228,7 @@ CSS entrypoint:
 - `Divider`
 - `Input`
 - `Kbd`
+- `MaterialIcon`
 - `RadioGroup`, `RadioOption`
 - `Rating`
 - `SearchInput`
@@ -130,6 +298,44 @@ Key foundation capabilities:
 - Reusable visual utilities for HUD and terminal presentation
 - App-level theme switching through `ThemeProvider`
 
+## Tailwind and Styling
+
+AEGIS uses Tailwind in the library build rather than a runtime CDN include.
+
+- Consumers do not need to add a Tailwind CDN script
+- The published package includes compiled CSS in `dist/index.css`
+- The optional `dist/fonts.css` export carries the bundled font-face declarations
+- Utility classes used internally are already compiled into the shipped stylesheet
+- `aegisTailwindTheme` remains available for sharing token values with app-level Tailwind config
+
+## Typography Assets
+
+The design system ships an optional local font bundle for the families used by the component system:
+
+- `Orbitron`
+- `JetBrains Mono`
+
+These fonts are loaded through local `@font-face` declarations in [`fonts.css`](./src/foundations/fonts.css). No Google Fonts dependency is required in either the library or Storybook.
+
+## Icons
+
+Material symbols are rendered through [`MaterialIcon`](./src/components/atoms/MaterialIcon.tsx), backed by `@material-symbols-svg/react`.
+
+- Icons are SVG React components, not font glyphs
+- No Google Fonts or icon CDN dependency is required
+- Icon props across the component API use a typed `MaterialIconName` union
+- Filled variants are supported where the icon set provides them, such as `star` in `Rating`
+
+Example:
+
+```tsx
+import { MaterialIcon } from '@azelenets/aegis-design-system';
+
+export function Status() {
+  return <MaterialIcon name="warning" className="text-aegis-alert" />;
+}
+```
+
 ## Project Structure
 
 ```text
@@ -197,6 +403,7 @@ npm run test-storybook
 npm run test-storybook:watch
 npm run test-storybook:coverage
 npm run visual-test
+npm run publish:npm
 ```
 
 Meaning:
@@ -206,6 +413,7 @@ Meaning:
 - `typecheck`: TypeScript compile-time validation with `tsc --noEmit`
 - `test-storybook`: Storybook interaction suite
 - `test-storybook:coverage`: Storybook interaction suite with V8 coverage output
+- `publish:npm`: publish the package to `npmjs.org`
 
 ## Testing and Quality Gates
 
@@ -282,6 +490,5 @@ It is less about generic marketing-site components and more about structured, st
 
 ## Notes
 
-- The repo is currently private and structured as a package workspace rather than a published npm package release flow.
 - The Vite app in [`src/App.tsx`](./src/App.tsx) is a local preview shell, not the primary documentation surface.
 - Storybook remains the canonical showcase and test surface for the component library.

@@ -3,6 +3,8 @@ import {
   Children, type ReactNode, type HTMLAttributes,
 } from 'react';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -86,7 +88,7 @@ const Carousel = ({
   const atStart = !loop && active === 0;
   const atEnd   = !loop && active === count - 1;
 
-  const arrowBtn = (onClick: () => void, disabled: boolean, icon: string, label: string) => (
+  const arrowBtn = (onClick: () => void, disabled: boolean, icon: MaterialIconName, label: string) => (
     <Button
       onClick={onClick}
       disabled={disabled}
@@ -102,7 +104,7 @@ const Carousel = ({
         disabled ? 'opacity-30 cursor-not-allowed pointer-events-none' : '',
       ].filter(Boolean).join(' ')}
     >
-      <span className="material-symbols-outlined text-[18px]">{icon}</span>
+      <MaterialIcon name={icon} className="text-[18px]" />
     </Button>
   );
 

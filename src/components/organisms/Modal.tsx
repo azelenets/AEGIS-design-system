@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 import { aegisLayers } from '@/foundations/layers';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -91,7 +92,7 @@ export const ModalHeader = memo(({ title, eyebrow, onClose, variant = 'primary',
         size="sm"
         className="shrink-0 min-w-0 border-0 px-1 py-1 text-slate-600 hover:text-slate-200 mt-0.5"
       >
-        <span className="material-symbols-outlined text-[20px]">close</span>
+        <MaterialIcon name="close" className="text-[20px]" />
       </Button>
     )}
   </div>

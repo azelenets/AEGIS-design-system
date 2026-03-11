@@ -1,4 +1,6 @@
 import { memo, useMemo, type ReactNode, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -7,7 +9,7 @@ export type BreadcrumbSeparator = 'slash' | 'chevron' | 'dot' | 'arrow';
 export interface BreadcrumbItem {
   label: string;
   href?: string;
-  icon?: string;
+  icon?: MaterialIconName;
 }
 
 export interface BreadcrumbsProps extends HTMLAttributes<HTMLElement> {
@@ -20,9 +22,9 @@ export interface BreadcrumbsProps extends HTMLAttributes<HTMLElement> {
 
 const SEPARATOR_CONTENT: Record<BreadcrumbSeparator, ReactNode> = {
   slash:   <span className="text-slate-400 font-mono">/</span>,
-  chevron: <span className="material-symbols-outlined text-[12px] text-slate-400">chevron_right</span>,
+  chevron: <MaterialIcon name="chevron_right" className="text-[12px] text-slate-400" />,
   dot:     <span className="w-1 h-1 rounded-full bg-slate-400 mt-px" />,
-  arrow:   <span className="material-symbols-outlined text-[12px] text-slate-400">arrow_forward</span>,
+  arrow:   <MaterialIcon name="arrow_forward" className="text-[12px] text-slate-400" />,
 };
 
 // ─── Breadcrumbs ──────────────────────────────────────────────────────────────
@@ -63,7 +65,7 @@ const Breadcrumbs = ({ items, separator = 'chevron', maxItems, className, ...res
                   className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest font-mono text-primary"
                 >
                   {item.icon && (
-                    <span className="material-symbols-outlined text-[13px]">{item.icon}</span>
+                    <MaterialIcon name={item.icon} className="text-[13px]" />
                   )}
                   {item.label}
                 </span>
@@ -73,14 +75,14 @@ const Breadcrumbs = ({ items, separator = 'chevron', maxItems, className, ...res
                   className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest font-mono text-slate-400 hover:text-slate-200 transition-colors"
                 >
                   {item.icon && (
-                    <span className="material-symbols-outlined text-[13px]">{item.icon}</span>
+                    <MaterialIcon name={item.icon} className="text-[13px]" />
                   )}
                   {item.label}
                 </a>
               ) : (
                 <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest font-mono text-slate-400">
                   {item.icon && (
-                    <span className="material-symbols-outlined text-[13px]">{item.icon}</span>
+                    <MaterialIcon name={item.icon} className="text-[13px]" />
                   )}
                   {item.label}
                 </span>

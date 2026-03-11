@@ -1,11 +1,13 @@
 import { memo, type ReactNode, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 import { aegisLayers } from '@/foundations/layers';
 
 export interface NavItem {
   id: string;
   label: string;
   href?: string;
-  icon?: string;
+  icon?: MaterialIconName;
   active?: boolean;
   badge?: string;
 }
@@ -49,7 +51,7 @@ const Navbar = ({ brand, items = [], actions, sticky = true, onNavClick, classNa
                   : 'text-slate-400 border-transparent hover:text-slate-300 hover:border-slate-600',
               ].join(' ')}
             >
-              {item.icon && <span className="material-symbols-outlined text-[15px]">{item.icon}</span>}
+              {item.icon && <MaterialIcon name={item.icon} className="text-[15px]" />}
               {item.label}
               {item.badge && (
                 <span className="ml-1 px-1 py-0.5 text-[8px] font-bold bg-primary/15 text-primary border border-primary/30">

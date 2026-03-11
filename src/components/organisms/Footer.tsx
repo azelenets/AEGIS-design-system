@@ -1,10 +1,12 @@
 import { memo, type ReactNode, type HTMLAttributes } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
+import type { MaterialIconName } from '@/components/atoms/MaterialIcon';
 
 export interface FooterLink {
   id: string;
   label: string;
   href?: string;
-  icon?: string;
+  icon?: MaterialIconName;
   onClick?: () => void;
 }
 
@@ -59,7 +61,7 @@ const Footer = ({ brand, tagline, groups = [], bottom, copyright, className = ''
                           className="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-400 hover:text-slate-200 transition-colors"
                         >
                           {link.icon && (
-                            <span className="material-symbols-outlined text-[13px]">{link.icon}</span>
+                            <MaterialIcon name={link.icon} className="text-[13px]" />
                           )}
                           {link.label}
                         </Tag>

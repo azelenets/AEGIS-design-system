@@ -1,6 +1,7 @@
 import type { Meta } from '@storybook/react-vite';
 import Badge from '@/components/atoms/Badge';
 import Button from '@/components/atoms/Button';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 import Skeleton from '@/components/atoms/Skeleton';
 import { CardBody, CardHeader, default as Card } from '@/components/molecules/Card';
 import Stack from '@/components/layout/Stack';
@@ -37,11 +38,11 @@ export const AllAnimations = {
 
       <div className="grid gap-4 md:grid-cols-2">
         <DemoCard label="animate-spin" hint="Tailwind built-in // 1s">
-          <span className="material-symbols-outlined text-primary text-[24px] animate-spin">refresh</span>
+          <MaterialIcon name="refresh" className="text-primary text-[24px] animate-spin" />
         </DemoCard>
 
         <DemoCard label="animate-spin-slow" hint="Custom // 20s linear infinite">
-          <span className="material-symbols-outlined text-primary/60 text-[24px] animate-spin-slow">radar</span>
+          <MaterialIcon name="radar" className="text-primary/60 text-[24px] animate-spin-slow" />
         </DemoCard>
 
         <DemoCard label="animate-pulse" hint="Tailwind built-in // 2s">
@@ -62,12 +63,11 @@ export const AllAnimations = {
         </DemoCard>
 
         <DemoCard label="aegis-spin-progress" hint="globals.css // circular spinner">
-          <span
-            className="material-symbols-outlined text-primary text-[24px]"
+          <MaterialIcon
+            name="progress_activity"
+            className="text-primary text-[24px]"
             style={{ animation: 'aegis-spin-progress 1.4s linear infinite' }}
-          >
-            progress_activity
-          </span>
+          />
         </DemoCard>
 
         <DemoCard label="aegis-shimmer" hint="globals.css // skeleton shimmer">

@@ -23,6 +23,9 @@ export default defineConfig({
         plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
         test: {
           name: 'storybook',
+          fileParallelism: false,
+          maxWorkers: 1,
+          minWorkers: 1,
           browser: {
             enabled: true,
             headless: true,

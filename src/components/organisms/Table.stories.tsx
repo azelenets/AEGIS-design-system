@@ -136,9 +136,10 @@ export const Empty: Story = {
   ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const emptyIcon = canvasElement.querySelector('svg.material-symbols_person_off');
 
     await expect(canvas.getByText('No operators on record')).toBeVisible();
-    await expect(canvas.getByText('person_off')).toBeVisible();
+    await expect(emptyIcon).toBeInTheDocument();
   },
 };
 

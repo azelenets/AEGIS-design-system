@@ -1,4 +1,5 @@
 import { memo, type InputHTMLAttributes, useId } from 'react';
+import MaterialIcon from '@/components/atoms/MaterialIcon';
 
 export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;
@@ -44,13 +45,13 @@ const Checkbox = ({ label, hint, indeterminate, id, className = '', ...rest }: C
           {/* Check mark — visible when checked and not indeterminate */}
           <span
             className={[
-              'material-symbols-outlined text-primary text-[12px] transition-opacity',
+              'text-primary text-[12px] transition-opacity',
               indeterminate
                 ? 'hidden'
                 : 'opacity-0 group-has-[input:checked]/box:opacity-100',
             ].join(' ')}
           >
-            check
+            <MaterialIcon name="check" />
           </span>
           {/* Dash — visible when indeterminate */}
           {indeterminate && (

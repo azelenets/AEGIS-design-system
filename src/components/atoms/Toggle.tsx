@@ -11,10 +11,10 @@ export interface ToggleProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   labelPosition?: 'right' | 'left';
 }
 
-const SIZE: Record<ToggleSize, { track: string; thumb: string; translate: string }> = {
-  sm: { track: 'w-7 h-4',   thumb: 'w-2.5 h-2.5 top-[3px] left-[3px]', translate: 'translate-x-3' },
-  md: { track: 'w-9 h-5',   thumb: 'w-3 h-3 top-[4px] left-[4px]',     translate: 'translate-x-4' },
-  lg: { track: 'w-11 h-6',  thumb: 'w-4 h-4 top-[4px] left-[4px]',     translate: 'translate-x-5' },
+const SIZE: Record<ToggleSize, { track: string; thumb: string; checkedThumb: string }> = {
+  sm: { track: 'w-7 h-4',   thumb: 'w-2.5 h-2.5 top-[3px] left-[3px]', checkedThumb: 'group-has-[input:checked]/box:translate-x-3' },
+  md: { track: 'w-9 h-5',   thumb: 'w-3 h-3 top-[4px] left-[4px]',     checkedThumb: 'group-has-[input:checked]/box:translate-x-4' },
+  lg: { track: 'w-11 h-6',  thumb: 'w-4 h-4 top-[4px] left-[4px]',     checkedThumb: 'group-has-[input:checked]/box:translate-x-5' },
 };
 
 const VARIANT_TRACK: Record<ToggleVariant, string> = {
@@ -59,8 +59,8 @@ const Toggle = ({
       {/* Thumb */}
       <span
         className={[
-          'absolute rounded-full bg-slate-500 transition-all',
-          `group-has-[input:checked]/box:${s.translate}`,
+          'absolute rounded-full bg-slate-500 transition-transform',
+          s.checkedThumb,
           VARIANT_THUMB[variant],
           s.thumb,
         ].join(' ')}

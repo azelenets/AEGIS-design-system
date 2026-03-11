@@ -11,6 +11,7 @@ The design direction is deliberate rather than generic: HUD framing, grid overla
 - Typed React components exported from a single package entrypoint
 - Design tokens and CSS variable contracts for dark/light theming
 - Tailwind-powered global stylesheet bundled with the package
+- Bundled local font assets for `Orbitron`, `JetBrains Mono`, and `Space Grotesk`
 - SVG-based Material Symbols integration without font or CDN dependencies
 - Storybook stories for components, foundations, and page-level assemblies
 - Browser-based Storybook interaction tests with Vitest and Playwright
@@ -58,6 +59,8 @@ The package ships its compiled stylesheet. Import the package entry once and the
 ```tsx
 import '@azelenets/aegis-design-system';
 ```
+
+That stylesheet also includes the design system fonts, so consumers do not need to load Google Fonts or any other third-party font CDN.
 
 If you prefer an explicit style import, use either of these exports:
 
@@ -179,8 +182,19 @@ AEGIS uses Tailwind in the library build rather than a runtime CDN include.
 
 - Consumers do not need to add a Tailwind CDN script
 - The published package includes compiled CSS in `dist/index.css`
+- The published package also embeds the design-system fonts into that stylesheet
 - Utility classes used internally are already compiled into the shipped stylesheet
 - `aegisTailwindTheme` remains available for sharing token values with app-level Tailwind config
+
+## Typography Assets
+
+The design system ships its own font files for the families it uses:
+
+- `Orbitron`
+- `JetBrains Mono`
+- `Space Grotesk`
+
+These fonts are bundled into the package build and loaded through local `@font-face` declarations in [`globals.css`](./src/foundations/globals.css). No Google Fonts dependency is required in either the library or Storybook.
 
 ## Icons
 

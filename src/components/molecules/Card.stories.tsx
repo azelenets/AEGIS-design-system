@@ -16,6 +16,20 @@ export const Default = {
   ),
 };
 
+export const WithHint = {
+  render: () => (
+    <Card>
+      <CardHeader
+        title="Signal Trace"
+        eyebrow="LAB-001"
+        hint="Real-time distributed tracing for microservice architectures."
+      />
+      <CardBody><p className="text-xs text-slate-400 font-mono">Telemetry spans, latency heatmaps, and failure paths in one place.</p></CardBody>
+      <CardFooter><Button variant="secondary" size="sm">View Project</Button></CardFooter>
+    </Card>
+  ),
+};
+
 export const PrimaryVariant = {
   render: () => (
     <Card variant="primary" hoverable>

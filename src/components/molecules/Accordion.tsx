@@ -39,7 +39,13 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
       {items.map((item) => {
         const isOpen = open.has(item.id);
         return (
-          <div key={item.id} className="bg-panel-dark">
+          <div
+            key={item.id}
+            className={[
+              'bg-panel-dark transition-colors',
+              isOpen ? 'bg-primary/5' : '',
+            ].filter(Boolean).join(' ')}
+          >
             {/* Trigger */}
             <Button
               disabled={item.disabled}
@@ -50,17 +56,27 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
               variant="ghost"
               size="lg"
               className={[
-                'w-full justify-between px-4 py-3.5 text-left normal-case tracking-normal border-0',
+                'w-full justify-between px-4 py-3.5 text-left normal-case tracking-normal border-0 transition-colors',
                 isOpen ? 'text-primary' : 'text-slate-400',
                 item.disabled ? 'opacity-40 cursor-not-allowed' : 'hover:text-slate-200 cursor-pointer',
               ]
                 .filter(Boolean)
                 .join(' ')}
             >
-              <span>{item.trigger}</span>
+              <span
+                className={[
+                  'transition-colors',
+                  isOpen ? 'text-primary' : 'text-slate-300',
+                ].join(' ')}
+              >
+                {item.trigger}
+              </span>
               <MaterialIcon
                 name="expand_more"
-                className={`text-[18px] shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                className={[
+                  'text-[18px] shrink-0 transition-transform duration-200',
+                  isOpen ? 'rotate-180 text-primary' : '',
+                ].join(' ')}
               />
             </Button>
 
@@ -70,7 +86,10 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
                 id={`accordion-panel-${item.id}`}
                 role="region"
                 aria-labelledby={`accordion-trigger-${item.id}`}
-                className="px-4 pb-4 text-sm text-slate-400 font-mono leading-relaxed border-t border-border-dark pt-3"
+                className={[
+                  'px-6 py-3.5 text-sm font-mono leading-relaxed border-t transition-colors',
+                  isOpen ? 'border-primary/30 text-slate-300' : 'border-border-dark text-slate-400',
+                ].join(' ')}
               >
                 {item.content}
               </div>

@@ -1,4 +1,4 @@
-import { memo, type InputHTMLAttributes, useId } from 'react';
+import { memo, type InputHTMLAttributes, type ReactNode, useId } from 'react';
 
 // ─── RadioOption ──────────────────────────────────────────────────────────────
 
@@ -73,7 +73,7 @@ export interface RadioGroupProps {
   label?: string;
   hint?: string;
   orientation?: RadioGroupOrientation;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const ORIENTATION_CLASSES: Record<RadioGroupOrientation, string> = {

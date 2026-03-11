@@ -11,7 +11,7 @@ The design direction is deliberate rather than generic: HUD framing, grid overla
 - Typed React components exported from a single package entrypoint
 - Design tokens and CSS variable contracts for dark/light theming
 - Tailwind-powered global stylesheet bundled with the package
-- Bundled local font assets for `Orbitron`, `JetBrains Mono`, and `Space Grotesk`
+- Optional bundled local font assets for AEGIS display and mono typography
 - SVG-based Material Symbols integration without font or CDN dependencies
 - Storybook stories for components, foundations, and page-level assemblies
 - Browser-based Storybook interaction tests with Vitest and Playwright
@@ -54,13 +54,19 @@ Peer dependencies:
 - `react`
 - `react-dom`
 
-The package ships its compiled stylesheet. Import the package entry once and the styles are included automatically:
+The package ships its compiled core stylesheet. Import the package entry once and the component styles are included automatically:
 
 ```tsx
 import '@azelenets/aegis-design-system';
 ```
 
-That stylesheet also includes the design system fonts, so consumers do not need to load Google Fonts or any other third-party font CDN.
+To load the bundled AEGIS fonts as well, import the optional font stylesheet:
+
+```tsx
+import '@azelenets/aegis-design-system/fonts.css';
+```
+
+That keeps the default bundle smaller for consumers who do not need the exact design-system typography.
 
 If you prefer an explicit style import, use either of these exports:
 
@@ -84,6 +90,121 @@ export function App() {
 }
 ```
 
+## Usage Examples
+
+App setup with optional fonts:
+
+```tsx
+import '@azelenets/aegis-design-system/fonts.css';
+import {
+  ThemeProvider,
+  ThemeToggle,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+} from '@azelenets/aegis-design-system';
+
+export function App() {
+  return (
+    <ThemeProvider defaultTheme="dark">
+      <main className="min-h-screen bg-bg-dark p-6">
+        <div className="mb-4 flex justify-end">
+          <ThemeToggle />
+        </div>
+        <Card variant="default">
+          <CardHeader title="Mission Control" eyebrow="AEGIS" />
+          <CardBody>
+            <Button variant="primary">Launch Sequence</Button>
+          </CardBody>
+        </Card>
+      </main>
+    </ThemeProvider>
+  );
+}
+```
+
+Explicit stylesheet imports:
+
+```tsx
+import '@azelenets/aegis-design-system/styles.css';
+import '@azelenets/aegis-design-system/fonts.css';
+```
+
+Typed icon usage:
+
+```tsx
+import { MaterialIcon, Tag } from '@azelenets/aegis-design-system';
+
+export function ThreatStatus() {
+  return (
+    <div className="flex items-center gap-2">
+      <MaterialIcon name="warning" className="text-alert text-[18px]" />
+      <Tag label="Critical" variant="hazard" />
+    </div>
+  );
+}
+```
+
+Data grid usage:
+
+```tsx
+import { DataGrid, type DataGridColumn } from '@azelenets/aegis-design-system';
+
+type Operator = {
+  id: string;
+  callSign: string;
+  sector: string;
+};
+
+const columns: DataGridColumn<Operator>[] = [
+  { key: 'id', header: 'ID', sortable: true },
+  { key: 'callSign', header: 'Call Sign', sortable: true },
+  { key: 'sector', header: 'Sector' },
+];
+
+const rows: Operator[] = [
+  { id: 'OP-001', callSign: 'GHOST', sector: 'Alpha-7' },
+  { id: 'OP-002', callSign: 'RAVEN', sector: 'Delta-3' },
+];
+
+export function OperatorsTable() {
+  return (
+    <DataGrid
+      columns={columns}
+      data={rows}
+      keyField="id"
+      searchable
+      caption="AEGIS // Operator Registry"
+    />
+  );
+}
+```
+
+Map usage:
+
+```tsx
+import { Map, type MapMarker } from '@azelenets/aegis-design-system';
+
+const markers: MapMarker[] = [
+  { id: 'alpha', lat: 51.5007, lng: -0.1246, title: 'Alpha Node' },
+  { id: 'beta', lat: 51.5081, lng: -0.0759, title: 'Beta Node' },
+];
+
+export function TacticalMap() {
+  return (
+    <Map
+      ariaLabel="AEGIS tactical map"
+      center={[51.505, -0.09]}
+      zoom={12}
+      markers={markers}
+      fitMarkers
+      height={420}
+    />
+  );
+}
+```
+
 ### Foundations
 
 - `aegisTailwindTheme`
@@ -96,6 +217,7 @@ CSS entrypoint:
 
 - `@azelenets/aegis-design-system/styles.css`
 - `@azelenets/aegis-design-system/globals.css`
+- `@azelenets/aegis-design-system/fonts.css`
 
 ### Atoms
 
@@ -182,19 +304,18 @@ AEGIS uses Tailwind in the library build rather than a runtime CDN include.
 
 - Consumers do not need to add a Tailwind CDN script
 - The published package includes compiled CSS in `dist/index.css`
-- The published package also embeds the design-system fonts into that stylesheet
+- The optional `dist/fonts.css` export carries the bundled font-face declarations
 - Utility classes used internally are already compiled into the shipped stylesheet
 - `aegisTailwindTheme` remains available for sharing token values with app-level Tailwind config
 
 ## Typography Assets
 
-The design system ships its own font files for the families it uses:
+The design system ships an optional local font bundle for the families used by the component system:
 
 - `Orbitron`
 - `JetBrains Mono`
-- `Space Grotesk`
 
-These fonts are bundled into the package build and loaded through local `@font-face` declarations in [`globals.css`](./src/foundations/globals.css). No Google Fonts dependency is required in either the library or Storybook.
+These fonts are loaded through local `@font-face` declarations in [`fonts.css`](./src/foundations/fonts.css). No Google Fonts dependency is required in either the library or Storybook.
 
 ## Icons
 

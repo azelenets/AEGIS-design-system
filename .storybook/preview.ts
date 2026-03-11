@@ -1,5 +1,6 @@
 import { createElement } from 'react';
 import type { Preview, Decorator } from '@storybook/react-vite';
+import '../src/foundations/fonts.css';
 import '../src/foundations/globals.css';
 
 type MemoLikeComponent = {

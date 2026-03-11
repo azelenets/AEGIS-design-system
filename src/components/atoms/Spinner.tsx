@@ -43,4 +43,7 @@ const Spinner = ({ size = 'md', variant = 'primary', label, className = '', ...r
   </div>
 );
 
-export default memo(Spinner);
+const MemoSpinner = memo(Spinner);
+MemoSpinner.displayName = 'Spinner';
+
+export default MemoSpinner;

@@ -93,4 +93,7 @@ const RadioGroup = ({ name: _name, label, hint, orientation = 'vertical', childr
   </fieldset>
 );
 
-export default memo(RadioGroup);
+const MemoRadioGroup = memo(RadioGroup);
+MemoRadioGroup.displayName = 'RadioGroup';
+
+export default MemoRadioGroup;

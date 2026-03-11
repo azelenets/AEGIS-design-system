@@ -73,4 +73,7 @@ const Checkbox = ({ label, hint, indeterminate, id, className = '', ...rest }: C
   );
 };
 
-export default memo(Checkbox);
+const MemoCheckbox = memo(Checkbox);
+MemoCheckbox.displayName = 'Checkbox';
+
+export default MemoCheckbox;

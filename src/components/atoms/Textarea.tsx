@@ -45,4 +45,7 @@ const Textarea = ({ label, error, hint, id, className = '', ...rest }: TextareaP
   );
 };
 
-export default memo(Textarea);
+const MemoTextarea = memo(Textarea);
+MemoTextarea.displayName = 'Textarea';
+
+export default MemoTextarea;

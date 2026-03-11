@@ -82,4 +82,7 @@ const Rating = ({
   );
 };
 
-export default memo(Rating);
+const MemoRating = memo(Rating);
+MemoRating.displayName = 'Rating';
+
+export default MemoRating;

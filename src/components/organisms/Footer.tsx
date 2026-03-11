@@ -86,4 +86,7 @@ const Footer = ({ brand, tagline, groups = [], bottom, copyright, className = ''
   </footer>
 );
 
-export default memo(Footer);
+const MemoFooter = memo(Footer);
+MemoFooter.displayName = 'Footer';
+
+export default MemoFooter;

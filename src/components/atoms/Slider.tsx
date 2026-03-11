@@ -107,4 +107,7 @@ const Slider = ({
   );
 };
 
-export default memo(Slider);
+const MemoSlider = memo(Slider);
+MemoSlider.displayName = 'Slider';
+
+export default MemoSlider;

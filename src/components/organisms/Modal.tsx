@@ -203,4 +203,7 @@ const Modal = ({
   );
 };
 
-export default memo(Modal);
+const MemoModal = memo(Modal);
+MemoModal.displayName = 'Modal';
+
+export default MemoModal;

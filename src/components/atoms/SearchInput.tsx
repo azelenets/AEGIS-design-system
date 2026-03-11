@@ -72,4 +72,7 @@ const SearchInput = ({
   );
 };
 
-export default memo(SearchInput);
+const MemoSearchInput = memo(SearchInput);
+MemoSearchInput.displayName = 'SearchInput';
+
+export default MemoSearchInput;

@@ -11,4 +11,7 @@ const Kbd = ({ children, className = '', ...rest }: KbdProps) => (
   </kbd>
 );
 
-export default memo(Kbd);
+const MemoKbd = memo(Kbd);
+MemoKbd.displayName = 'Kbd';
+
+export default MemoKbd;

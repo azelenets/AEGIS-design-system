@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ─── Design token CSS variables ─────────────────────────────────────────────
    Colors are stored as raw RGB channels so Tailwind opacity modifiers work:
    rgb(var(--color-primary) / 0.2) === bg-primary/20

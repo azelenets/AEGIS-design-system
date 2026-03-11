@@ -271,4 +271,7 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
   );
 };
 
-export default memo(Dropdown);
+const MemoDropdown = memo(Dropdown);
+MemoDropdown.displayName = 'Dropdown';
+
+export default MemoDropdown;

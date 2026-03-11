@@ -304,4 +304,7 @@ const Select = ({
   );
 };
 
-export default memo(Select);
+const MemoSelect = memo(Select);
+MemoSelect.displayName = 'Select';
+
+export default MemoSelect;

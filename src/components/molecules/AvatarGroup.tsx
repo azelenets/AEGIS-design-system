@@ -34,4 +34,7 @@ const AvatarGroup = ({ avatars, max = 5, size = 'md', className = '', ...rest }:
   );
 };
 
-export default memo(AvatarGroup);
+const MemoAvatarGroup = memo(AvatarGroup);
+MemoAvatarGroup.displayName = 'AvatarGroup';
+
+export default MemoAvatarGroup;

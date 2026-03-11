@@ -18,4 +18,7 @@ const SpecCard = ({ title, subtitle, img, className = '', ...rest }: SpecCardPro
   </figure>
 );
 
-export default memo(SpecCard);
+const MemoSpecCard = memo(SpecCard);
+MemoSpecCard.displayName = 'SpecCard';
+
+export default MemoSpecCard;

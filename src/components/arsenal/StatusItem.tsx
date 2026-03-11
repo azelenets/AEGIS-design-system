@@ -37,4 +37,7 @@ const StatusItem = ({ name, detail, status, isCritical, isMaster, className = ''
   );
 };
 
-export default memo(StatusItem);
+const MemoStatusItem = memo(StatusItem);
+MemoStatusItem.displayName = 'StatusItem';
+
+export default MemoStatusItem;

@@ -174,4 +174,7 @@ const Tabs = ({ defaultTab, variant = 'line', onChange, children, className = ''
   );
 };
 
-export default memo(Tabs);
+const MemoTabs = memo(Tabs);
+MemoTabs.displayName = 'Tabs';
+
+export default MemoTabs;

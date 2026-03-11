@@ -52,4 +52,7 @@ const Tooltip = ({ content, placement = 'top', children, className = '', ...rest
   );
 };
 
-export default memo(Tooltip);
+const MemoTooltip = memo(Tooltip);
+MemoTooltip.displayName = 'Tooltip';
+
+export default MemoTooltip;

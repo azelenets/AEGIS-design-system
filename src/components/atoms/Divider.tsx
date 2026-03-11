@@ -40,4 +40,7 @@ const Divider = ({ label, variant = 'ghost', vertical = false, className = '', .
   return <div {...rest} className={['w-full border-t', BORDER_CLASSES[variant], className].filter(Boolean).join(' ')} />;
 };
 
-export default memo(Divider);
+const MemoDivider = memo(Divider);
+MemoDivider.displayName = 'Divider';
+
+export default MemoDivider;

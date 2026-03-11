@@ -123,4 +123,7 @@ const ProgressCircle = ({
   );
 };
 
-export default memo(ProgressCircle);
+const MemoProgressCircle = memo(ProgressCircle);
+MemoProgressCircle.displayName = 'ProgressCircle';
+
+export default MemoProgressCircle;

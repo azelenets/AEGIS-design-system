@@ -175,4 +175,7 @@ const Stepper = ({
   );
 };
 
-export default memo(Stepper);
+const MemoStepper = memo(Stepper);
+MemoStepper.displayName = 'Stepper';
+
+export default MemoStepper;

@@ -82,4 +82,7 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
   );
 };
 
-export default memo(Accordion);
+const MemoAccordion = memo(Accordion);
+MemoAccordion.displayName = 'Accordion';
+
+export default MemoAccordion;

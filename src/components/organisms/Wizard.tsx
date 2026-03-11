@@ -188,4 +188,7 @@ const Wizard = ({
   );
 };
 
-export default memo(Wizard);
+const MemoWizard = memo(Wizard);
+MemoWizard.displayName = 'Wizard';
+
+export default MemoWizard;

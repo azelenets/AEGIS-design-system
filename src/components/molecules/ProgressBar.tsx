@@ -151,4 +151,7 @@ const ProgressBar = ({
   );
 };
 
-export default memo(ProgressBar);
+const MemoProgressBar = memo(ProgressBar);
+MemoProgressBar.displayName = 'ProgressBar';
+
+export default MemoProgressBar;

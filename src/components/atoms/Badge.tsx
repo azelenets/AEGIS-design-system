@@ -44,4 +44,7 @@ const Badge = ({ label, variant = 'ghost', dot = false, solid = false, className
   </span>
 );
 
-export default memo(Badge);
+const MemoBadge = memo(Badge);
+MemoBadge.displayName = 'Badge';
+
+export default MemoBadge;

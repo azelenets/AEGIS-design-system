@@ -69,4 +69,7 @@ const Navbar = ({ brand, items = [], actions, sticky = true, onNavClick, classNa
   </header>
 );
 
-export default memo(Navbar);
+const MemoNavbar = memo(Navbar);
+MemoNavbar.displayName = 'Navbar';
+
+export default MemoNavbar;

@@ -112,4 +112,7 @@ const MissionItem = ({ date, title, missionRole, scanId, objective, tactics, too
   );
 };
 
-export default memo(MissionItem);
+const MemoMissionItem = memo(MissionItem);
+MemoMissionItem.displayName = 'MissionItem';
+
+export default MemoMissionItem;

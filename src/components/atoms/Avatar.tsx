@@ -78,4 +78,7 @@ const Avatar = ({
   );
 };
 
-export default memo(Avatar);
+const MemoAvatar = memo(Avatar);
+MemoAvatar.displayName = 'Avatar';
+
+export default MemoAvatar;

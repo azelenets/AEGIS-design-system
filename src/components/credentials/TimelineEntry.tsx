@@ -46,4 +46,7 @@ const TimelineEntry = ({ level, title, organization, period, distinguished, fiel
   </article>
 );
 
-export default memo(TimelineEntry);
+const MemoTimelineEntry = memo(TimelineEntry);
+MemoTimelineEntry.displayName = 'TimelineEntry';
+
+export default MemoTimelineEntry;

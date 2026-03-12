@@ -39,6 +39,7 @@ export { default as Form, FormSection, FormRow, FormActions } from '@/components
 export { default as Pagination }   from '@/components/molecules/Pagination';
 export { default as ProgressBar }  from '@/components/molecules/ProgressBar';
 export { default as ProgressCircle } from '@/components/molecules/ProgressCircle';
+export { default as AudioPlayer }  from '@/components/molecules/AudioPlayer';
 export { default as VideoPlayer }  from '@/components/molecules/VideoPlayer';
 
 // ─── Organisms ────────────────────────────────────────────────────────────────
@@ -95,6 +96,7 @@ export type { FormSectionProps, FormRowProps, FormRowCols, FormActionsProps, For
 export type { PaginationProps }                                          from '@/components/molecules/Pagination';
 export type { ProgressBarProps, ProgressBarVariant, ProgressBarSize }   from '@/components/molecules/ProgressBar';
 export type { ProgressCircleProps, ProgressCircleVariant, ProgressCircleSize } from '@/components/molecules/ProgressCircle';
+export type { AudioPlayerProps, AudioPlayerSource, AudioPlayerTrack } from '@/components/molecules/AudioPlayer';
 export type { VideoPlayerProps, VideoPlayerAspectRatio, VideoPlayerFit, VideoPlayerSource, VideoPlayerTrack } from '@/components/molecules/VideoPlayer';
 
 // ─── Types — Organisms ────────────────────────────────────────────────────────

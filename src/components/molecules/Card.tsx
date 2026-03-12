@@ -11,6 +11,7 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   eyebrow?: string;
+  hint?: string;
   action?: ReactNode;
   variant?: CardVariant;
 }
@@ -55,7 +56,7 @@ const FOOTER_ALIGN: Record<'left' | 'right' | 'between', string> = {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-export const CardHeader = memo(({ title, eyebrow, action, variant = 'default', className = '', ...rest }: CardHeaderProps) => (
+export const CardHeader = memo(({ title, eyebrow, hint, action, variant = 'default', className = '', ...rest }: CardHeaderProps) => (
   <div {...rest} className={['flex items-start justify-between gap-4 px-5 pt-4 pb-3 border-b border-border-dark', className].filter(Boolean).join(' ')}>
     <div className="flex flex-col gap-0.5 min-w-0">
       {eyebrow && (
@@ -64,6 +65,11 @@ export const CardHeader = memo(({ title, eyebrow, action, variant = 'default', c
         </span>
       )}
       <h3 className="text-sm font-bold text-white font-mono truncate">{title}</h3>
+      {hint && (
+        <p className="text-[10px] text-slate-400 font-mono leading-relaxed">
+          {hint}
+        </p>
+      )}
     </div>
     {action && <div className="shrink-0">{action}</div>}
   </div>

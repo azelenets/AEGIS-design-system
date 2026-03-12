@@ -8,7 +8,8 @@ import {
   cloneElement,
   isValidElement,
   type ReactNode,
-  type HTMLAttributes,
+  type ButtonHTMLAttributes,
+  type MouseEventHandler,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
@@ -22,6 +23,22 @@ const getTriggerText = (node: ReactNode): string => {
   if (Array.isArray(node)) return node.map(getTriggerText).join(' ').trim();
   if (isValidElement<{ children?: ReactNode }>(node)) return getTriggerText(node.props.children);
   return '';
+};
+
+const composeClick = (
+  original?: MouseEventHandler<HTMLElement>,
+  next?: MouseEventHandler<HTMLElement>,
+): MouseEventHandler<HTMLElement> => (event) => {
+  original?.(event);
+  if (!event.defaultPrevented) next?.(event);
+};
+
+const composeKeyDown = (
+  original?: React.KeyboardEventHandler<HTMLElement>,
+  next?: React.KeyboardEventHandler<HTMLElement>,
+): React.KeyboardEventHandler<HTMLElement> => (event) => {
+  original?.(event);
+  if (!event.defaultPrevented) next?.(event);
 };
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -40,7 +57,7 @@ export interface DropdownGroupProps {
   children: ReactNode;
 }
 
-export interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
+export interface DropdownProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   trigger: ReactNode;
   children: ReactNode;
   align?: 'left' | 'right';
@@ -86,14 +103,14 @@ DropdownSeparator.displayName = 'DropdownSeparator';
 // ─── DropdownGroup ────────────────────────────────────────────────────────────
 
 export const DropdownGroup = memo(({ label, children }: DropdownGroupProps) => (
-  <div role="group" aria-label={label}>
+  <section role="group" aria-label={label}>
     {label && (
       <p className="px-3 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest text-slate-600 font-mono" aria-hidden="true">
         {label}
       </p>
     )}
     {children}
-  </div>
+  </section>
 ));
 
 DropdownGroup.displayName = 'DropdownGroup';
@@ -120,6 +137,11 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
     if (!next) return;
     setPos(next);
   }, [getPosition]);
+
+  const focusTrigger = useCallback(() => {
+    const focusable = triggerRef.current?.querySelector<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])');
+    focusable?.focus();
+  }, []);
 
   const closeMenu = useCallback(() => setOpen(false), []);
   const toggleMenu = useCallback(() => {
@@ -163,7 +185,7 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         closeMenu();
-        triggerRef.current?.focus();
+        focusTrigger();
       }
     };
     const handleViewportChange = () => updatePosition();
@@ -177,9 +199,9 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
       window.removeEventListener('resize', handleViewportChange);
       window.removeEventListener('scroll', handleViewportChange, true);
     };
-  }, [open, closeMenu, updatePosition]);
+  }, [open, closeMenu, focusTrigger, updatePosition]);
 
-  const handleTriggerKeyDown = useCallback((e: ReactKeyboardEvent<HTMLDivElement>) => {
+  const handleTriggerKeyDown = useCallback((e: ReactKeyboardEvent<HTMLElement>) => {
     if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (!open) {
@@ -225,33 +247,56 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
 
   const triggerLabel = getTriggerText(trigger).replace(/\s+/g, ' ').trim() || 'Open menu';
 
+  /* eslint-disable react-hooks/refs */
   const renderedTrigger = isValidElement(trigger)
-    ? cloneElement(trigger as React.ReactElement<{ 'aria-hidden'?: boolean; tabIndex?: number }>, {
-        'aria-hidden': true,
-        tabIndex: -1,
-      })
-    : (
-      <div aria-hidden="true">
-        {trigger}
-      </div>
-    );
+    ? cloneElement(
+        trigger as React.ReactElement<{
+          onClick?: MouseEventHandler<HTMLElement>;
+          onKeyDown?: React.KeyboardEventHandler<HTMLElement>;
+          className?: string;
+          id?: string;
+          'aria-haspopup'?: 'menu';
+          'aria-expanded'?: boolean;
+          'aria-controls'?: string;
+          'aria-label'?: string;
+        }>,
+        {
+          id: `${baseId}-trigger`,
+          onClick: composeClick((trigger.props as { onClick?: MouseEventHandler<HTMLElement> }).onClick, () => toggleMenu()),
+          onKeyDown: composeKeyDown(
+            (trigger.props as { onKeyDown?: React.KeyboardEventHandler<HTMLElement> }).onKeyDown,
+            handleTriggerKeyDown,
+          ),
+          'aria-haspopup': 'menu',
+          'aria-expanded': open,
+          'aria-controls': `${baseId}-menu`,
+          'aria-label': triggerLabel,
+        },
+      )
+    : null;
+  /* eslint-enable react-hooks/refs */
 
   return (
     <>
       <div
-        {...rest}
         ref={triggerRef}
-        onClick={toggleMenu}
-        onKeyDown={handleTriggerKeyDown}
         className={['inline-flex', className].filter(Boolean).join(' ')}
-        role="button"
-        aria-haspopup="menu"
-        aria-expanded={open}
-        aria-controls={`${baseId}-menu`}
-        aria-label={triggerLabel}
-        tabIndex={0}
       >
-        {renderedTrigger}
+        {renderedTrigger ?? (
+          <button
+            {...rest}
+            type="button"
+            onClick={toggleMenu}
+            onKeyDown={handleTriggerKeyDown}
+            id={`${baseId}-trigger`}
+            aria-haspopup="menu"
+            aria-expanded={open}
+            aria-controls={`${baseId}-menu`}
+            aria-label={triggerLabel}
+          >
+            {trigger}
+          </button>
+        )}
       </div>
 
       {open && createPortal(
@@ -259,6 +304,7 @@ const Dropdown = ({ trigger, children, align = 'left', width = '200px', classNam
           ref={menuRef}
           id={`${baseId}-menu`}
           role="menu"
+          aria-labelledby={`${baseId}-trigger`}
           className="fixed z-50 py-1 bg-panel-dark border border-border-dark shadow-xl"
           style={{ top: pos.top, left: pos.left, width }}
           onClick={closeMenu}

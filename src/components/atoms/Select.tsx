@@ -44,6 +44,7 @@ const Select = ({
   const generatedId = useId();
   const selectId = id ?? generatedId;
   const listboxId = `${selectId}-listbox`;
+  const descriptionId = `${selectId}-description`;
 
   const [open, setOpen] = useState(false);
   const [highlighted, setHighlighted] = useState(-1);
@@ -84,8 +85,14 @@ const Select = ({
       .map((selectedValue) => optionMap.get(selectedValue))
       .filter((option): option is SelectOption => Boolean(option));
   }, [multiple, currentValues, optionMap]);
+  const multipleSummary = useMemo(() => {
+    if (!multiple || selectedOptions.length === 0) return '';
+    if (selectedOptions.length <= 2) return selectedOptions.map((option) => option.label).join(', ');
+    return `${selectedOptions.slice(0, 2).map((option) => option.label).join(', ')} +${selectedOptions.length - 2}`;
+  }, [multiple, selectedOptions]);
 
   const hasSelection = multiple ? currentValues.length > 0 : !!selectedOption;
+  const activeDescendant = open && highlighted >= 0 ? `${selectId}-option-${options[highlighted]?.value}` : undefined;
 
   useEffect(() => {
     if (!open) return;
@@ -154,8 +161,7 @@ const Select = ({
     [open, highlighted, options, selectOption, disabled, currentValue, openDropdown],
   );
 
-  const removeValue = useCallback((val: string, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const removeValue = useCallback((val: string) => {
     const next = currentValues.filter((v) => v !== val);
     setInternalValues(next);
     onChangeMultiple?.(next);
@@ -168,81 +174,82 @@ const Select = ({
           {label}
         </label>
       )}
-      <div ref={containerRef} className="relative">
-        <button
-          ref={triggerRef}
-          type="button"
-          id={selectId}
-          role="combobox"
-          aria-expanded={open}
-          aria-haspopup="listbox"
-          aria-controls={listboxId}
-          disabled={disabled}
-          onKeyDown={handleKeyDown}
-          onClick={() => {
-            if (disabled) return;
-            if (open) {
-              setOpen(false);
-            } else {
-              openDropdown();
-            }
-          }}
-          className={[
-            'w-full bg-surface-terminal border text-sm text-left font-mono',
-            'px-3 py-2 pr-8 outline-none transition-all duration-150 min-h-[38px]',
-            hasSelection ? 'text-slate-200' : 'text-slate-400',
-            error
-              ? 'border-alert/50 focus:border-alert'
-              : open
-                ? 'border-primary/60'
-                : 'border-slate-600 hover:border-primary/30 focus:border-primary/60',
-            'disabled:opacity-40 disabled:cursor-not-allowed',
-            className,
-          ]
-            .filter(Boolean)
-            .join(' ')}
-        >
-          {multiple ? (
-            selectedOptions.length > 0 ? (
-              <span className="flex flex-wrap gap-1">
-                {selectedOptions.map((opt) => (
-                  <span
-                    key={opt.value}
-                    className="inline-flex items-center gap-1 px-1.5 py-px text-[10px] font-mono bg-primary/10 border border-primary/20 text-primary leading-none"
-                  >
-                    {opt.label}
-                    <span
-                      role="button"
-                      tabIndex={0}
-                      aria-label={`Remove ${opt.label}`}
-                      onMouseDown={(e) => removeValue(opt.value, e)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          removeValue(opt.value, e as unknown as React.MouseEvent);
-                        }
-                      }}
-                      className="inline-flex text-[10px] text-primary/60 hover:text-primary cursor-pointer"
-                    >
-                      <MaterialIcon name="close" />
-                    </span>
-                  </span>
-                ))}
-              </span>
+      <div ref={containerRef} className="flex flex-col gap-2">
+        <div className="relative">
+          <button
+            ref={triggerRef}
+            type="button"
+            id={selectId}
+            role="combobox"
+            aria-expanded={open}
+            aria-haspopup="listbox"
+            aria-controls={listboxId}
+            aria-activedescendant={activeDescendant}
+            aria-describedby={error || hint ? descriptionId : undefined}
+            disabled={disabled}
+            onKeyDown={handleKeyDown}
+            onClick={() => {
+              if (disabled) return;
+              if (open) {
+                setOpen(false);
+              } else {
+                openDropdown();
+              }
+            }}
+            className={[
+              'w-full bg-surface-terminal border text-sm text-left font-mono',
+              'px-3 py-2 pr-8 outline-none transition-all duration-150 min-h-[38px]',
+              hasSelection ? 'text-slate-200' : 'text-slate-400',
+              error
+                ? 'border-alert/50 focus:border-alert'
+                : open
+                  ? 'border-primary/60'
+                  : 'border-slate-600 hover:border-primary/30 focus:border-primary/60',
+              'disabled:opacity-40 disabled:cursor-not-allowed',
+              className,
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
+            {multiple ? (
+              selectedOptions.length > 0 ? (
+                <span className="block truncate">{multipleSummary}</span>
+              ) : (
+                <span className="text-slate-400">{placeholder ?? 'Select options…'}</span>
+              )
             ) : (
-              <span className="text-slate-400">{placeholder ?? 'Select options…'}</span>
-            )
-          ) : (
-            selectedOption?.label ?? <span className="text-slate-400">{placeholder ?? 'Select…'}</span>
-          )}
-        </button>
+              selectedOption?.label ?? <span className="text-slate-400">{placeholder ?? 'Select…'}</span>
+            )}
+          </button>
 
-        <MaterialIcon
-          name="keyboard_arrow_down"
-          className={`absolute right-2 top-1/2 -translate-y-1/2 text-[16px] pointer-events-none transition-transform duration-150 ${
-            open ? 'rotate-180 text-primary/60' : 'text-slate-400'
-          }`}
-        />
+          <MaterialIcon
+            name="keyboard_arrow_down"
+            className={`absolute right-2 top-1/2 -translate-y-1/2 text-[16px] pointer-events-none transition-transform duration-150 ${
+              open ? 'rotate-180 text-primary' : 'text-slate-400'
+            }`}
+          />
+        </div>
+
+        {multiple && selectedOptions.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {selectedOptions.map((opt) => (
+              <span
+                key={opt.value}
+                className="inline-flex items-center gap-1 px-1.5 py-px text-[10px] font-mono bg-primary/10 border border-primary/20 text-primary leading-none"
+              >
+                {opt.label}
+                <button
+                  type="button"
+                  aria-label={`Remove ${opt.label}`}
+                  onClick={() => removeValue(opt.value)}
+                  className="inline-flex text-[10px] text-primary hover:text-primary"
+                >
+                  <MaterialIcon name="close" />
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
 
         {open && createPortal(
           <ul
@@ -259,6 +266,7 @@ const Select = ({
               return (
                 <li
                   key={opt.value}
+                  id={`${selectId}-option-${opt.value}`}
                   role="option"
                   aria-selected={selected}
                   onMouseEnter={() => setHighlighted(i)}
@@ -298,7 +306,7 @@ const Select = ({
       </div>
 
       {(error || hint) && (
-        <p className={`text-[10px] font-mono ${error ? 'text-alert' : 'text-slate-400'}`}>{error ?? hint}</p>
+        <p id={descriptionId} className={`text-[10px] font-mono ${error ? 'text-alert' : 'text-slate-400'}`}>{error ?? hint}</p>
       )}
     </div>
   );

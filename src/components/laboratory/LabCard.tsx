@@ -24,9 +24,9 @@ const COLOR_CLASS_MAP: Record<LabCardProps['color'], string> = {
 };
 
 const ACTION_CLASS_MAP: Record<LabCardProps['color'], { text: string; hover: string }> = {
-  primary: { text: 'text-primary/60', hover: 'hover:text-primary' },
-  hazard: { text: 'text-hazard/60', hover: 'hover:text-hazard' },
-  alert: { text: 'text-alert/60', hover: 'hover:text-alert' },
+  primary: { text: 'text-primary', hover: 'hover:text-primary' },
+  hazard: { text: 'text-hazard', hover: 'hover:text-hazard' },
+  alert: { text: 'text-alert', hover: 'hover:text-alert' },
 };
 
 const TITLE_HOVER_CLASS_MAP: Record<LabCardProps['color'], string> = {

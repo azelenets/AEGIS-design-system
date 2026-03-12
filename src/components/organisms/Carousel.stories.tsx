@@ -106,10 +106,12 @@ export const Default = {
     const prev = canvas.getByRole('button', { name: 'Previous slide' });
 
     await expect(canvas.getByText('Alpha Sector')).toBeVisible();
+    await expect(next).toBeVisible();
+    await expect(prev).toBeVisible();
     await expect(canvas.getAllByRole('button', { name: /Go to slide/i })).toHaveLength(4);
     await userEvent.click(next);
     await expect(canvas.getByText('Bravo Sector')).toBeVisible();
-    await userEvent.keyboard('{ArrowLeft}');
+    await userEvent.click(prev);
     await expect(canvas.getByText('Alpha Sector')).toBeVisible();
     await expect(prev).toBeEnabled();
   },

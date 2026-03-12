@@ -1,12 +1,14 @@
 import { memo, type InputHTMLAttributes, useId, useState } from 'react';
 
 export type SliderVariant = 'primary' | 'hazard' | 'alert';
+export type SliderOrientation = 'horizontal' | 'vertical';
 
 export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;
   hint?: string;
   showValue?: boolean;
   variant?: SliderVariant;
+  orientation?: SliderOrientation;
   formatValue?: (v: number) => string;
 }
 
@@ -33,6 +35,7 @@ const Slider = ({
   hint,
   showValue = true,
   variant = 'primary',
+  orientation = 'horizontal',
   formatValue,
   id,
   min = 0,
@@ -50,6 +53,7 @@ const Slider = ({
   const rawValue = isControlled ? Number(rest.value) : internalValue;
   const formatted = formatValue ? formatValue(rawValue) : String(rawValue);
   const pct = ((rawValue - Number(min)) / (Number(max) - Number(min))) * 100;
+  const isVertical = orientation === 'vertical';
 
   const fill = FILL_COLOR[variant];
   const track = 'rgb(var(--color-surface-terminal))';
@@ -59,10 +63,34 @@ const Slider = ({
     onChange?.(e);
   };
 
+  const sliderInput = (
+    <input
+      id={inputId}
+      type="range"
+      min={min}
+      max={max}
+      style={{
+        background: `linear-gradient(to right, ${fill} ${pct}%, ${track} ${pct}%)`,
+      }}
+      className={[
+        'h-1.5 w-full appearance-none cursor-pointer',
+        '[&::-webkit-slider-runnable-track]:h-1.5 [&::-webkit-slider-runnable-track]:bg-transparent',
+        '[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3',
+        '[&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:-mt-[3px]',
+        '[&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0',
+        THUMB_COLOR[variant],
+        'disabled:opacity-40 disabled:cursor-not-allowed',
+        className,
+      ].join(' ')}
+      onChange={handleChange}
+      {...rest}
+    />
+  );
+
   return (
-    <div className="flex flex-col gap-1.5 w-full">
+    <div className={['flex gap-1.5', isVertical ? 'w-fit flex-col items-center' : 'w-full flex-col'].join(' ')}>
       {(label || showValue) && (
-        <div className="flex items-center justify-between gap-2">
+        <div className={['flex items-center gap-2', isVertical ? 'w-full flex-col' : 'justify-between'].join(' ')}>
           {label && (
             <label
               htmlFor={inputId}
@@ -78,30 +106,15 @@ const Slider = ({
           )}
         </div>
       )}
-      <input
-        id={inputId}
-        type="range"
-        min={min}
-        max={max}
-        style={{
-          background: `linear-gradient(to right, ${fill} ${pct}%, ${track} ${pct}%)`,
-        }}
-        className={[
-          'w-full h-1.5 appearance-none cursor-pointer',
-          // webkit: track height only — background comes from the element itself
-          '[&::-webkit-slider-runnable-track]:h-1.5 [&::-webkit-slider-runnable-track]:bg-transparent',
-          // webkit thumb
-          '[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3',
-          '[&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:-mt-[3px]',
-          // moz thumb
-          '[&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0',
-          THUMB_COLOR[variant],
-          'disabled:opacity-40 disabled:cursor-not-allowed',
-          className,
-        ].join(' ')}
-        onChange={handleChange}
-        {...rest}
-      />
+      {isVertical ? (
+        <div className="flex h-24 w-4 items-center justify-center overflow-visible">
+          <div className="w-24 shrink-0 -rotate-90">
+            {sliderInput}
+          </div>
+        </div>
+      ) : (
+        sliderInput
+      )}
       {hint && <p className="text-[10px] text-slate-400 font-mono">{hint}</p>}
     </div>
   );

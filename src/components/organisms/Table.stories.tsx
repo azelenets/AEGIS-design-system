@@ -149,13 +149,15 @@ export const WithSorting: Story = {
   ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const callSignHeader = canvas.getByText('Call Sign').closest('th');
+    const callSignHeader = canvas.getByRole('button', { name: 'Call Sign' });
     const rows = () => canvas.getAllByRole('row').slice(1);
 
-    await userEvent.click(callSignHeader as HTMLElement);
+    await expect(callSignHeader.closest('th')).toHaveAttribute('aria-sort', 'none');
+    await userEvent.click(callSignHeader);
     await expect(rows()[0]).toHaveTextContent('CIPHER');
-    await userEvent.click(callSignHeader as HTMLElement);
+    await expect(callSignHeader.closest('th')).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.click(callSignHeader);
     await expect(rows()[0]).toHaveTextContent('WRAITH');
-    await expect(callSignHeader?.querySelector('.text-primary')).toBeInTheDocument();
+    await expect(callSignHeader.closest('th')).toHaveAttribute('aria-sort', 'descending');
   },
 };

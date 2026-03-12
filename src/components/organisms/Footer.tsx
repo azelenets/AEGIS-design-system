@@ -46,7 +46,7 @@ const Footer = ({ brand, tagline, groups = [], bottom, copyright, className = ''
           <div className="flex flex-wrap gap-10">
             {groups.map((group) => (
               <div key={group.id} className="flex flex-col gap-3 min-w-[100px]">
-                <span className="text-[9px] font-bold font-mono uppercase tracking-[0.2em] text-primary/60">
+                <span className="text-[9px] font-bold font-mono uppercase tracking-[0.2em] text-primary">
                   {group.label}
                 </span>
                 <ul className="flex flex-col gap-2">

@@ -49,7 +49,7 @@ export const WithLabel: Story = {
     const segments = canvasElement.querySelectorAll('.border-t');
 
     await expect(label).toBeVisible();
-    await expect(label).toHaveClass('text-primary/60');
+    await expect(label).toHaveClass('text-primary');
     await expect(segments).toHaveLength(2);
   },
 };
@@ -62,7 +62,7 @@ export const HazardWithLabel: Story = {
     const segments = canvasElement.querySelectorAll('.border-t');
 
     await expect(label).toBeVisible();
-    await expect(label).toHaveClass('text-hazard/60');
+    await expect(label).toHaveClass('text-hazard');
     await expect(segments).toHaveLength(2);
   },
 };

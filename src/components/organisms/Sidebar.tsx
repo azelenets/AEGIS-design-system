@@ -57,6 +57,7 @@ const Sidebar = ({ brand, groups = [], footer, collapsed = false, onNavClick, cl
                 {...(item.href ? { href: item.href } : { type: 'button' as const })}
                 onClick={() => onNavClick?.(item)}
                 title={collapsed ? item.label : undefined}
+                aria-label={collapsed ? item.label : undefined}
                 className={[
                   'w-full flex items-center gap-2.5 px-3 py-2 transition-colors border-l-2 text-left',
                   'text-[10px] font-bold uppercase tracking-widest font-mono',

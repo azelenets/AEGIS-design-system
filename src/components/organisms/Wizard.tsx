@@ -95,25 +95,25 @@ const Wizard = ({
 
   // ── Content panel + nav (shared between layouts) ──────────────────────────
   const contentPanel = (
-    <div className="bg-surface-terminal border border-border-dark relative overflow-hidden flex-1">
+    <section className="bg-surface-terminal border border-border-dark relative overflow-hidden flex-1">
       {/* Top accent line */}
       <div className="absolute inset-x-0 top-0 h-px bg-primary/30" />
       {/* Step label */}
-      <div className="flex items-center gap-2 px-4 pt-4 pb-3 border-b border-border-dark">
+      <header className="flex items-center gap-2 px-4 pt-4 pb-3 border-b border-border-dark">
         <span className="text-[9px] font-mono text-slate-300 uppercase tracking-widest">
           Step {activeIndex + 1} / {steps.length}
         </span>
         <span className="text-[9px] font-mono text-slate-300 uppercase tracking-widest">
           — {steps[activeIndex]?.title}
         </span>
-      </div>
+      </header>
       {/* Content */}
-      <div className="p-4">{activeContent}</div>
-    </div>
+      <section className="p-4">{activeContent}</section>
+    </section>
   );
 
   const navBar = !hideNav && (
-    <div className="flex items-center justify-between">
+    <nav className="flex items-center justify-between" aria-label="Wizard navigation">
       <Button
         variant="ghost"
         size="sm"
@@ -125,19 +125,20 @@ const Wizard = ({
       </Button>
 
       {/* Step dots */}
-      <div className="flex items-center gap-1.5">
+      <ol className="flex items-center gap-1.5" aria-label="Wizard progress">
         {steps.map((_, i) => (
-          <span
+          <li
             key={i}
             className={[
               'w-1.5 h-1.5 transition-all',
               i < activeIndex  ? 'bg-primary/50' :
               i === activeIndex ? 'bg-primary w-3' :
               'bg-border-dark',
+              'list-none',
             ].join(' ')}
           />
         ))}
-      </div>
+      </ol>
 
       <Button
         variant={isLast ? 'primary' : 'secondary'}
@@ -148,33 +149,33 @@ const Wizard = ({
       >
         {isLast ? completeLabel : 'Next'}
       </Button>
-    </div>
+    </nav>
   );
 
   if (isVertical) {
     return (
-      <div {...rest} className={['flex flex-row gap-0', className].filter(Boolean).join(' ')}>
+      <section {...rest} className={['flex flex-row gap-0', className].filter(Boolean).join(' ')}>
         {/* Left: vertical stepper */}
-        <div className="shrink-0 border-r border-border-dark pr-6 pt-2">
+        <aside className="shrink-0 border-r border-border-dark pr-6 pt-2">
           <Stepper
             steps={stepData}
             orientation="vertical"
             activeStep={activeIndex}
             onStepClick={isControlled ? setStep : undefined}
           />
-        </div>
+        </aside>
 
         {/* Right: content + nav */}
-        <div className="flex flex-col gap-6 flex-1 pl-6">
+        <section className="flex flex-col gap-6 flex-1 pl-6">
           {contentPanel}
           {navBar}
-        </div>
-      </div>
+        </section>
+      </section>
     );
   }
 
   return (
-    <div {...rest} className={['flex flex-col gap-6', className].filter(Boolean).join(' ')}>
+    <section {...rest} className={['flex flex-col gap-6', className].filter(Boolean).join(' ')}>
       {/* Stepper header */}
       <Stepper
         steps={stepData}
@@ -184,7 +185,7 @@ const Wizard = ({
       />
       {contentPanel}
       {navBar}
-    </div>
+    </section>
   );
 };
 

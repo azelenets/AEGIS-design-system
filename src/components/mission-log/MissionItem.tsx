@@ -30,7 +30,7 @@ const MissionItem = ({ date, title, missionRole, scanId, objective, tactics, too
       <div className={`space-y-4 ${align === 'right' ? 'md:text-right' : 'md:order-2'}`}>
         <div className="inline-block px-3 py-1 bg-primary/10 border border-primary/30 text-primary text-[10px] font-bold tracking-widest uppercase">OPS_DATE: {date}</div>
         <h2 className="text-2xl font-display font-black text-white uppercase tracking-tight">{title}</h2>
-        <div className="text-primary/60 text-xs font-bold tracking-tighter uppercase">ROLE: {missionRole}</div>
+        <div className="text-primary text-xs font-bold tracking-tighter uppercase">ROLE: {missionRole}</div>
 
         <figure className="border border-primary/10 bg-black/20 p-4 mt-4 inline-block group hover:border-primary/40 transition-colors w-full">
           {isShield ? (
@@ -91,12 +91,12 @@ const MissionItem = ({ date, title, missionRole, scanId, objective, tactics, too
 
         {tools?.length ? (
           <div className="space-y-2">
-            <div className="text-primary/70 text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-2">
+            <div className="text-primary text-[10px] font-bold tracking-[0.2em] uppercase flex items-center gap-2">
               <><MaterialIcon name="memory" className="text-xs" /> TECH_STACK</>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {tools.map((tool) => (
-                <span key={tool} className="px-2 py-0.5 bg-primary/5 border border-primary/15 text-primary/60 text-[9px] font-mono tracking-wider">
+                <span key={tool} className="px-2 py-0.5 bg-primary/5 border border-primary/15 text-primary text-[9px] font-mono tracking-wider">
                   {tool}
                 </span>
               ))}

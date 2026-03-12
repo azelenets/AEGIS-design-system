@@ -1,10 +1,17 @@
 import {
   memo,
   useEffect,
+  useId,
+  useMemo,
+  useRef,
+  createContext,
+  useContext,
   useCallback,
+  useState,
   type ReactNode,
   type KeyboardEvent,
   type HTMLAttributes,
+  type PointerEvent as ReactPointerEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
@@ -21,6 +28,7 @@ export interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
   size?: ModalSize;
   variant?: ModalVariant;
+  draggable?: boolean;
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   children: ReactNode;
@@ -44,6 +52,12 @@ export interface ModalFooterProps extends HTMLAttributes<HTMLDivElement> {
   align?: 'left' | 'right' | 'center';
 }
 
+interface ModalContextValue {
+  titleId: string;
+  descriptionId: string;
+  draggable: boolean;
+}
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const SIZE_CLASSES: Record<ModalSize, string> = {
@@ -61,9 +75,9 @@ const VARIANT_BORDER: Record<ModalVariant, string> = {
 };
 
 const VARIANT_EYEBROW: Record<ModalVariant, string> = {
-  primary: 'text-primary/60',
-  hazard:  'text-hazard/60',
-  alert:   'text-alert/60',
+  primary: 'text-primary',
+  hazard:  'text-hazard',
+  alert:   'text-alert',
 };
 
 const FOOTER_ALIGN: Record<'left' | 'right' | 'center', string> = {
@@ -72,50 +86,74 @@ const FOOTER_ALIGN: Record<'left' | 'right' | 'center', string> = {
   center: 'justify-center',
 };
 
+const ModalContext = createContext<ModalContextValue | null>(null);
+
+const useModalContext = () => {
+  const context = useContext(ModalContext);
+  if (!context) throw new Error('Modal sub-components must be used inside <Modal>.');
+  return context;
+};
+
 // ─── ModalHeader ──────────────────────────────────────────────────────────────
 
-export const ModalHeader = memo(({ title, eyebrow, onClose, variant = 'primary', className = '', ...rest }: ModalHeaderProps) => (
-  <div {...rest} className={['flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-border-dark shrink-0', className].filter(Boolean).join(' ')}>
-    <div className="flex flex-col gap-0.5 min-w-0">
-      {eyebrow && (
-        <span className={`text-[9px] font-bold uppercase tracking-widest font-mono ${VARIANT_EYEBROW[variant]}`}>
-          {eyebrow}
-        </span>
+export const ModalHeader = memo(({ title, eyebrow, onClose, variant = 'primary', className = '', ...rest }: ModalHeaderProps) => {
+  const { titleId, draggable } = useModalContext();
+
+  return (
+    <header
+      {...rest}
+      data-modal-drag-handle={draggable ? 'true' : undefined}
+      className={[
+        'flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-border-dark shrink-0',
+        draggable ? 'cursor-move select-none' : '',
+        className,
+      ].filter(Boolean).join(' ')}
+    >
+      <div className="flex flex-col gap-0.5 min-w-0" data-modal-drag-handle={draggable ? 'true' : undefined}>
+        {eyebrow && (
+          <span className={`text-[9px] font-bold uppercase tracking-widest font-mono ${VARIANT_EYEBROW[variant]}`}>
+            {eyebrow}
+          </span>
+        )}
+        <h2 id={titleId} className="text-base font-display font-bold text-white leading-tight truncate">{title}</h2>
+      </div>
+      {onClose && (
+        <Button
+          onClick={onClose}
+          aria-label="Close dialog"
+          variant="ghost"
+          size="sm"
+          className="shrink-0 min-w-0 border-0 px-1 py-1 text-slate-600 hover:text-slate-200 mt-0.5"
+        >
+          <MaterialIcon name="close" className="text-[20px]" />
+        </Button>
       )}
-      <h2 className="text-base font-display font-bold text-white leading-tight truncate">{title}</h2>
-    </div>
-    {onClose && (
-      <Button
-        onClick={onClose}
-        aria-label="Close dialog"
-        variant="ghost"
-        size="sm"
-        className="shrink-0 min-w-0 border-0 px-1 py-1 text-slate-600 hover:text-slate-200 mt-0.5"
-      >
-        <MaterialIcon name="close" className="text-[20px]" />
-      </Button>
-    )}
-  </div>
-));
+    </header>
+  );
+});
 
 ModalHeader.displayName = 'ModalHeader';
 
 // ─── ModalBody ────────────────────────────────────────────────────────────────
 
-export const ModalBody = memo(({ children, className = '', ...rest }: ModalBodyProps) => (
-  <div {...rest} className={['px-6 py-5 overflow-y-auto flex-1 text-sm text-slate-400 font-mono leading-relaxed', className].filter(Boolean).join(' ')}>
-    {children}
-  </div>
-));
+export const ModalBody = memo(({ children, className = '', ...rest }: ModalBodyProps) => {
+  const { descriptionId } = useModalContext();
+
+  return (
+    <section id={descriptionId} {...rest} className={['px-6 py-5 overflow-y-auto flex-1 text-sm text-slate-400 font-mono leading-relaxed', className].filter(Boolean).join(' ')}>
+      {children}
+    </section>
+  );
+});
 
 ModalBody.displayName = 'ModalBody';
 
 // ─── ModalFooter ──────────────────────────────────────────────────────────────
 
 export const ModalFooter = memo(({ children, align = 'right', className = '', ...rest }: ModalFooterProps) => (
-  <div {...rest} className={['flex flex-wrap items-center gap-3 px-6 py-4 border-t border-border-dark shrink-0', FOOTER_ALIGN[align], className].filter(Boolean).join(' ')}>
+  <footer {...rest} className={['flex flex-wrap items-center gap-3 px-6 py-4 border-t border-border-dark shrink-0', FOOTER_ALIGN[align], className].filter(Boolean).join(' ')}>
     {children}
-  </div>
+  </footer>
 ));
 
 ModalFooter.displayName = 'ModalFooter';
@@ -127,12 +165,24 @@ const Modal = ({
   onClose,
   size = 'md',
   variant = 'primary',
+  draggable = false,
   closeOnBackdrop = true,
   closeOnEscape = true,
   children,
   className = '',
+  style,
   ...rest
 }: ModalProps) => {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const lastFocusedRef = useRef<HTMLElement | null>(null);
+  const dragStateRef = useRef<{ pointerId: number; startX: number; startY: number; originX: number; originY: number } | null>(null);
+  const modalId = useId();
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const contextValue = useMemo(
+    () => ({ titleId: `${modalId}-title`, descriptionId: `${modalId}-description`, draggable }),
+    [draggable, modalId],
+  );
+
   // Escape key handler
   const handleKeyDown = useCallback(
     (e: globalThis.KeyboardEvent) => {
@@ -144,34 +194,128 @@ const Modal = ({
   // Scroll lock + key listener
   useEffect(() => {
     if (!open) return;
+    lastFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const resetFrame = window.requestAnimationFrame(() => {
+      setPosition({ x: 0, y: 0 });
+    });
     document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', handleKeyDown);
+
+    const panel = panelRef.current;
+    if (panel) {
+      const focusable = panel.querySelector<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      (focusable ?? panel).focus();
+    }
+
     return () => {
+      window.cancelAnimationFrame(resetFrame);
       document.body.style.overflow = '';
       document.removeEventListener('keydown', handleKeyDown);
+      lastFocusedRef.current?.focus();
     };
   }, [open, handleKeyDown]);
 
+  useEffect(() => {
+    if (!open || !draggable) return undefined;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const dragState = dragStateRef.current;
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+      setPosition({
+        x: dragState.originX + (event.clientX - dragState.startX),
+        y: dragState.originY + (event.clientY - dragState.startY),
+      });
+    };
+
+    const handlePointerUp = (event: PointerEvent) => {
+      if (dragStateRef.current?.pointerId === event.pointerId) {
+        dragStateRef.current = null;
+      }
+    };
+
+    document.addEventListener('pointermove', handlePointerMove);
+    document.addEventListener('pointerup', handlePointerUp);
+    document.addEventListener('pointercancel', handlePointerUp);
+
+    return () => {
+      document.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('pointerup', handlePointerUp);
+      document.removeEventListener('pointercancel', handlePointerUp);
+      dragStateRef.current = null;
+    };
+  }, [draggable, open]);
+
   if (!open) return null;
 
+  const handlePanelPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!draggable) return;
+    if (event.button !== 0) return;
+
+    const target = event.target as HTMLElement;
+    if (!target.closest('[data-modal-drag-handle="true"]')) return;
+    if (target.closest('button, a, input, select, textarea, [role="button"]')) return;
+
+    dragStateRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: position.x,
+      originY: position.y,
+    };
+  };
+
   const handlePanelKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    // Prevent Escape from bubbling to backdrop when panel is focused
-    if (e.key === 'Escape') e.stopPropagation();
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      return;
+    }
+
+    if (e.key !== 'Tab') return;
+
+    const panel = panelRef.current;
+    if (!panel) return;
+
+    const focusable = Array.from(
+      panel.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    );
+
+    if (focusable.length === 0) {
+      e.preventDefault();
+      panel.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const activeElement = document.activeElement;
+
+    if (e.shiftKey && activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   };
 
   return createPortal(
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="fixed inset-0 flex items-center justify-center p-4"
-      style={{ zIndex: aegisLayers.modal }}
-    >
+    <ModalContext.Provider value={contextValue}>
+      <div
+        className="fixed inset-0 flex items-center justify-center p-4"
+        style={{ zIndex: aegisLayers.modal }}
+      >
       {/* Backdrop */}
       <button
         type="button"
         className="absolute inset-0 bg-bg-dark/80 backdrop-blur-sm"
         onClick={() => closeOnBackdrop && onClose()}
-        aria-label="Close dialog backdrop"
+        aria-hidden="true"
+        tabIndex={-1}
       />
 
       {/* Scanline overlay on backdrop */}
@@ -185,12 +329,25 @@ const Modal = ({
       />
 
       {/* Panel */}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <div
-        {...rest}
-        role="presentation"
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={contextValue.titleId}
+        aria-describedby={contextValue.descriptionId}
+        onPointerDown={handlePanelPointerDown}
         onKeyDown={handlePanelKeyDown}
+        tabIndex={-1}
+        data-draggable={draggable ? 'true' : undefined}
+        style={{
+          ...style,
+          transform: draggable ? `translate(${position.x}px, ${position.y}px)` : undefined,
+        }}
+        {...rest}
         className={[
           'relative flex flex-col max-h-[90vh]',
+          draggable ? 'touch-none' : '',
           'bg-panel-dark border hud-border',
           VARIANT_BORDER[variant],
           SIZE_CLASSES[size],
@@ -199,7 +356,8 @@ const Modal = ({
       >
         {children}
       </div>
-    </div>,
+      </div>
+    </ModalContext.Provider>,
     document.body,
   );
 };

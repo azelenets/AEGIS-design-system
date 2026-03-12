@@ -34,6 +34,8 @@ import {
   Error,
   FilterList,
   Flag,
+  Fullscreen,
+  FullscreenExit,
   Group,
   Inbox,
   Info,
@@ -54,6 +56,7 @@ import {
   PauseCircle,
   Person,
   PersonOff,
+  PlayArrow,
   PriorityHigh,
   ProgressActivity,
   Radar,
@@ -78,6 +81,9 @@ import {
   VerifiedUser,
   ViewColumn,
   Visibility,
+  VolumeDown,
+  VolumeOff,
+  VolumeUp,
   Warning,
 } from '@material-symbols-svg/react';
 import { memo, type ComponentType, type SVGProps } from 'react';
@@ -125,6 +131,8 @@ const ICONS = {
   expand_more: KeyboardArrowDown,
   filter_list: FilterList,
   flag: Flag,
+  fullscreen: Fullscreen,
+  fullscreen_exit: FullscreenExit,
   group: Group,
   inbox: Inbox,
   info: Info,
@@ -145,6 +153,7 @@ const ICONS = {
   pause_circle: PauseCircle,
   person: Person,
   person_off: PersonOff,
+  play_arrow: PlayArrow,
   priority_high: PriorityHigh,
   progress_activity: ProgressActivity,
   radar: Radar,
@@ -168,6 +177,9 @@ const ICONS = {
   verified_user: VerifiedUser,
   view_column: ViewColumn,
   visibility: Visibility,
+  volume_down: VolumeDown,
+  volume_off: VolumeOff,
+  volume_up: VolumeUp,
   warning: Warning,
 } satisfies Record<string, MaterialSymbolComponent>;
 

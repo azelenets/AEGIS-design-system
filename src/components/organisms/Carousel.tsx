@@ -100,7 +100,6 @@ const Carousel = ({
         'bg-bg-dark/80 border border-slate-600',
         'text-slate-400 transition-all duration-200',
         'hover:border-primary/50 hover:text-primary',
-        'opacity-0 group-hover/carousel:opacity-100',
         disabled ? 'opacity-30 cursor-not-allowed pointer-events-none' : '',
       ].filter(Boolean).join(' ')}
     >
@@ -109,7 +108,7 @@ const Carousel = ({
   );
 
   return (
-    <div
+    <section
       {...rest}
       className={['group/carousel select-none', className].filter(Boolean).join(' ')}
       onMouseEnter={() => pauseOnHover && setPaused(true)}
@@ -203,7 +202,7 @@ const Carousel = ({
           />
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
@@ -220,8 +219,8 @@ export interface CarouselSlideProps extends HTMLAttributes<HTMLDivElement> {
 
 /** Semantic wrapper for carousel slide content */
 export const CarouselSlide = memo(({ children, className = '', ...rest }: CarouselSlideProps) => (
-  <div {...rest} className={['w-full', className].filter(Boolean).join(' ')}>
+  <article {...rest} className={['w-full', className].filter(Boolean).join(' ')}>
     {children}
-  </div>
+  </article>
 ));
 CarouselSlide.displayName = 'CarouselSlide';

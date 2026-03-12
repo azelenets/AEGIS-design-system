@@ -393,22 +393,32 @@ const DataGridInner = <T extends Record<string, unknown>>({
                   <th
                     key={k}
                     style={{ width: col.width, minWidth: col.minWidth }}
-                    onClick={() => handleSort(col)}
+                    scope="col"
+                    aria-sort={
+                      !col.sortable ? undefined : isSorted ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'
+                    }
                     className={[
                       'px-4 py-3 text-[9px] font-bold uppercase tracking-widest text-slate-400',
                       ALIGN[col.align ?? 'left'],
-                      col.sortable ? 'cursor-pointer select-none hover:text-primary transition-colors' : '',
                     ].filter(Boolean).join(' ')}
                   >
-                    <span className="inline-flex items-center gap-1">
-                      {col.header}
-                      {col.sortable && (
+                    {col.sortable ? (
+                      <button
+                        type="button"
+                        onClick={() => handleSort(col)}
+                        className="inline-flex items-center gap-1 select-none transition-colors hover:text-primary focus-visible:text-primary"
+                      >
+                        {col.header}
                         <MaterialIcon
                           name={isSorted ? (sortDir === 'asc' ? 'arrow_upward' : 'arrow_downward') : 'unfold_more'}
                           className={`text-[12px] ${isSorted ? 'text-primary' : 'opacity-30'}`}
                         />
-                      )}
-                    </span>
+                      </button>
+                    ) : (
+                      <span className="inline-flex items-center gap-1">
+                        {col.header}
+                      </span>
+                    )}
                   </th>
                 );
               })}
@@ -535,7 +545,7 @@ const DataGridInner = <T extends Record<string, unknown>>({
                       {/* Row actions */}
                       {hasActions && (
                         <td className={`px-4 ${cellPad} text-right`}>
-                          <div className="flex items-center justify-end gap-1 opacity-0 group-hover/row:opacity-100 transition-opacity">
+                          <div className="flex items-center justify-end gap-1 opacity-100 md:opacity-0 md:group-hover/row:opacity-100 md:group-focus-within/row:opacity-100 transition-opacity">
                             {actions!(row)}
                           </div>
                         </td>

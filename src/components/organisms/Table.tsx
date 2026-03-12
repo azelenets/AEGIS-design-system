@@ -89,21 +89,31 @@ const TableInner = <T extends Record<string, unknown>>({
                 <th
                   key={key}
                   style={col.width ? { width: col.width } : undefined}
+                  scope="col"
+                  aria-sort={
+                    !col.sortable ? undefined : isSorted ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'
+                  }
                   className={[
                     'px-4 py-3 text-[9px] font-bold uppercase tracking-widest text-slate-400',
                     ALIGN_TH[col.align ?? 'left'],
-                    col.sortable ? 'cursor-pointer select-none hover:text-primary transition-colors' : '',
                   ]
                     .filter(Boolean)
                     .join(' ')}
-                  onClick={() => handleSort(col)}
                 >
-                  <span className="inline-flex items-center gap-1">
-                    {col.header}
-                    {col.sortable && (
+                  {col.sortable ? (
+                    <button
+                      type="button"
+                      onClick={() => handleSort(col)}
+                      className="inline-flex items-center gap-1 select-none transition-colors hover:text-primary focus-visible:text-primary"
+                    >
+                      {col.header}
                       <MaterialIcon name={sortIcon} className={`text-[12px] ${isSorted ? 'text-primary' : 'opacity-30'}`} />
-                    )}
-                  </span>
+                    </button>
+                  ) : (
+                    <span className="inline-flex items-center gap-1">
+                      {col.header}
+                    </span>
+                  )}
                 </th>
               );
             })}

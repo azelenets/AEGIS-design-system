@@ -34,13 +34,13 @@ const TimelineEntry = ({ level, title, organization, period, distinguished, fiel
         </div>
         <div className="text-sm text-slate-400">{organization}</div>
       </div>
-      <span className="text-xs font-bold text-white/60">{period}</span>
+      <span className="text-xs font-bold text-slate-400">{period}</span>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
       {fields.map(({ label, value }) => (
         <div key={label} className="bg-black/40 border border-white/5 p-3">
           <div className="text-[9px] text-primary uppercase mb-1">{label}</div>
-          <div className="text-xs text-white/60">{value}</div>
+          <div className="text-xs text-slate-400">{value}</div>
         </div>
       ))}
     </div>

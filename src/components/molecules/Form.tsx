@@ -13,7 +13,7 @@ export const FormSection = memo(({ title, description, children, className = '',
     {(title || description) && (
       <div className="border-b border-border-dark pb-3">
         {title && (
-          <legend className="text-[10px] font-bold uppercase tracking-widest text-primary/70 font-mono">
+          <legend className="text-[10px] font-bold uppercase tracking-widest text-primary font-mono">
             {title}
           </legend>
         )}

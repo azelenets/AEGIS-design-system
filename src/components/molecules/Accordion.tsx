@@ -35,7 +35,14 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
   };
 
   return (
-    <section {...rest} className={[variant === 'default' ? 'border border-border-dark divide-y divide-border-dark' : 'divide-y divide-border-dark', className].filter(Boolean).join(' ')}>
+    <section
+      {...rest}
+      className={[
+        'bg-panel-dark',
+        variant === 'default' ? 'border border-border-dark divide-y divide-border-dark' : 'divide-y divide-border-dark',
+        className,
+      ].filter(Boolean).join(' ')}
+    >
       {items.map((item) => {
         const isOpen = open.has(item.id);
         return (

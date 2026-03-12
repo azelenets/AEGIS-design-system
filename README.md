@@ -517,8 +517,14 @@ Current CI structure:
 - `chromatic` job
   - runs on push
   - waits for both static checks and Storybook tests
+- `publish-package` workflow
+  - runs after `Storybook Tests` succeeds for a push to `main`
+  - skips if the current `package.json` version already exists on npm
+  - builds and publishes with `NPM_TOKEN`
 
 Static checks and Storybook browser tests run in parallel to reduce total CI time.
+
+To enable automated npm publishing, add the `NPM_TOKEN` repository secret with publish access for `@azelenets/aegis-design-system`.
 
 ## Storybook Scope
 

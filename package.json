@@ -1,7 +1,8 @@
 {
   "name": "@azelenets/aegis-design-system",
+  "description": "A design system for AEGIS applications, built with React and TypeScript. It includes reusable components, styles, and utilities.",
   "private": false,
-  "version": "0.1.5",
+  "version": "0.1.5.1",
   "author": "Andrii Zelenets",
   "license": "MIT",
   "type": "module",

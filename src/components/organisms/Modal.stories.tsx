@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, fireEvent, userEvent, within } from 'storybook/test';
 import Modal, { ModalHeader, ModalBody, ModalFooter } from './Modal';
 import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
@@ -221,6 +221,26 @@ export const ScrollableContent: Story = {
   ],
 };
 
+export const Draggable: Story = {
+  decorators: [
+    () => (
+      <Trigger label="Open Draggable">
+        {(open, setOpen) => (
+          <Modal open={open} onClose={() => setOpen(false)} size="md" draggable>
+            <ModalHeader title="Moveable Console" eyebrow="AEGIS // DRAG ENABLED" onClose={() => setOpen(false)} />
+            <ModalBody>
+              Drag the header to reposition this dialog without closing it.
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" onClick={() => setOpen(false)}>Close</Button>
+            </ModalFooter>
+          </Modal>
+        )}
+      </Trigger>
+    ),
+  ],
+};
+
 export const BackdropDismissSpec: Story = {
   tags: ['!dev'],
   decorators: [
@@ -280,6 +300,42 @@ export const EscapeAndBackdropDisabledSpec: Story = {
 
     await userEvent.click(within(document.body).getByRole('button', { name: 'Close Manually' }));
     await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
+  },
+};
+
+export const DraggableSpec: Story = {
+  tags: ['!dev'],
+  decorators: [
+    () => (
+      <Trigger label="Open Draggable Spec">
+        {(open, setOpen) => (
+          <Modal open={open} onClose={() => setOpen(false)} size="md" draggable>
+            <ModalHeader title="Draggable Modal" eyebrow="AEGIS // MOVE" onClose={() => setOpen(false)} />
+            <ModalBody>Drag this modal by the header.</ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" onClick={() => setOpen(false)}>Close</Button>
+            </ModalFooter>
+          </Modal>
+        )}
+      </Trigger>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: /Open Draggable Spec/ }));
+    const dialog = within(document.body).getByRole('dialog', { name: 'Draggable Modal' }) as HTMLDivElement;
+    const header = within(document.body).getByText('Draggable Modal').closest('header') as HTMLElement;
+
+    await expect(dialog).toHaveAttribute('data-draggable', 'true');
+    await expect(header).toHaveAttribute('data-modal-drag-handle', 'true');
+    await expect(dialog.style.transform).toBe('translate(0px, 0px)');
+
+    fireEvent.pointerDown(header, { pointerId: 1, button: 0, clientX: 100, clientY: 100 });
+    fireEvent.pointerMove(document, { pointerId: 1, clientX: 160, clientY: 145 });
+    fireEvent.pointerUp(document, { pointerId: 1, clientX: 160, clientY: 145 });
+
+    await expect(dialog.style.transform).toBe('translate(60px, 45px)');
   },
 };
 

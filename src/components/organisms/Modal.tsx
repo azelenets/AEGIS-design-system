@@ -7,9 +7,11 @@ import {
   createContext,
   useContext,
   useCallback,
+  useState,
   type ReactNode,
   type KeyboardEvent,
   type HTMLAttributes,
+  type PointerEvent as ReactPointerEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
 import Button from '@/components/atoms/Button';
@@ -26,6 +28,7 @@ export interface ModalProps extends HTMLAttributes<HTMLDivElement> {
   onClose: () => void;
   size?: ModalSize;
   variant?: ModalVariant;
+  draggable?: boolean;
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
   children: ReactNode;
@@ -52,6 +55,7 @@ export interface ModalFooterProps extends HTMLAttributes<HTMLDivElement> {
 interface ModalContextValue {
   titleId: string;
   descriptionId: string;
+  draggable: boolean;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -93,11 +97,19 @@ const useModalContext = () => {
 // ─── ModalHeader ──────────────────────────────────────────────────────────────
 
 export const ModalHeader = memo(({ title, eyebrow, onClose, variant = 'primary', className = '', ...rest }: ModalHeaderProps) => {
-  const { titleId } = useModalContext();
+  const { titleId, draggable } = useModalContext();
 
   return (
-    <header {...rest} className={['flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-border-dark shrink-0', className].filter(Boolean).join(' ')}>
-      <div className="flex flex-col gap-0.5 min-w-0">
+    <header
+      {...rest}
+      data-modal-drag-handle={draggable ? 'true' : undefined}
+      className={[
+        'flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-border-dark shrink-0',
+        draggable ? 'cursor-move select-none' : '',
+        className,
+      ].filter(Boolean).join(' ')}
+    >
+      <div className="flex flex-col gap-0.5 min-w-0" data-modal-drag-handle={draggable ? 'true' : undefined}>
         {eyebrow && (
           <span className={`text-[9px] font-bold uppercase tracking-widest font-mono ${VARIANT_EYEBROW[variant]}`}>
             {eyebrow}
@@ -153,18 +165,22 @@ const Modal = ({
   onClose,
   size = 'md',
   variant = 'primary',
+  draggable = false,
   closeOnBackdrop = true,
   closeOnEscape = true,
   children,
   className = '',
+  style,
   ...rest
 }: ModalProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const lastFocusedRef = useRef<HTMLElement | null>(null);
+  const dragStateRef = useRef<{ pointerId: number; startX: number; startY: number; originX: number; originY: number } | null>(null);
   const modalId = useId();
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const contextValue = useMemo(
-    () => ({ titleId: `${modalId}-title`, descriptionId: `${modalId}-description` }),
-    [modalId],
+    () => ({ titleId: `${modalId}-title`, descriptionId: `${modalId}-description`, draggable }),
+    [draggable, modalId],
   );
 
   // Escape key handler
@@ -179,6 +195,9 @@ const Modal = ({
   useEffect(() => {
     if (!open) return;
     lastFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const resetFrame = window.requestAnimationFrame(() => {
+      setPosition({ x: 0, y: 0 });
+    });
     document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', handleKeyDown);
 
@@ -191,13 +210,62 @@ const Modal = ({
     }
 
     return () => {
+      window.cancelAnimationFrame(resetFrame);
       document.body.style.overflow = '';
       document.removeEventListener('keydown', handleKeyDown);
       lastFocusedRef.current?.focus();
     };
   }, [open, handleKeyDown]);
 
+  useEffect(() => {
+    if (!open || !draggable) return undefined;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const dragState = dragStateRef.current;
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+      setPosition({
+        x: dragState.originX + (event.clientX - dragState.startX),
+        y: dragState.originY + (event.clientY - dragState.startY),
+      });
+    };
+
+    const handlePointerUp = (event: PointerEvent) => {
+      if (dragStateRef.current?.pointerId === event.pointerId) {
+        dragStateRef.current = null;
+      }
+    };
+
+    document.addEventListener('pointermove', handlePointerMove);
+    document.addEventListener('pointerup', handlePointerUp);
+    document.addEventListener('pointercancel', handlePointerUp);
+
+    return () => {
+      document.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('pointerup', handlePointerUp);
+      document.removeEventListener('pointercancel', handlePointerUp);
+      dragStateRef.current = null;
+    };
+  }, [draggable, open]);
+
   if (!open) return null;
+
+  const handlePanelPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!draggable) return;
+    if (event.button !== 0) return;
+
+    const target = event.target as HTMLElement;
+    if (!target.closest('[data-modal-drag-handle="true"]')) return;
+    if (target.closest('button, a, input, select, textarea, [role="button"]')) return;
+
+    dragStateRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: position.x,
+      originY: position.y,
+    };
+  };
 
   const handlePanelKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Escape') {
@@ -263,16 +331,23 @@ const Modal = ({
       {/* Panel */}
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <div
-        {...rest}
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={contextValue.titleId}
         aria-describedby={contextValue.descriptionId}
+        onPointerDown={handlePanelPointerDown}
         onKeyDown={handlePanelKeyDown}
         tabIndex={-1}
+        data-draggable={draggable ? 'true' : undefined}
+        style={{
+          ...style,
+          transform: draggable ? `translate(${position.x}px, ${position.y}px)` : undefined,
+        }}
+        {...rest}
         className={[
           'relative flex flex-col max-h-[90vh]',
+          draggable ? 'touch-none' : '',
           'bg-panel-dark border hud-border',
           VARIANT_BORDER[variant],
           SIZE_CLASSES[size],

@@ -6,6 +6,8 @@ AEGIS is a React 19 design-system workspace for building tactical, terminal-insp
 
 The design direction is deliberate rather than generic: HUD framing, grid overlays, mono-driven data presentation, alert-state color semantics, and operational dashboard patterns are all first-class parts of the system.
 
+AEGIS is published as [`@azelenets/aegis-design-system`](https://www.npmjs.com/package/@azelenets/aegis-design-system) and is intended for product teams building dashboards, control surfaces, admin tools, and operator-facing workflows.
+
 ## What This Project Includes
 
 - Typed React components exported from a single package entrypoint
@@ -42,6 +44,15 @@ AEGIS is built for tactical product surfaces rather than consumer UI defaults.
 ## Package Surface
 
 Primary exports live in [`src/index.ts`](./src/index.ts).
+
+The library is organized into:
+
+- Foundations for theme tokens, CSS variable contracts, and theme state
+- Atoms for inputs, indicators, and low-level controls
+- Molecules for grouped interaction patterns and composite UI blocks
+- Organisms for app-shell, workflow, and data-heavy surfaces
+- Layout primitives for page composition
+- Domain components for tactical dashboard patterns
 
 ## Installation
 
@@ -246,6 +257,7 @@ CSS entrypoint:
 
 - `Accordion`
 - `Alert`
+- `AudioPlayer`
 - `AvatarGroup`
 - `Breadcrumbs`
 - `Card`, `CardHeader`, `CardBody`, `CardFooter`
@@ -253,6 +265,7 @@ CSS entrypoint:
 - `Pagination`
 - `ProgressBar`
 - `ProgressCircle`
+- `VideoPlayer`
 
 ### Organisms
 
@@ -298,6 +311,22 @@ Key foundation capabilities:
 - Reusable visual utilities for HUD and terminal presentation
 - App-level theme switching through `ThemeProvider`
 
+Example:
+
+```tsx
+import { ThemeProvider, ThemeToggle } from '@azelenets/aegis-design-system';
+
+export function Shell() {
+  return (
+    <ThemeProvider defaultTheme="dark">
+      <header className="flex justify-end p-4">
+        <ThemeToggle />
+      </header>
+    </ThemeProvider>
+  );
+}
+```
+
 ## Tailwind and Styling
 
 AEGIS uses Tailwind in the library build rather than a runtime CDN include.
@@ -317,6 +346,8 @@ The design system ships an optional local font bundle for the families used by t
 
 These fonts are loaded through local `@font-face` declarations in [`fonts.css`](./src/foundations/fonts.css). No Google Fonts dependency is required in either the library or Storybook.
 
+`Space Grotesk` is used in the project foundations and demos, but the published optional font bundle is currently focused on the display and mono families that define the AEGIS visual identity.
+
 ## Icons
 
 Material symbols are rendered through [`MaterialIcon`](./src/components/atoms/MaterialIcon.tsx), backed by `@material-symbols-svg/react`.
@@ -333,6 +364,46 @@ import { MaterialIcon } from '@azelenets/aegis-design-system';
 
 export function Status() {
   return <MaterialIcon name="warning" className="text-aegis-alert" />;
+}
+```
+
+## Notifications
+
+Toast notifications are exposed through a provider-driven API:
+
+```tsx
+import {
+  ToastProvider,
+  Toaster,
+  useToast,
+  Button,
+} from '@azelenets/aegis-design-system';
+
+function TriggerToast() {
+  const { toast } = useToast();
+
+  return (
+    <Button
+      onClick={() =>
+        toast({
+          title: 'AEGIS',
+          message: 'Threat state updated.',
+          variant: 'warning',
+        })
+      }
+    >
+      Notify
+    </Button>
+  );
+}
+
+export function App() {
+  return (
+    <ToastProvider>
+      <TriggerToast />
+      <Toaster position="bottom-right" />
+    </ToastProvider>
+  );
 }
 ```
 
@@ -386,7 +457,7 @@ npm run storybook
 
 Typical local URLs:
 
-- Vite app: `http://localhost:5173`
+- Vite app: `http://localhost:3001`
 - Storybook: `http://localhost:6007`
 
 ## Scripts

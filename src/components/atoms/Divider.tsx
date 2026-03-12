@@ -15,9 +15,9 @@ const BORDER_CLASSES: Record<DividerVariant, string> = {
 };
 
 const LABEL_CLASSES: Record<DividerVariant, string> = {
-  primary: 'text-primary/60',
+  primary: 'text-primary',
   ghost: 'text-slate-600',
-  hazard: 'text-hazard/60',
+  hazard: 'text-hazard',
 };
 
 const Divider = ({ label, variant = 'ghost', vertical = false, className = '', ...rest }: DividerProps) => {

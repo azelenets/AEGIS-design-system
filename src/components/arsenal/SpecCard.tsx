@@ -13,7 +13,7 @@ const SpecCard = ({ title, subtitle, img, className = '', ...rest }: SpecCardPro
     <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-transparent to-transparent z-20" />
     <figcaption className="absolute bottom-4 left-4 z-30">
       <h4 className="text-white font-bold uppercase text-sm tracking-tighter">{title}</h4>
-      <p className="text-[9px] text-primary/70 font-mono">{subtitle}</p>
+      <p className="text-[9px] text-primary font-mono">{subtitle}</p>
     </figcaption>
   </figure>
 );

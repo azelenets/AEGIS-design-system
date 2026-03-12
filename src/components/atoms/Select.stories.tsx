@@ -68,6 +68,8 @@ export const Multiple: Story = {
     await userEvent.click(body.getByRole('option', { name: 'Offline' }));
     await expect(combobox).toHaveTextContent('Active');
     await expect(combobox).toHaveTextContent('Offline');
+    await expect(canvas.getByRole('button', { name: 'Remove Active' })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: 'Remove Offline' })).toBeInTheDocument();
     const options = body.getAllByRole('option');
     const activeOption = options.find((option) => option.textContent?.includes('Active'));
     const offlineOption = options.find((option) => option.textContent?.includes('Offline'));
@@ -78,15 +80,17 @@ export const Multiple: Story = {
 };
 
 export const MultiplePreselected: Story = {
-  args: { label: 'Active Zones', options: statusOptions, multiple: true, values: ['active', 'standby'] },
+  args: { label: 'Active Zones', options: statusOptions, multiple: true, values: ['active', 'standby', 'offline'] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const combobox = canvas.getByRole('combobox', { name: 'Active Zones' });
 
     await expect(combobox).toHaveTextContent('Active');
     await expect(combobox).toHaveTextContent('Standby');
+    await expect(combobox).toHaveTextContent('+1');
     await expect(canvas.getByRole('button', { name: 'Remove Active' })).toBeInTheDocument();
     await expect(canvas.getByRole('button', { name: 'Remove Standby' })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: 'Remove Offline' })).toBeInTheDocument();
   },
 };
 

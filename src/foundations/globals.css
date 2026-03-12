@@ -55,6 +55,13 @@
 [data-theme="light"] .text-slate-500    { color: rgb(100 116 139) !important; }
 [data-theme="light"] .text-slate-600    { color: rgb(71 85 105) !important; }
 [data-theme="light"] .text-slate-700    { color: rgb(51 65 85) !important; }
+[data-theme="light"] .text-primary\/60,
+[data-theme="light"] .text-primary\/70  { color: rgb(0 105 116) !important; }
+[data-theme="light"] .text-hazard\/60,
+[data-theme="light"] .text-hazard\/70   { color: rgb(146 64 14) !important; }
+[data-theme="light"] .text-alert\/60,
+[data-theme="light"] .text-alert\/70    { color: rgb(159 18 57) !important; }
+[data-theme="light"] .text-white\/60    { color: rgb(71 85 105) !important; }
 
 html,
 body,

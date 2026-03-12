@@ -136,6 +136,22 @@ export const Default = {
   },
 };
 
+export const SortableHeaders = {
+  render: () => (
+    <DataGrid columns={columns} data={operators} keyField="id" />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const header = canvas.getByRole('button', { name: 'Call Sign' });
+
+    await expect(header.closest('th')).toHaveAttribute('aria-sort', 'none');
+    await userEvent.click(header);
+    await expect(header.closest('th')).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.click(header);
+    await expect(header.closest('th')).toHaveAttribute('aria-sort', 'descending');
+  },
+};
+
 export const Striped = {
   render: () => (
     <DataGrid columns={columns} data={operators} keyField="id" striped />

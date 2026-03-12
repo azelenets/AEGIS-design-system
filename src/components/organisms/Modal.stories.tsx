@@ -55,7 +55,10 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     await userEvent.click(canvas.getByRole('button', { name: /Open Default/ }));
-    await expect(within(document.body).getByRole('dialog')).toBeVisible();
+    const dialog = within(document.body).getByRole('dialog', { name: 'System Notice' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveAttribute('aria-describedby');
+    await expect(within(document.body).getByRole('button', { name: 'Close dialog' })).toHaveFocus();
     await userEvent.click(within(document.body).getByRole('button', { name: /Acknowledge/ }));
     await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
   },
@@ -238,7 +241,8 @@ export const BackdropDismissSpec: Story = {
     await userEvent.click(canvas.getByRole('button', { name: /Open Backdrop Dismiss/ }));
     await expect(within(document.body).getByRole('dialog')).toBeVisible();
 
-    await userEvent.click(within(document.body).getByRole('button', { name: 'Close dialog backdrop' }));
+    const backdrop = document.body.querySelector('button.absolute.inset-0');
+    await userEvent.click(backdrop as HTMLButtonElement);
     await expect(within(document.body).queryByRole('dialog')).not.toBeInTheDocument();
   },
 };
@@ -267,7 +271,8 @@ export const EscapeAndBackdropDisabledSpec: Story = {
     const dialog = within(document.body).getByRole('dialog');
     await expect(dialog).toBeVisible();
 
-    await userEvent.click(within(document.body).getByRole('button', { name: 'Close dialog backdrop' }));
+    const backdrop = document.body.querySelector('button.absolute.inset-0');
+    await userEvent.click(backdrop as HTMLButtonElement);
     await expect(dialog).toBeVisible();
 
     await userEvent.keyboard('{Escape}');

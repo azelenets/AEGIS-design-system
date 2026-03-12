@@ -20,7 +20,7 @@ const StatusItem = ({ name, detail, status, isCritical, isMaster, className = ''
   ) : isMaster ? (
     <span className={ALERT_BADGE_CLASSES}>MASTER_UNIT</span>
   ) : (
-    <span className="text-[9px] text-primary/60 font-bold uppercase px-1 border border-primary/30">ACTIVE</span>
+    <span className="text-[9px] text-primary font-bold uppercase px-1 border border-primary/30">ACTIVE</span>
   );
 
   return (

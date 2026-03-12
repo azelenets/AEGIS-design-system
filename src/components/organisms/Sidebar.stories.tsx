@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import Sidebar from './Sidebar';
 import type { SidebarGroup } from './Sidebar';
 import Avatar from '@/components/atoms/Avatar';
@@ -52,6 +53,13 @@ export const Collapsed = {
       <main className="flex-1 p-8 text-xs font-mono text-slate-400">Main content area</main>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await expect(canvas.getByRole('button', { name: 'Dashboard' })).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Laboratory' })).toBeVisible();
+    await expect(canvas.getByRole('button', { name: 'Missions' })).toBeVisible();
+  },
 };
 
 export const Toggleable = {

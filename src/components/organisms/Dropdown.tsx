@@ -103,14 +103,14 @@ DropdownSeparator.displayName = 'DropdownSeparator';
 // ─── DropdownGroup ────────────────────────────────────────────────────────────
 
 export const DropdownGroup = memo(({ label, children }: DropdownGroupProps) => (
-  <div role="group" aria-label={label}>
+  <section role="group" aria-label={label}>
     {label && (
       <p className="px-3 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest text-slate-600 font-mono" aria-hidden="true">
         {label}
       </p>
     )}
     {children}
-  </div>
+  </section>
 ));
 
 DropdownGroup.displayName = 'DropdownGroup';

@@ -96,7 +96,7 @@ export const ModalHeader = memo(({ title, eyebrow, onClose, variant = 'primary',
   const { titleId } = useModalContext();
 
   return (
-    <div {...rest} className={['flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-border-dark shrink-0', className].filter(Boolean).join(' ')}>
+    <header {...rest} className={['flex items-start justify-between gap-4 px-6 pt-5 pb-4 border-b border-border-dark shrink-0', className].filter(Boolean).join(' ')}>
       <div className="flex flex-col gap-0.5 min-w-0">
         {eyebrow && (
           <span className={`text-[9px] font-bold uppercase tracking-widest font-mono ${VARIANT_EYEBROW[variant]}`}>
@@ -116,7 +116,7 @@ export const ModalHeader = memo(({ title, eyebrow, onClose, variant = 'primary',
           <MaterialIcon name="close" className="text-[20px]" />
         </Button>
       )}
-    </div>
+    </header>
   );
 });
 
@@ -128,9 +128,9 @@ export const ModalBody = memo(({ children, className = '', ...rest }: ModalBodyP
   const { descriptionId } = useModalContext();
 
   return (
-    <div id={descriptionId} {...rest} className={['px-6 py-5 overflow-y-auto flex-1 text-sm text-slate-400 font-mono leading-relaxed', className].filter(Boolean).join(' ')}>
+    <section id={descriptionId} {...rest} className={['px-6 py-5 overflow-y-auto flex-1 text-sm text-slate-400 font-mono leading-relaxed', className].filter(Boolean).join(' ')}>
       {children}
-    </div>
+    </section>
   );
 });
 
@@ -139,9 +139,9 @@ ModalBody.displayName = 'ModalBody';
 // ─── ModalFooter ──────────────────────────────────────────────────────────────
 
 export const ModalFooter = memo(({ children, align = 'right', className = '', ...rest }: ModalFooterProps) => (
-  <div {...rest} className={['flex flex-wrap items-center gap-3 px-6 py-4 border-t border-border-dark shrink-0', FOOTER_ALIGN[align], className].filter(Boolean).join(' ')}>
+  <footer {...rest} className={['flex flex-wrap items-center gap-3 px-6 py-4 border-t border-border-dark shrink-0', FOOTER_ALIGN[align], className].filter(Boolean).join(' ')}>
     {children}
-  </div>
+  </footer>
 ));
 
 ModalFooter.displayName = 'ModalFooter';

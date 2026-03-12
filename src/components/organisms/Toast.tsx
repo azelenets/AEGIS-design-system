@@ -77,7 +77,7 @@ const ToastItem = memo(({ data, onDismiss }: { data: ToastData; onDismiss: (id: 
   }, [data.id, duration, onDismiss]);
 
   return (
-    <div className={`flex items-start gap-3 w-80 max-w-[calc(100vw-2rem)] border ${cfg.border} ${cfg.bg} p-4 shadow-xl`}>
+    <article className={`flex items-start gap-3 w-80 max-w-[calc(100vw-2rem)] border ${cfg.border} ${cfg.bg} p-4 shadow-xl`}>
       <MaterialIcon name={cfg.icon} className={`text-[20px] shrink-0 mt-0.5 ${cfg.iconColor}`} />
       <div className="flex-1 min-w-0">
         {data.title && (
@@ -94,7 +94,7 @@ const ToastItem = memo(({ data, onDismiss }: { data: ToastData; onDismiss: (id: 
       >
         <MaterialIcon name="close" className="text-[16px]" />
       </Button>
-    </div>
+    </article>
   );
 });
 
@@ -107,13 +107,13 @@ export const Toaster = memo(({ position = 'bottom-right' }: { position?: ToastPo
   if (!ctx) throw new Error('Toaster must be used inside <ToastProvider>.');
 
   return createPortal(
-    <div className={`fixed flex flex-col gap-2 pointer-events-none ${POSITION_CLASSES[position]}`} style={{ zIndex: aegisLayers.toast }}>
+    <ol className={`fixed flex flex-col gap-2 pointer-events-none ${POSITION_CLASSES[position]}`} style={{ zIndex: aegisLayers.toast }}>
       {ctx.toasts.map((t) => (
-        <div key={t.id} className="pointer-events-auto">
+        <li key={t.id} className="pointer-events-auto list-none">
           <ToastItem data={t} onDismiss={ctx.dismiss} />
-        </div>
+        </li>
       ))}
-    </div>,
+    </ol>,
     document.body,
   );
 });

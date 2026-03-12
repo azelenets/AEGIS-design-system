@@ -12,7 +12,7 @@ export interface StepData {
   status: StepStatus;
 }
 
-export interface StepperProps extends HTMLAttributes<HTMLDivElement> {
+export interface StepperProps extends HTMLAttributes<HTMLElement> {
   steps: StepData[];
   orientation?: StepperOrientation;
   children?: ReactNode;   // active step content
@@ -65,12 +65,12 @@ const Stepper = ({
 
   if (orientation === 'vertical') {
     return (
-      <div {...rest} className={['flex flex-col', className].filter(Boolean).join(' ')}>
+      <ol {...rest} className={['flex flex-col', className].filter(Boolean).join(' ')}>
         {steps.map((step, i) => {
           const isLast = i === steps.length - 1;
           const isCurrent = activeStep === i;
           return (
-            <div key={step.id} className="flex gap-3">
+            <li key={step.id} className="flex gap-3 list-none">
               {/* Icon + connector */}
               <div className="flex flex-col items-center">
                 {isInteractive ? (
@@ -115,22 +115,22 @@ const Stepper = ({
                   <div className="mt-3">{children}</div>
                 )}
               </div>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ol>
     );
   }
 
   // Horizontal
   return (
-    <div {...rest} className={['flex flex-col gap-4', className].filter(Boolean).join(' ')}>
-      <div className="flex items-start">
+    <section {...rest} className={['flex flex-col gap-4', className].filter(Boolean).join(' ')}>
+      <ol className="flex items-start">
         {steps.map((step, i) => {
           const isLast = i === steps.length - 1;
           const isCurrent = activeStep === i;
           return (
-            <div key={step.id} className="flex-1 flex flex-col items-center relative">
+            <li key={step.id} className="flex-1 flex flex-col items-center relative list-none">
               {/* Connector line — drawn before icon, hidden for first */}
               {i > 0 && (
                 <div className={`absolute left-0 top-[11px] w-1/2 h-px ${LINE_COLOR[steps[i - 1].status]}`} />
@@ -164,12 +164,12 @@ const Stepper = ({
               {step.description && (
                 <p className="text-[9px] text-slate-400 font-mono text-center mt-0.5 px-1">{step.description}</p>
               )}
-            </div>
+            </li>
           );
         })}
-      </div>
-      {children && <div>{children}</div>}
-    </div>
+      </ol>
+      {children && <section>{children}</section>}
+    </section>
   );
 };
 

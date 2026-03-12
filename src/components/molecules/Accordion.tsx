@@ -35,11 +35,11 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
   };
 
   return (
-    <div {...rest} className={[variant === 'default' ? 'border border-border-dark divide-y divide-border-dark' : 'divide-y divide-border-dark', className].filter(Boolean).join(' ')}>
+    <section {...rest} className={[variant === 'default' ? 'border border-border-dark divide-y divide-border-dark' : 'divide-y divide-border-dark', className].filter(Boolean).join(' ')}>
       {items.map((item) => {
         const isOpen = open.has(item.id);
         return (
-          <div
+          <section
             key={item.id}
             className={[
               'bg-panel-dark transition-colors',
@@ -82,9 +82,8 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
 
             {/* Panel */}
             {isOpen && (
-              <div
+              <section
                 id={`accordion-panel-${item.id}`}
-                role="region"
                 aria-labelledby={`accordion-trigger-${item.id}`}
                 className={[
                   'px-6 py-3.5 text-sm font-mono leading-relaxed border-t transition-colors',
@@ -92,12 +91,12 @@ const Accordion = ({ items, variant = 'default', multiple = false, defaultOpen =
                 ].join(' ')}
               >
                 {item.content}
-              </div>
+              </section>
             )}
-          </div>
+          </section>
         );
       })}
-    </div>
+    </section>
   );
 };
 

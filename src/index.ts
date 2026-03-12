@@ -39,6 +39,7 @@ export { default as Form, FormSection, FormRow, FormActions } from '@/components
 export { default as Pagination }   from '@/components/molecules/Pagination';
 export { default as ProgressBar }  from '@/components/molecules/ProgressBar';
 export { default as ProgressCircle } from '@/components/molecules/ProgressCircle';
+export { default as VideoPlayer }  from '@/components/molecules/VideoPlayer';
 
 // ─── Organisms ────────────────────────────────────────────────────────────────
 export { default as Carousel, CarouselSlide } from '@/components/organisms/Carousel';
@@ -76,7 +77,7 @@ export type { RatingProps, RatingVariant }                               from '@
 export type { SearchInputProps }                                         from '@/components/atoms/SearchInput';
 export type { SelectProps, SelectOption }                                from '@/components/atoms/Select';
 export type { SkeletonProps, SkeletonShape }                             from '@/components/atoms/Skeleton';
-export type { SliderProps, SliderVariant }                               from '@/components/atoms/Slider';
+export type { SliderProps, SliderVariant, SliderOrientation }            from '@/components/atoms/Slider';
 export type { SpinnerProps, SpinnerSize, SpinnerVariant }                from '@/components/atoms/Spinner';
 export type { TagProps, TagVariant }                                     from '@/components/atoms/Tag';
 export type { TextareaProps }                                            from '@/components/atoms/Textarea';
@@ -94,6 +95,7 @@ export type { FormSectionProps, FormRowProps, FormRowCols, FormActionsProps, For
 export type { PaginationProps }                                          from '@/components/molecules/Pagination';
 export type { ProgressBarProps, ProgressBarVariant, ProgressBarSize }   from '@/components/molecules/ProgressBar';
 export type { ProgressCircleProps, ProgressCircleVariant, ProgressCircleSize } from '@/components/molecules/ProgressCircle';
+export type { VideoPlayerProps, VideoPlayerAspectRatio, VideoPlayerFit, VideoPlayerSource, VideoPlayerTrack } from '@/components/molecules/VideoPlayer';
 
 // ─── Types — Organisms ────────────────────────────────────────────────────────
 export type { CarouselProps, CarouselSlideProps, CarouselIndicator, CarouselTransition } from '@/components/organisms/Carousel';
